@@ -112,8 +112,11 @@
     {
         "id": 5,
         "message": "It's not the best ale you've ever had, but it's certainly drinkable",
-        "gold" : -10,
-        "fallback": 16,
+        "effects": {
+            "gold" : -2,
+            "drunk": 5,
+            "fallback": 16
+        },
         "dialogue": [
             {
                 "speaker": {

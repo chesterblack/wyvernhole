@@ -1,13 +1,18 @@
 // ----- ----- ----- //
 //    GLOBAL VARS    //
 // ----- ----- ----- //
+const body = document.getElementById("body");
 const textBox = document.getElementById("text");
 const responseBox = document.getElementById("responses");
 const dialogueBox = document.getElementById("dialogue");
 const goldBox = document.getElementById("gold");
 const moneyMessageBox = document.getElementById("money-message");
+const drunkennessBox = document.getElementById("drunkenness-counter");
+const drunkBox = document.getElementById("drunk");
+
 let speed = 10;
 let gold = 10;
+let drunkenness = 0;
 
 // ----- ----- ----- //
 //     FUNCTIONS     //
@@ -117,16 +122,32 @@ function writeOutRoom(id) {
     textBox.innerHTML = "";
     dialogueBox.innerHTML = "";
     moneyMessageBox.innerHTML = "";
+
     ajax(url, (response) => {
         roomData = JSON.parse(response);
-        if (roomData.gold) {
-            if ((gold += roomData.gold) < 0) {
+        if (roomData.effects && roomData.effects.drunk) {
+            drunkenness += roomData.effects.drunk;
+            body.style.filter = "blur("+(drunkenness / 10)+"px)";
+            drunk.innerHTML = drunkenness;
+            drunkennessBox.style.display = "block";
+        } else if (drunkenness > 0) {
+            drunkenness -= 1;
+            body.style.filter = "blur("+(drunkenness / 10)+"px)";
+            drunk.innerHTML = drunkenness;
+            if (drunkenness == 0) {
+                drunkennessBox.style.display = "none";
+            }
+        } else {
+            drunkennessBox.style.display = "none";
+        }
+        if (roomData.effects && roomData.effects.gold) {
+            if ((gold += roomData.effects.gold) < 0) {
                 moneyMessageBox.innerHTML = "Insufficient Gold";
-                writeOutRoom(roomData.fallback);
+                writeOutRoom(roomData.effects.fallback);
                 return;
             } else {
                 moneyMessageBox.classList.add("active");
-                moneyMessageBox.innerHTML = roomData.gold + "gp";
+                moneyMessageBox.innerHTML = roomData.effects.gold + "gp";
                 goldBox.innerHTML = gold + "gp";
                 setTimeout(() => {
                     moneyMessageBox.innerHTML = "";

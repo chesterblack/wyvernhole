@@ -6,7 +6,7 @@
     <title>Wyvernhole Redux</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./game.css"></head>
-<body>
+<body id="body">
     <div class="container">
         <div class="counters">
             <div id="money-counter">
@@ -16,6 +16,9 @@
             <div id="health-counter">
                 Health: <span id="hp">100</span>
             </div>
+            <div id="drunkenness-counter">
+                Drunkenness: <span id="drunk">0</span>
+            </div>
         </div>
         <div id="text"></div>
         <div id="dialogue"></div>
@@ -23,7 +26,7 @@
 
         <script type="text/javascript" src="game.js"></script>
         <script>
-            writeOutRoom(1);
+            writeOutRoom(3);
         </script>
     </div>
 </body>
