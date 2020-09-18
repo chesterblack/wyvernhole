@@ -4,6 +4,7 @@
 const textBox = document.getElementById("text");
 const responseBox = document.getElementById("responses");
 const dialogueBox = document.getElementById("dialogue");
+let speed = 10;
 
 // ----- ----- ----- //
 //     FUNCTIONS     //
@@ -36,10 +37,7 @@ function ajax(url, callback) {
  */
 function typeWriter(txt, target, callback) {
     responseBox.innerHTML = "";
-
     let i = 0;
-    let speed = 0;
-
     typeText();
     function typeText() {
         if (i < txt.length) {
@@ -72,9 +70,11 @@ function createChoiceBox(text, id) {
  * @param {array} choices array of objects with text and ids to create the option buttons
  */
 function presentChoices(choices) {
-    for (let i = 0; i < choices.length; i++) {
-        responseBox.innerHTML += createChoiceBox(choices[i].text, choices[i].id);
-    }
+    setTimeout(() => {
+        for (let i = 0; i < choices.length; i++) {
+            responseBox.innerHTML += createChoiceBox(choices[i].text, choices[i].id);
+        }
+    }, speed*20);
 }
 
 function createDialogueBox(speaker) {
