@@ -32,18 +32,18 @@
             {
                 "speaker": {
                     "name": "Barkeep",
-                    "color": "blue"
+                    "color": "#b8d7ff"
                 },
                 "message": "Of course, I'm afraid the selection's a bit limited at the moment due to all the bandit attacks, so we've got ale, or ale"
             }
         ],
         "options": [
             {
-                "text": "Buy ale",
+                "text": "Buy ale (2gp)",
                 "id": 5
             },
             {
-                "text": "Buy ale",
+                "text": "Buy ale (2gp)",
                 "id": 5
             },
             {
@@ -55,12 +55,12 @@
 
     {
         "id": 7,
-        "message": "The barkeep smiles warmly as you stand the bar",
+        "message": "The barkeep smiles warmly as you stand at the bar",
         "dialogue": [
             {
                 "speaker": {
                     "name": "Barkeep",
-                    "color": "blue"
+                    "color": "#b8d7ff"
                 },
                 "message": "What can I do for you?"
             }
@@ -88,7 +88,7 @@
             {
                 "speaker": {
                     "name": "Barkeep",
-                    "color": "blue"
+                    "color": "#b8d7ff"
                 },
                 "message": "Well if it's rumours you're looking for, those two over there are always spouting off tall tales, need anything else?"
             }
@@ -112,18 +112,20 @@
     {
         "id": 5,
         "message": "It's not the best ale you've ever had, but it's certainly drinkable",
+        "gold" : -10,
+        "fallback": 16,
         "dialogue": [
             {
                 "speaker": {
                     "name": "Barkeep",
-                    "color": "blue"
+                    "color": "#b8d7ff"
                 },
                 "message": "Anything else I can get for you?"
             }
         ],
         "options": [
             {
-                "text": "Another ale please",
+                "text": "Another ale please (2gp)",
                 "id": 5
             },
             {
@@ -144,14 +146,14 @@
             {
                 "speaker": {
                     "name": "Old Man 1",
-                    "color": "red"
+                    "color": "#ff9c9c"
                 },
-                "message": "I tells ya, it's that damn harpy that's taken ol' One-eyed Jack, bandits would've captured him and sent a ransom note"
+                "message": "I tells ya, it's that damn harpy that's taken ol' One-eyed Jack, bandits would've captu#ff9c9c him and sent a ransom note"
             },
             {
                 "speaker": {
                     "name": "Old Man 2",
-                    "color": "green"
+                    "color": "#8ada8b"
                 },
                 "message": "You're crazy, no bandit round 'ere has ever sent a ransom note, you know damn well no one round 'ere's got any money, least of all to buy Jack back. He's buried in a shallow grave in the woods somewhere, or fed to the dogs."
             }
@@ -179,7 +181,7 @@
             {
                 "speaker": {
                     "name": "Old Man 2",
-                    "color": "green"
+                    "color": "#8ada8b"
                 },
                 "message": "Now you just listen here, if you go off into them there woods and find a harpy, come back and I'll buy you a round my damn self"
             }
@@ -203,7 +205,7 @@
             {
                 "speaker": {
                     "name": "Old Man 1",
-                    "color": "red"
+                    "color": "#ff9c9c"
                 },
                 "message": "Now you just listen here, if you go off into them there woods and find a harpy, come back and I'll buy you a round my damn self"
             }
@@ -227,14 +229,14 @@
             {
                 "speaker": {
                     "name": "Old Man 1",
-                    "color": "red"
+                    "color": "#ff9c9c"
                 },
                 "message": "This feller One-eye Jack went into the woods recently, to hunt down the harpy that took his eye and he's not come back since the harpy's done ate 'im."
             },
             {
                 "speaker": {
                     "name": "Old Man 2",
-                    "color": "green"
+                    "color": "#8ada8b"
                 },
                 "message": "Ignore him, that harpy took his eye years ago, it's long gone by now. We've been havin' trouble with bandits the last few weeks, and it's <em>them</em> that done ol' Jack in, the poor fool."
             }
@@ -273,14 +275,14 @@
             {
                 "speaker": {
                     "name": "Old Man 1",
-                    "color": "red"
+                    "color": "#ff9c9c"
                 },
                 "message": "C'mon, you can't have forgotten what to do already? Go inna the woods and find out what happened to One-eyed Jack."
             },
             {
                 "speaker": {
                     "name": "Old Man 2",
-                    "color": "green"
+                    "color": "#8ada8b"
                 },
                 "message": "If you come back in one piece we'll pay ya."
             }
@@ -295,10 +297,10 @@
 
     {
         "id": 12,
-        "message": "You step out onto the street, one direction leads into the nearby woods, the other to a ramshackle little building with a sign out front saying \"Genral Stor\"",
+        "message": "You step out onto the street, one direction leads into the nearby woods, the other to a ramshackle little building with a sign out front saying \"Genral Stoar\"",
         "options": [
             {
-                "text": "Go to the \"Genral Stor\"",
+                "text": "Go to the \"Genral Stoar\"",
                 "id": 14
             },
             {
@@ -335,5 +337,29 @@
     {
         "id": 15,
         "message": "You trot up the dusty path towards the woods and are stuck with a strange feeling that this is the start of quite the adventure...."
+    },
+
+    {
+        "id": 16,
+        "message": "",
+        "dialogue": [
+            {
+                "speaker": {
+                    "name": "Barkeep",
+                    "color": "#b8d7ff"
+                },
+                "message": "Ah, sorry, but you don't have enough money"
+            }
+        ],
+        "options": [
+            {
+                "text": "Know of any rumours around here?",
+                "id": 8
+            },
+            {
+                "text": "Leave",
+                "id": 2
+            }
+        ]
     }
 ]

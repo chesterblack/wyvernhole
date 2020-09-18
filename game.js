@@ -4,7 +4,10 @@
 const textBox = document.getElementById("text");
 const responseBox = document.getElementById("responses");
 const dialogueBox = document.getElementById("dialogue");
+const goldBox = document.getElementById("gold");
+const moneyMessageBox = document.getElementById("money-message");
 let speed = 10;
+let gold = 10;
 
 // ----- ----- ----- //
 //     FUNCTIONS     //
@@ -113,20 +116,33 @@ function writeOutRoom(id) {
     responseBox.innerHTML = "";
     textBox.innerHTML = "";
     dialogueBox.innerHTML = "";
+    moneyMessageBox.innerHTML = "";
     ajax(url, (response) => {
         roomData = JSON.parse(response);
+        if (roomData.gold) {
+            if ((gold += roomData.gold) < 0) {
+                moneyMessageBox.innerHTML = "Insufficient Gold";
+                writeOutRoom(roomData.fallback);
+                return;
+            } else {
+                moneyMessageBox.classList.add("active");
+                moneyMessageBox.innerHTML = roomData.gold + "gp";
+                goldBox.innerHTML = gold + "gp";
+                setTimeout(() => {
+                    moneyMessageBox.innerHTML = "";
+                    moneyMessageBox.classList.remove("active");
+                }, 1000);
+            }
+        }
 
         typeWriter(roomData.message, textBox, () => {
             if (roomData.dialogue) {
-
                 writeOutDialogue(roomData.dialogue, 0, () => {
                     presentChoices(roomData.options);
                 });
-
             } else {
                 presentChoices(roomData.options);
             }
         });
-
     });
 }

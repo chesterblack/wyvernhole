@@ -14,7 +14,8 @@ body{
     max-width: 1000px;
     height: 100vh;
     margin: 0 auto;
-    padding: 10% 5%;
+    padding: 0 5%;
+    padding-top: calc(60px + 5%);
     background-color: #454545;
     border-left: 3px solid goldenrod;
     border-right: 3px solid goldenrod;
@@ -50,4 +51,27 @@ button:focus{
     border-right: 2px solid rgb(118 118 118);
     border-top: 2px solid rgb(33 33 33);
     border-left: 2px solid rgb(33 33 33);
+}
+#gold{
+    color: goldenrod;
+}
+.counters{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+#hp{
+    color: green;
+}
+#money-message{
+    height: 5px;
+    text-align: right;
+}
+#money-message.active{
+    -webkit-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    -moz-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    -ms-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    -o-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    opacity: 0;
+    transform: translateY(20px);
 }
