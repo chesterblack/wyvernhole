@@ -9,10 +9,23 @@ const goldBox = document.getElementById("gold");
 const moneyMessageBox = document.getElementById("money-message");
 const drunkennessBox = document.getElementById("drunkenness-counter");
 const drunkBox = document.getElementById("drunk");
+const optionsMenu = document.getElementById('options');
+const textSpeedInput = document.getElementById('text-speed');
+const saveGameOutput = document.getElementById('save-game');
+const loadGameInput = document.getElementById('load-game');
 
 let speed = 10;
+let health = 100;
 let gold = 10;
 let drunkenness = 0;
+
+let saveCode = {
+    r: 1,
+    h: health,
+    g: gold,
+    s: speed,
+    d: drunkenness
+};
 
 // ----- ----- ----- //
 //     FUNCTIONS     //
@@ -85,6 +98,13 @@ function presentChoices(choices) {
     }, speed*20);
 }
 
+/**
+ * 
+ * Creates empty HTML element of the correct colour
+ * 
+ * @param {object} speaker speaker obj containing color (for text)
+ * @returns {element} span element
+ */
 function createDialogueBox(speaker) {
     let span = document.createElement("span");
     span.classList.add("speaker");
@@ -93,6 +113,14 @@ function createDialogueBox(speaker) {
     return span;
 }
 
+/**
+ * 
+ * Write out the i of an array of dialogue objects, then callback itself until all the dialogues are done
+ * 
+ * @param {array} dialogue array of objects containing speaker obj and message string
+ * @param {integer} i which index of the array are we up to
+ * @param {function} callback what to do once all the dialogue texts have been written
+ */
 function writeOutDialogue(dialogue, i, callback) {
     let target;
     if (dialogue.length == i) {
@@ -144,6 +172,7 @@ function writeOutRoom(id) {
             if ((gold += roomData.effects.gold) < 0) {
                 moneyMessageBox.innerHTML = "Insufficient Gold";
                 writeOutRoom(roomData.effects.fallback);
+                saveGame(fallback);
                 return;
             } else {
                 moneyMessageBox.classList.add("active");
@@ -166,4 +195,71 @@ function writeOutRoom(id) {
             }
         });
     });
+
+    saveGame(id);
 }
+
+/**
+ * 
+ * Save the current gold, room id, health etc. as a base64 encoded json object
+ * 
+ * @param {integer} room what room id are we on (optional)
+ */
+function saveGame(room) {
+    if (room) {
+        saveCode.r = room;
+    }
+    saveCode.g = gold;
+    saveCode.d = drunkenness;
+    saveCode.h = health;
+    saveCode.s = speed;
+
+    saveGameOutput.value = btoa(JSON.stringify(saveCode));
+}
+
+/**
+ * 
+ * Open/close the options menu
+ */
+function toggleOptions() {
+    if (optionsMenu.classList.contains("closed")) {
+        optionsMenu.classList.remove("closed");
+    } else {
+        optionsMenu.classList.add("closed");
+    }
+}
+
+/**
+ * 
+ * Replace current gold, room etc. with loaded base64 encoded string pasted into the load input
+ */
+function loadGame() {
+    loadedOptions = JSON.parse(atob(loadGameInput.value));
+    console.log(loadedOptions);
+    gold = loadedOptions.g;
+    drunkenness = loadedOptions.d;
+    health = loadedOptions.h;
+    speed = loadedOptions.s;
+    textSpeedInput.value = speed;
+    writeOutRoom(loadedOptions.r);
+}
+
+/**
+ * 
+ * Copy what's currently in the save input to the clipboard
+ */
+function copySaveCode() {
+  let copyText = saveGameOutput;
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+}
+
+/**
+ * 
+ * Update the speed variable that determines how fast the text will type
+ */
+textSpeedInput.addEventListener("change", () => {
+    speed = textSpeedInput.value;
+    saveGame();
+})

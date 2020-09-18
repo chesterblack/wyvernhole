@@ -5,6 +5,9 @@
     line-height: 84%;
     box-sizing: border-box;
 }
+*:focus{
+    outline: none;
+}
 body{
     background: #000000;
     margin: 0;
@@ -46,7 +49,6 @@ button:hover{
     background-color: rgba(0,0,0,0.2);
 }
 button:focus{
-    outline: none;
     border-bottom: 2px solid rgb(118 118 118);
     border-right: 2px solid rgb(118 118 118);
     border-top: 2px solid rgb(33 33 33);
@@ -77,4 +79,38 @@ button:focus{
 }
 #drunkenness-counter{
     display: none;
+}
+
+.menu{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    text-align: right;
+}
+.menu button{
+    margin: 0 0 0 auto;
+}
+#options{
+    overflow: hidden;
+    height: 100vh;
+    background-color: #000000;
+    border-left: 2px solid goldenrod;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+#options.closed{
+    display: none;
+}
+input{
+    border-radius: 0;
+    border: 2px solid #ffffff;
+    background: none;
+    margin: 7px 0;
+}
+
+#options > *{
+    margin-bottom: 20px;
 }

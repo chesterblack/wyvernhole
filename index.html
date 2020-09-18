@@ -20,13 +20,35 @@
                 Drunkenness: <span id="drunk">0</span>
             </div>
         </div>
+
+        <div class="menu">
+            <button onclick="toggleOptions()">Options</button>
+            <div id="options" class="closed">
+                <button onclick="toggleOptions()">Close</button>
+                <div>
+                    Text Speed:
+                    <input type="number" id="text-speed" value="10" />
+                </div>
+                <div>
+                    Save game:
+                    <input id="save-game" type="text" />
+                    <button onclick="copySaveCode()">Copy</button>
+                </div>
+                <div>
+                    Load game:
+                    <input type="text" id="load-game" />
+                    <button onclick="loadGame()">Load</button>
+                </div>
+            </div>
+        </div>
+
         <div id="text"></div>
         <div id="dialogue"></div>
         <div id="responses"></div>
 
         <script type="text/javascript" src="game.js"></script>
         <script>
-            writeOutRoom(3);
+            writeOutRoom(1);
         </script>
     </div>
 </body>
