@@ -18,16 +18,6 @@
         }
     }
 
-    if (isset($_GET['function'])) {
-        switch($_GET['function']){
-            case 'fetchRoom':
-                fetchRoom($_GET['room']);
-                break;
-            default:
-                echo "Invalid function provided";
-        }
-    }
-
     /**
      * 
      * Fetches data from rooms table
@@ -40,4 +30,14 @@
         $stmt->execute(['id' => $roomID]);
         $results = $stmt->fetch();
         echo $results['data'];
+    }
+
+    if (isset($_GET['function'])) {
+        switch($_GET['function']){
+            case 'fetchRoom':
+                fetchRoom($_GET['room']);
+                break;
+            default:
+                echo "Invalid function provided";
+        }
     }

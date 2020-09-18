@@ -31,18 +31,14 @@ function ajax(url, callback) {
  * Types out the text given one letter at a time like a typewriter
  * 
  * @param {string} txt Text to be typewritered out
- * @param {boolean} clear Whether the existing text should be cleared first
  * @param {object} target Where the text needs to go
  * @param {function} callback What to do once the text has been typed
  */
-function typeWriter(txt, clear = true, target, callback) {
+function typeWriter(txt, target, callback) {
     responseBox.innerHTML = "";
-    if (clear) {
-        target.innerHTML = "";
-    }
 
     let i = 0;
-    let speed = 20;
+    let speed = 0;
 
     typeText();
     function typeText() {
@@ -81,6 +77,30 @@ function presentChoices(choices) {
     }
 }
 
+function createDialogueBox(speaker) {
+    let span = document.createElement("span");
+    span.classList.add("speaker");
+    span.style.color = speaker.color;
+    dialogueBox.appendChild(span);
+    return span;
+}
+
+function writeOutDialogue(dialogue, i, callback) {
+    let target;
+    if (dialogue.length == i) {
+        callback();
+    } else {
+        target = createDialogueBox(dialogue[i].speaker);
+        typeWriter(
+            dialogue[i].speaker.name+": "+dialogue[i].message, 
+            target, 
+            () => {
+                writeOutDialogue(dialogue, i+1, callback);
+            }
+        )
+    }
+}
+
 /**
  * 
  * Fetches room data from the database based on id given, then prints out the message and presents the options of a room
@@ -89,12 +109,24 @@ function presentChoices(choices) {
  * 
  */
 function writeOutRoom(id) {
-    var url = '/game.php?function=fetchRoom&room=' + id;
-
+    let url = '/game.php?function=fetchRoom&room=' + id;
+    responseBox.innerHTML = "";
+    textBox.innerHTML = "";
+    dialogueBox.innerHTML = "";
     ajax(url, (response) => {
         roomData = JSON.parse(response);
-        typeWriter(roomData.message, true, textBox, () => {
-            presentChoices(roomData.options);
+
+        typeWriter(roomData.message, textBox, () => {
+            if (roomData.dialogue) {
+
+                writeOutDialogue(roomData.dialogue, 0, () => {
+                    presentChoices(roomData.options);
+                });
+
+            } else {
+                presentChoices(roomData.options);
+            }
         });
+
     });
 }
