@@ -80,6 +80,9 @@ button:focus{
 #drunkenness-counter{
     display: none;
 }
+#drunk{
+    color: mediumpurple;
+}
 
 .menu{
     position: absolute;
@@ -94,7 +97,7 @@ button:focus{
     overflow: hidden;
     height: 100vh;
     background-color: #000000;
-    border-left: 2px solid goldenrod;
+    border-left: px solid goldenrod;
     position: absolute;
     top: -15px;
     right: -15px;

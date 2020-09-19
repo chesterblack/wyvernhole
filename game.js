@@ -162,10 +162,13 @@ function writeOutRoom(id) {
             drunkenness -= 1;
             body.style.filter = "blur("+(drunkenness / 10)+"px)";
             drunk.innerHTML = drunkenness;
+            drunkennessBox.style.display = "block";
             if (drunkenness == 0) {
+                body.style.filter = "blur(0)";
                 drunkennessBox.style.display = "none";
             }
         } else {
+            body.style.filter = "blur(0)";
             drunkennessBox.style.display = "none";
         }
         if (roomData.effects && roomData.effects.gold) {
@@ -215,6 +218,7 @@ function saveGame(room) {
     saveCode.s = speed;
 
     saveGameOutput.value = btoa(JSON.stringify(saveCode));
+    document.cookie = "saveCode="+btoa(JSON.stringify(saveCode));
 }
 
 /**
@@ -233,9 +237,12 @@ function toggleOptions() {
  * 
  * Replace current gold, room etc. with loaded base64 encoded string pasted into the load input
  */
-function loadGame() {
-    loadedOptions = JSON.parse(atob(loadGameInput.value));
-    console.log(loadedOptions);
+function loadGame(saveCode) {
+    if (!saveCode) {
+        saveCode = loadGameInput.value;
+    }
+    let decodedOptions = atob(saveCode);
+    let loadedOptions = JSON.parse(decodedOptions);
     gold = loadedOptions.g;
     drunkenness = loadedOptions.d;
     health = loadedOptions.h;
@@ -257,9 +264,26 @@ function copySaveCode() {
 
 /**
  * 
+ * Loads a new game using the default options
+ */
+function newGame() {
+    loadGame("eyJyIjoxLCJoIjoxMDAsImciOjEwLCJzIjoxMCwiZCI6MH0=");
+}
+
+/**
+ * 
  * Update the speed variable that determines how fast the text will type
  */
 textSpeedInput.addEventListener("change", () => {
     speed = textSpeedInput.value;
     saveGame();
 })
+
+window.onload = () => {
+    let match = document.cookie.match(new RegExp('(^| )saveCode=([^;]+)'));
+    if (match) {
+        loadGame(match[2]);
+    } else {
+        writeOutRoom(1);
+    }
+}
