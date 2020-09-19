@@ -343,6 +343,20 @@
     },
 
     {
+        "id": 17,
+        "message": "Combat test",
+        "combat": {
+            "combatants": [
+                {
+                    "name": "Goblin",
+                    "attack": 10,
+                    "defence": 5
+                }
+            ]
+        }
+    },
+
+    {
         "id": 16,
         "message": "",
         "dialogue": [

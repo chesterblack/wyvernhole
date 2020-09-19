@@ -13,6 +13,7 @@ const optionsMenu = document.getElementById('options');
 const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
+let stopTyping = false;
 
 let speed = 10;
 let health = 100;
@@ -61,12 +62,14 @@ function typeWriter(txt, target, callback) {
     let i = 0;
     typeText();
     function typeText() {
-        if (i < txt.length) {
-            target.innerHTML += txt.charAt(i);
-            i++;
-            setTimeout(typeText, speed);
-        } else {
-            callback();
+        if (!stopTyping) {
+            if (i < txt.length) {
+                target.innerHTML += txt.charAt(i);
+                i++;
+                setTimeout(typeText, speed);
+            } else {
+                callback();
+            }
         }
     }
 }
@@ -145,6 +148,7 @@ function writeOutDialogue(dialogue, i, callback) {
  * 
  */
 function writeOutRoom(id) {
+    stopTyping = true;
     let url = '/game.php?function=fetchRoom&room=' + id;
     responseBox.innerHTML = "";
     textBox.innerHTML = "";
@@ -152,6 +156,7 @@ function writeOutRoom(id) {
     moneyMessageBox.innerHTML = "";
 
     ajax(url, (response) => {
+        stopTyping = false;
         roomData = JSON.parse(response);
         if (roomData.effects && roomData.effects.drunk) {
             drunkenness += roomData.effects.drunk;
