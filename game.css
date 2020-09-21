@@ -45,14 +45,18 @@ button{
     border-bottom: 2px solid rgb(33 33 33);
     border-right: 2px solid rgb(33 33 33);
 }
-button:hover{
+button:hover, 
+button:focus{
     background-color: rgba(0,0,0,0.2);
 }
-button:focus{
+button:active{
     border-bottom: 2px solid rgb(118 118 118);
     border-right: 2px solid rgb(118 118 118);
     border-top: 2px solid rgb(33 33 33);
     border-left: 2px solid rgb(33 33 33);
+}
+.dialogue{
+    display: flex;
 }
 #gold{
     color: goldenrod;
@@ -97,7 +101,7 @@ button:focus{
     overflow: hidden;
     height: 100vh;
     background-color: #000000;
-    border-left: px solid goldenrod;
+    border-left: 2px solid goldenrod;
     position: absolute;
     top: -15px;
     right: -15px;
@@ -107,11 +111,17 @@ button:focus{
 #options.closed{
     display: none;
 }
-input{
+input,
+textarea{
     border-radius: 0;
     border: 2px solid #ffffff;
-    background: none;
+    background: #000000;
     margin: 7px 0;
+}
+
+textarea{
+    width: 100%;
+    resize: vertical;
 }
 
 #options > *{
