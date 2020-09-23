@@ -37,15 +37,21 @@
                 "message": "Of course, I'm afraid the selection's a bit limited at the moment due to all the bandit attacks, so we've got ale, or ale"
             }
         ],
+        "shop": [
+            {
+                "name": "Ale",
+                "stock": 100,
+                "price": 2,
+                "id": 4
+            },
+            {
+                "name": "Ale",
+                "stock": 100,
+                "price": 2,
+                "id": 4
+            }
+        ],
         "options": [
-            {
-                "text": "Buy ale (2gp)",
-                "id": 5
-            },
-            {
-                "text": "Buy ale (2gp)",
-                "id": 5
-            },
             {
                 "text": "Actually, I don't really like ale",
                 "id": 7
@@ -376,6 +382,37 @@
             {
                 "text": "Leave",
                 "id": 2
+            }
+        ]
+    },
+
+    {
+        "id": 19,
+        "message": "shop test",
+        "shop": [
+            {
+                "name": "Sword",
+                "price": 10,
+                "stock": 1,
+                "id": 1
+            },
+            {
+                "name": "Shield",
+                "price": 10,
+                "stock": 1,
+                "id": 2
+            },
+            {
+                "name": "Health potion",
+                "price": 5,
+                "stock": 5,
+                "id": 3
+            }
+        ],
+        "options": [
+            {
+                "text": "Leave",
+                "id": 12
             }
         ]
     }

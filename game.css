@@ -15,9 +15,9 @@ body{
 }
 .container{
     max-width: 1000px;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0 auto;
-    padding: 0 5%;
+    padding: 5%;
     padding-top: calc(60px + 5%);
     background-color: #454545;
     border-left: 3px solid goldenrod;
@@ -47,7 +47,7 @@ button{
 }
 button:hover, 
 button:focus{
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(50,50,50,0.6);
 }
 button:active{
     border-bottom: 2px solid rgb(118 118 118);
@@ -66,40 +66,46 @@ button:active{
     top: 15px;
     left: 15px;
 }
-#hp{
+#health{
     color: green;
 }
 #money-message{
     height: 5px;
     text-align: right;
 }
-#money-message.active{
+.ping{
     -webkit-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
     -moz-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
     -ms-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
     -o-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    position: absolute;
+    right: 0;
+    margin-top: -10px;
+    z-index: 1;
+}
+.fade{
     opacity: 0;
     transform: translateY(20px);
 }
 #drunkenness-counter{
     display: none;
 }
-#drunk{
+#drunkenness{
     color: mediumpurple;
 }
 
-.menu{
+.menu-wrapper{
     position: absolute;
     top: 15px;
     right: 15px;
     text-align: right;
 }
-.menu button{
-    margin: 0 0 0 auto;
+.menu-wrapper button{
+    margin-left: auto;
 }
-#options{
+.menu{
     overflow: hidden;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #000000;
     border-left: 2px solid goldenrod;
     position: absolute;
@@ -107,8 +113,12 @@ button:active{
     right: -15px;
     padding: 15px;
     box-sizing: border-box;
+    z-index: 5;
 }
-#options.closed{
+#inventory-menu{
+    min-width: 251px;
+}
+.closed{
     display: none;
 }
 input,
@@ -124,6 +134,37 @@ textarea{
     resize: vertical;
 }
 
-#options > *{
+.menu > *{
     margin-bottom: 20px;
+}
+#inventory button{
+    display: inline-block;
+    margin: 0 0 0 10px;
+}
+.item {
+    white-space: nowrap;
+    margin: 5px 0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+}
+.item-info {
+    position: absolute;
+    top: 100%;
+    background: #000;
+    border: 2px solid #ffffff;
+    padding: 5px;
+    z-index: 10;
+    margin: 0;
+    list-style: none;
+    text-transform: capitalize;
+    display: none;
+}
+.item:hover .item-info{
+    display: block;
+}
+.gold{
+    color: goldenrod;
 }

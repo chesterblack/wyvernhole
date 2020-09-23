@@ -8,24 +8,40 @@ const dialogueBox = document.getElementById("dialogue");
 const goldBox = document.getElementById("gold");
 const moneyMessageBox = document.getElementById("money-message");
 const drunkennessBox = document.getElementById("drunkenness-counter");
-const drunkBox = document.getElementById("drunk");
+const drunkBox = document.getElementById("drunkenness");
+const inventoryBox = document.getElementById('inventory');
 const optionsMenu = document.getElementById('options');
 const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
-let stopTyping = false;
 
+const startingRoom = 1;
+
+let stopTyping = false;
 let speed = 10;
-let health = 100;
-let gold = 10;
-let drunkenness = 0;
+
+let stats = {
+    health: 100,
+    gold: 50,
+    drunkenness: 0,
+    attack: 5,
+    defence: 5,
+};
+
+let inventory = [];
+
+let roomData;
+let autosave = true;
+
+let stock = {};
 
 let saveCode = {
     r: 1,
-    h: health,
-    g: gold,
+    h: stats.health,
+    g: stats.gold,
     s: speed,
-    d: drunkenness
+    d: stats.drunkenness,
+    i: inventory
 };
 
 // ----- ----- ----- //
@@ -87,6 +103,10 @@ function createChoiceBox(text, id) {
     return "<button onclick=\"writeOutRoom("+id+")\">"+text+"</button>";
 }
 
+function createPurchaseBox(item) {
+    return "<button onclick=\"buyItem("+item.id+", "+item.price+")\">"+item.name+" ("+item.price+"gp)</button>";
+}
+
 /**
  * 
  * Adds the option buttons to the responses div
@@ -97,6 +117,14 @@ function presentChoices(choices) {
     setTimeout(() => {
         for (let i = 0; i < choices.length; i++) {
             responseBox.innerHTML += createChoiceBox(choices[i].text, choices[i].id);
+        }
+    }, speed*20);
+}
+
+function presentShopChoices(items) {
+    setTimeout(() => {
+        for (let i = 0; i < items.length; i++) {
+            responseBox.innerHTML += createPurchaseBox(items[i]);
         }
     }, speed*20);
 }
@@ -158,39 +186,10 @@ function writeOutRoom(id) {
     ajax(url, (response) => {
         stopTyping = false;
         roomData = JSON.parse(response);
-        if (roomData.effects && roomData.effects.drunk) {
-            drunkenness += roomData.effects.drunk;
-            body.style.filter = "blur("+(drunkenness / 10)+"px)";
-            drunk.innerHTML = drunkenness;
-            drunkennessBox.style.display = "block";
-        } else if (drunkenness > 0) {
-            drunkenness -= 1;
-            body.style.filter = "blur("+(drunkenness / 10)+"px)";
-            drunk.innerHTML = drunkenness;
-            drunkennessBox.style.display = "block";
-            if (drunkenness == 0) {
-                body.style.filter = "blur(0)";
-                drunkennessBox.style.display = "none";
-            }
-        } else {
-            body.style.filter = "blur(0)";
-            drunkennessBox.style.display = "none";
-        }
-        if (roomData.effects && roomData.effects.gold) {
-            if ((gold += roomData.effects.gold) < 0) {
-                moneyMessageBox.innerHTML = "Insufficient Gold";
-                writeOutRoom(roomData.effects.fallback);
-                saveGame(fallback);
-                return;
-            } else {
-                moneyMessageBox.classList.add("active");
-                moneyMessageBox.innerHTML = roomData.effects.gold + "gp";
-                goldBox.innerHTML = gold + "gp";
-                setTimeout(() => {
-                    moneyMessageBox.innerHTML = "";
-                    moneyMessageBox.classList.remove("active");
-                }, 1000);
-            }
+
+        if (roomData.shop) {
+            stock[roomData.id] = roomData.shop;
+            presentShopChoices(roomData.shop);
         }
 
         typeWriter(roomData.message, textBox, () => {
@@ -204,6 +203,17 @@ function writeOutRoom(id) {
         });
     });
 
+    endTurn(id);
+}
+
+function endTurn(id){
+    if (stats.drunkenness > 0) {
+        stats.drunkenness--;
+    }
+    if (stats.health > 100) {
+        stats.health -= 5;
+    }
+    updateStats();
     saveGame(id);
 }
 
@@ -217,24 +227,33 @@ function saveGame(room) {
     if (room) {
         saveCode.r = room;
     }
-    saveCode.g = gold;
-    saveCode.d = drunkenness;
-    saveCode.h = health;
+    saveCode.g = stats.gold;
+    saveCode.d = stats.drunkenness;
+    saveCode.h = stats.health;
     saveCode.s = speed;
 
+    saveCode.i = inventory;
+
     saveGameOutput.value = btoa(JSON.stringify(saveCode));
-    document.cookie = "saveCode="+btoa(JSON.stringify(saveCode));
+    if (autosave) {
+        document.cookie = "saveCode="+btoa(JSON.stringify(saveCode));
+    } else {
+        document.getElementById('autosave').innerHTML = "off";
+        document.cookie = "saveCode=; Max-Age=-1;";
+    }
+    console.log("Game Saved");
 }
 
 /**
  * 
  * Open/close the options menu
  */
-function toggleOptions() {
-    if (optionsMenu.classList.contains("closed")) {
-        optionsMenu.classList.remove("closed");
+function toggleMenu(id) {
+    let menu = document.getElementById(id);
+    if (menu.classList.contains("closed")) {
+        menu.classList.remove("closed");
     } else {
-        optionsMenu.classList.add("closed");
+        menu.classList.add("closed");
     }
 }
 
@@ -248,9 +267,10 @@ function loadGame(saveCode) {
     }
     let decodedOptions = atob(saveCode);
     let loadedOptions = JSON.parse(decodedOptions);
-    gold = loadedOptions.g;
-    drunkenness = loadedOptions.d;
-    health = loadedOptions.h;
+    stats.gold = loadedOptions.g;
+    stats.drunkenness = loadedOptions.d;
+    stats.health = loadedOptions.h;
+    inventory = loadedOptions.i;
     speed = loadedOptions.s;
     textSpeedInput.value = speed;
     writeOutRoom(loadedOptions.r);
@@ -284,11 +304,168 @@ textSpeedInput.addEventListener("change", () => {
     saveGame();
 })
 
+/**
+ * 
+ * Autoload a game saved to the cookie, otherwise load the first room
+ */
 window.onload = () => {
-    let match = document.cookie.match(new RegExp('(^| )saveCode=([^;]+)'));
-    if (match) {
-        loadGame(match[2]);
+    let autosaveSet = document.cookie.match(new RegExp('(^| )autosave=([^;]+)'));
+    if (autosaveSet[2] == "true") {
+        let savedGame = document.cookie.match(new RegExp('(^| )saveCode=([^;]+)'));
+        autosave = true;
+        if (savedGame) {
+            loadGame(savedGame[2]);
+        } else {
+            writeOutRoom(startingRoom);
+        }
     } else {
-        writeOutRoom(1);
+        autosave = false;
+        writeOutRoom(startingRoom);
     }
+
+    updateStats();
+}
+
+/**
+ * 
+ * Toggles whether data is saved into a cookie to be automatically loaded
+ */
+function toggleAutosave() {
+    autosave = autosave ? false : true;
+    document.cookie = "autosave="+autosave;
+    if (autosave) {
+        document.getElementById('autosave').innerHTML = "on";
+    } else {
+        document.getElementById('autosave').innerHTML = "off";
+    }
+}
+
+function updateStats() {
+    for (let key in stats) {
+        document.getElementById(key).innerHTML = stats[key];
+    }
+
+    inventoryBox.innerHTML = "";
+    for (let item of inventory) {
+        let newItem = document.createElement("div");
+        newItem.classList.add("item");
+        newItem.innerHTML = item.name;
+        if (item.quantity > 1) {
+            newItem.innerHTML += " x"+item.quantity;
+        }
+        newItem.dataset.itemid = item.id;
+        let itemInfoBox = document.createElement("ul");
+        itemInfoBox.classList.add("item-info");
+        for (let effect in item.effects) {
+            effect = Object.entries(item.effects[effect])[0];
+            let effectElement = document.createElement("li");
+            let modifier;
+            if (effect[1] > 0) {
+                modifier = "+";
+            }
+            effectElement.innerHTML = effect[0] + ": "+modifier+effect[1];
+            itemInfoBox.appendChild(effectElement);
+        }
+
+        if (item.consumable) {
+            let consumeButton = document.createElement("button");
+            consumeButton.innerHTML = "Use";
+            consumeButton.addEventListener("click", (e) => {
+                useItem(item);
+                deleteItem(item);
+            });
+            newItem.appendChild(consumeButton);
+        }
+
+        newItem.appendChild(itemInfoBox);
+
+        inventoryBox.appendChild(newItem);
+    }
+
+    if (stats.drunkenness > 0) {
+        body.style.filter = "blur("+(stats.drunkenness / 10)+"px)";
+        drunkennessBox.style.display = "block";
+    } else {
+        body.style.filter = "blur(0)";
+        drunkennessBox.style.display = "none";
+    }
+
+    saveGame();
+}
+
+function deleteItem(item) {
+    let invItem = inventory.find(invItem => invItem.id == item.id);
+    if (invItem.quantity > 1) {
+        invItem.quantity--;
+    } else {
+        inventory = inventory.filter(i => i.id != invItem.id);
+    }
+
+    updateStats();
+}
+
+function useItem(item) {
+    for (let i = 0; i < item.effects.length; i++) {
+        if (item.effects[i].health) {
+            stats.health += item.effects[i].health;
+        }
+        if (item.effects[i].attack) {
+            stats.attack += item.effects[i].attack;
+        }
+        if (item.effects[i].defence) {
+            stats.defence += item.effects[i].defence;
+        }
+        if (item.effects[i].drunkenness) {
+            stats.drunkenness += item.effects[i].drunkenness;
+
+        }
+    }
+
+    updateStats();
+}
+
+function buyItem(itemID, price) {
+    let url = '/game.php?function=fetchItem&item=' + itemID;
+
+    ajax(url, (response) => {
+        item = JSON.parse(response);
+
+        if (stats.gold < price) {
+            alert("Insufficient funds");
+        } else {
+            stats.gold -= price;
+
+            let alreadyOwns = inventory.find(invItem => invItem.id == item.id);
+            if (alreadyOwns) {
+                alreadyOwns.quantity++;
+            } else {
+                item.quantity = 1;
+                inventory.push(item);
+            }
+    
+            if (!item.consumable) {
+                useItem(item);
+            }
+
+            pingUpdateMessage('inv-button', "+ "+item.name);
+            pingUpdateMessage('gold', "-"+price+"gp");
+
+            updateStats();
+        }
+    });
+}
+
+function pingUpdateMessage(id, message) {
+    let parentElement = document.getElementById(id);
+    let grandparentElement = parentElement.parentElement;
+    let element = document.createElement("div");
+    element.classList.add('ping');
+    element.innerHTML = message;
+    grandparentElement.appendChild(element);
+    setTimeout(() => {
+        element.classList.add('fade')
+        setTimeout(() => {
+            grandparentElement.removeChild(element);
+        }, 1500);
+    }, 100);
 }
