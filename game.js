@@ -103,6 +103,14 @@ function createChoiceBox(text, id) {
     return "<button onclick=\"writeOutRoom("+id+")\">"+text+"</button>";
 }
 
+/**
+ * 
+ * Creates a button to purchase an item
+ * 
+ * @param {object} item object containing id, price and name of item
+ * 
+ * @returns {string} the button HTML
+ */
 function createPurchaseBox(item) {
     return "<button onclick=\"buyItem("+item.id+", "+item.price+")\">"+item.name+" ("+item.price+"gp)</button>";
 }
@@ -121,6 +129,12 @@ function presentChoices(choices) {
     }, speed*20);
 }
 
+/**
+ * 
+ * Adds the shop option buttons to the responses div
+ * 
+ * @param {array} items array of objects with id, price and name of item
+ */
 function presentShopChoices(items) {
     setTimeout(() => {
         for (let i = 0; i < items.length; i++) {
@@ -206,6 +220,12 @@ function writeOutRoom(id) {
     endTurn(id);
 }
 
+/**
+ * 
+ * Sobers up by 1, reduces hp by 5 if overhealed (will be used more in combat)
+ * 
+ * @param {integer} id optional, current room id to pass through to saveGame()
+ */
 function endTurn(id){
     if (stats.drunkenness > 0) {
         stats.drunkenness--;
@@ -340,6 +360,10 @@ function toggleAutosave() {
     }
 }
 
+/**
+ * 
+ * Updates visible stat counters (gold, health etc.) and inventory, applies passive effects from everything in inventory
+ */
 function updateStats() {
     for (let key in stats) {
         document.getElementById(key).innerHTML = stats[key];
@@ -393,6 +417,12 @@ function updateStats() {
     saveGame();
 }
 
+/**
+ * 
+ * Removes an item from the inventory based on it's id
+ * 
+ * @param {object} item only required attribute is id
+ */
 function deleteItem(item) {
     let invItem = inventory.find(invItem => invItem.id == item.id);
     if (invItem.quantity > 1) {
@@ -404,6 +434,12 @@ function deleteItem(item) {
     updateStats();
 }
 
+/**
+ * 
+ * Applies any effects an item has
+ * 
+ * @param {object} item containing array of effects
+ */
 function useItem(item) {
     for (let i = 0; i < item.effects.length; i++) {
         if (item.effects[i].health) {
@@ -424,6 +460,13 @@ function useItem(item) {
     updateStats();
 }
 
+/**
+ * 
+ * Add an item to the inventory and reduce current money by it's price
+ * 
+ * @param {integer} itemID The id of the item being purchased
+ * @param {integer} price how much the item costs
+ */
 function buyItem(itemID, price) {
     let url = '/game.php?function=fetchItem&item=' + itemID;
 
@@ -455,6 +498,13 @@ function buyItem(itemID, price) {
     });
 }
 
+/**
+ * 
+ * Adds a little message to an element that fades away to nothing
+ * 
+ * @param {string} id id of the element getting the ping
+ * @param {string} message what does the ping say?
+ */
 function pingUpdateMessage(id, message) {
     let parentElement = document.getElementById(id);
     let grandparentElement = parentElement.parentElement;
