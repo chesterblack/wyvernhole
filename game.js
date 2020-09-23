@@ -5,12 +5,8 @@ const body = document.getElementById("body");
 const textBox = document.getElementById("text");
 const responseBox = document.getElementById("responses");
 const dialogueBox = document.getElementById("dialogue");
-const goldBox = document.getElementById("gold");
-const moneyMessageBox = document.getElementById("money-message");
 const drunkennessBox = document.getElementById("drunkenness-counter");
-const drunkBox = document.getElementById("drunkenness");
 const inventoryBox = document.getElementById('inventory');
-const optionsMenu = document.getElementById('options');
 const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
@@ -119,29 +115,20 @@ function createPurchaseBox(item) {
  * 
  * Adds the option buttons to the responses div
  * 
- * @param {array} choices array of objects with text and ids to create the option buttons
+ * @param {array} options array of objects to create the option buttons
  */
-function presentChoices(choices) {
+function presentChoices(options) {
     setTimeout(() => {
-        for (let i = 0; i < choices.length; i++) {
-            responseBox.innerHTML += createChoiceBox(choices[i].text, choices[i].id);
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].type == "option") {
+                responseBox.innerHTML += createChoiceBox(options[i].text, options[i].id);
+            } else if (options[i].type == "item") {
+                responseBox.innerHTML += createPurchaseBox(options[i]);
+            }
         }
     }, speed*20);
 }
 
-/**
- * 
- * Adds the shop option buttons to the responses div
- * 
- * @param {array} items array of objects with id, price and name of item
- */
-function presentShopChoices(items) {
-    setTimeout(() => {
-        for (let i = 0; i < items.length; i++) {
-            responseBox.innerHTML += createPurchaseBox(items[i]);
-        }
-    }, speed*20);
-}
 
 /**
  * 
@@ -195,24 +182,31 @@ function writeOutRoom(id) {
     responseBox.innerHTML = "";
     textBox.innerHTML = "";
     dialogueBox.innerHTML = "";
-    moneyMessageBox.innerHTML = "";
 
     ajax(url, (response) => {
         stopTyping = false;
         roomData = JSON.parse(response);
 
+        let roomOptions = roomData.options;
+        for (let choice of roomOptions) {
+            choice.type = "option";
+        }
+
         if (roomData.shop) {
+            for (let item of roomData.shop) {
+                item.type = "item";
+                roomOptions.unshift(item);
+            }
             stock[roomData.id] = roomData.shop;
-            presentShopChoices(roomData.shop);
         }
 
         typeWriter(roomData.message, textBox, () => {
             if (roomData.dialogue) {
                 writeOutDialogue(roomData.dialogue, 0, () => {
-                    presentChoices(roomData.options);
+                    presentChoices(roomOptions);
                 });
             } else {
-                presentChoices(roomData.options);
+                presentChoices(roomOptions);
             }
         });
     });
@@ -261,7 +255,6 @@ function saveGame(room) {
         document.getElementById('autosave').innerHTML = "off";
         document.cookie = "saveCode=; Max-Age=-1;";
     }
-    console.log("Game Saved");
 }
 
 /**
@@ -312,7 +305,7 @@ function copySaveCode() {
  * Loads a new game using the default options
  */
 function newGame() {
-    loadGame("eyJyIjoxLCJoIjoxMDAsImciOjEwLCJzIjoxMCwiZCI6MH0=");
+    loadGame("eyJyIjoxLCJoIjoxMDAsImciOjUwLCJzIjoxMCwiZCI6MCwiaSI6W119");
 }
 
 /**
@@ -370,40 +363,42 @@ function updateStats() {
     }
 
     inventoryBox.innerHTML = "";
-    for (let item of inventory) {
-        let newItem = document.createElement("div");
-        newItem.classList.add("item");
-        newItem.innerHTML = item.name;
-        if (item.quantity > 1) {
-            newItem.innerHTML += " x"+item.quantity;
-        }
-        newItem.dataset.itemid = item.id;
-        let itemInfoBox = document.createElement("ul");
-        itemInfoBox.classList.add("item-info");
-        for (let effect in item.effects) {
-            effect = Object.entries(item.effects[effect])[0];
-            let effectElement = document.createElement("li");
-            let modifier;
-            if (effect[1] > 0) {
-                modifier = "+";
+    if (inventory[0]){
+        for (let item of inventory) {
+            let newItem = document.createElement("div");
+            newItem.classList.add("item");
+            newItem.innerHTML = item.name;
+            if (item.quantity > 1) {
+                newItem.innerHTML += " x"+item.quantity;
             }
-            effectElement.innerHTML = effect[0] + ": "+modifier+effect[1];
-            itemInfoBox.appendChild(effectElement);
+            newItem.dataset.itemid = item.id;
+            let itemInfoBox = document.createElement("ul");
+            itemInfoBox.classList.add("item-info");
+            for (let effect in item.effects) {
+                effect = Object.entries(item.effects[effect])[0];
+                let effectElement = document.createElement("li");
+                let modifier;
+                if (effect[1] > 0) {
+                    modifier = "+";
+                }
+                effectElement.innerHTML = effect[0] + ": "+modifier+effect[1];
+                itemInfoBox.appendChild(effectElement);
+            }
+
+            if (item.consumable) {
+                let consumeButton = document.createElement("button");
+                consumeButton.innerHTML = "Use";
+                consumeButton.addEventListener("click", (e) => {
+                    useItem(item);
+                    deleteItem(item);
+                });
+                newItem.appendChild(consumeButton);
+            }
+
+            newItem.appendChild(itemInfoBox);
+
+            inventoryBox.appendChild(newItem);
         }
-
-        if (item.consumable) {
-            let consumeButton = document.createElement("button");
-            consumeButton.innerHTML = "Use";
-            consumeButton.addEventListener("click", (e) => {
-                useItem(item);
-                deleteItem(item);
-            });
-            newItem.appendChild(consumeButton);
-        }
-
-        newItem.appendChild(itemInfoBox);
-
-        inventoryBox.appendChild(newItem);
     }
 
     if (stats.drunkenness > 0) {
@@ -491,7 +486,10 @@ function buyItem(itemID, price) {
             }
 
             pingUpdateMessage('inv-button', "+ "+item.name);
-            pingUpdateMessage('gold', "-"+price+"gp");
+
+            if (price != 0) {
+                pingUpdateMessage('gold', "-"+price+"gp");
+            }
 
             updateStats();
         }
