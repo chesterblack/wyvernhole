@@ -11,7 +11,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 19;
+const startingRoom = 1;
 
 let stopTyping = false;
 let speed = 10;
@@ -21,7 +21,7 @@ let stats = {
     maxHealth: 100,
     gold: 50,
     drunkenness: 0,
-    attack: 5,
+    attack: 0,
     defence: 0
 };
 
@@ -209,8 +209,11 @@ function writeOutRoom(id) {
         roomData = JSON.parse(response);
 
         let roomOptions = roomData.options;
-        for (let choice of roomOptions) {
-            choice.type = "option";
+
+        if (roomOptions){
+            for (let choice of roomOptions) {
+                choice.type = "option";
+            }
         }
 
         if (roomData.shop) {
@@ -265,8 +268,10 @@ function saveGame(room) {
     saveCode.g = stats.gold;
     saveCode.d = stats.drunkenness;
     saveCode.h = stats.health;
+    saveCode.mh = stats.maxHealth;
     saveCode.s = speed;
 
+    saveCode.e = equipped;
     saveCode.i = inventory;
 
     saveGameOutput.value = btoa(JSON.stringify(saveCode));
@@ -304,7 +309,9 @@ function loadGame(saveCode) {
     stats.gold = loadedOptions.g;
     stats.drunkenness = loadedOptions.d;
     stats.health = loadedOptions.h;
+    stats.maxHealth = loadedOptions.mh;
     inventory = loadedOptions.i;
+    equipped = loadedOptions.e;
     speed = loadedOptions.s;
     textSpeedInput.value = speed;
     writeOutRoom(loadedOptions.r);
