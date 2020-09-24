@@ -18,6 +18,7 @@ let speed = 10;
 
 let stats = {
     health: 100,
+    maxHealth: 100,
     gold: 50,
     drunkenness: 0,
     attack: 5,
@@ -26,7 +27,23 @@ let stats = {
 
 let inventory = [];
 
-let equipped = {};
+let equipped = {
+    hands: [
+        null,
+        null
+    ],
+    armour: null,
+    boots: null,
+    gloves: null,
+    head: null,
+    rings: [
+        null,
+        null,
+        null,
+        null
+    ],
+    amulet: null
+};
 
 let roomData;
 let autosave = true;
@@ -36,6 +53,7 @@ let stock = {};
 let saveCode = {
     r: 1,
     h: stats.health,
+    mh: stats.maxHealth,
     g: stats.gold,
     s: speed,
     d: stats.drunkenness,
@@ -219,7 +237,7 @@ function writeOutRoom(id) {
 
 /**
  * 
- * Sobers up by 1, reduces hp by 5 if overhealed (will be used more in combat)
+ * Sobers up by 1, reduces hp by 5 if overhealed
  * 
  * @param {integer} id optional, current room id to pass through to saveGame()
  */
@@ -227,7 +245,7 @@ function endTurn(id){
     if (stats.drunkenness > 0) {
         stats.drunkenness--;
     }
-    if (stats.health > 100) {
+    if (stats.health > stats.maxHealth) {
         stats.health -= 5;
     }
     updateStats();
@@ -361,17 +379,47 @@ function toggleEquipped(item) {
         return invItem.id == item.id;
     })];
 
-
-
     if (inventoryItem.equipped) {
+        if (equipped[item.slot] != null && Array.isArray(equipped[item.slot])) {
+            for (let i in equipped[item.slot]) {
+                if (equipped[item.slot][i] && equipped[item.slot][i].id == item.id) {
+                    equipped[item.slot][i] = null;
+                    break;
+                }
+            }
+        } else {
+            equipped[item.slot] = null;
+        }
         applyItem(item, false);
         inventoryItem.equipped = false;
     } else {
-        applyItem(item);
-        inventoryItem.equipped = true;
+        let freeSlot = checkSlotIsFree(item.slot);
+        if (freeSlot === true) {
+            applyItem(item);
+            inventoryItem.equipped = true;
+            equipped[item.slot] = item;
+        } else if (freeSlot !== false) {
+            applyItem(item);
+            inventoryItem.equipped = true;
+            equipped[item.slot][freeSlot] = item;
+        } else {
+            alert("Sorry, you can't equip another item in the "+item.slot+" slot");
+        }
     }
-
     updateStats();
+}
+
+function checkSlotIsFree(slot) {
+    if (equipped[slot] != null && Array.isArray(equipped[slot])) {
+        for (let item in equipped[slot]) {
+            if (equipped[slot][item] == null) {
+                return item;
+            }
+        }
+        return false;
+    } else {
+        return equipped[slot] == null;
+    }
 }
 
 /**
@@ -395,6 +443,18 @@ function updateStats() {
             newItem.dataset.itemid = item.id;
             let itemInfoBox = document.createElement("ul");
             itemInfoBox.classList.add("item-info");
+
+            let itemSlot = document.createElement("li");
+            itemSlot.classList.add("item-slot");
+            if (item.slot) {
+                itemSlot.innerHTML = item.slot;
+                itemInfoBox.appendChild(itemSlot);
+            }
+            if (item.consumable) {
+                itemSlot.innerHTML = "Consumable";
+            }
+            itemInfoBox.appendChild(itemSlot);
+
             for (let effect in item.effects) {
                 effect = Object.entries(item.effects[effect])[0];
                 let effectElement = document.createElement("li");
