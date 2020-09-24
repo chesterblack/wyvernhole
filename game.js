@@ -11,7 +11,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 1;
+const startingRoom = 19;
 
 let stopTyping = false;
 let speed = 10;
@@ -21,10 +21,12 @@ let stats = {
     gold: 50,
     drunkenness: 0,
     attack: 5,
-    defence: 5,
+    defence: 0
 };
 
 let inventory = [];
+
+let equipped = {};
 
 let roomData;
 let autosave = true;
@@ -37,7 +39,8 @@ let saveCode = {
     g: stats.gold,
     s: speed,
     d: stats.drunkenness,
-    i: inventory
+    i: inventory,
+    e: equipped
 };
 
 // ----- ----- ----- //
@@ -305,7 +308,7 @@ function copySaveCode() {
  * Loads a new game using the default options
  */
 function newGame() {
-    loadGame("eyJyIjoxLCJoIjoxMDAsImciOjUwLCJzIjoxMCwiZCI6MCwiaSI6W119");
+    loadGame("eyJyIjoxLCJoIjoxMDAsImciOjUwLCJzIjoxMCwiZCI6MCwiaSI6W3siaWQiOjQsIm5hbWUiOiJEYWdnZXIiLCJlZmZlY3RzIjpbeyJhdHRhY2siOjV9XSwicXVhbnRpdHkiOjF9XX0=");
 }
 
 /**
@@ -353,9 +356,27 @@ function toggleAutosave() {
     }
 }
 
+function toggleEquipped(item) {
+    let inventoryItem = inventory[inventory.findIndex((invItem) => {
+        return invItem.id == item.id;
+    })];
+
+
+
+    if (inventoryItem.equipped) {
+        applyItem(item, false);
+        inventoryItem.equipped = false;
+    } else {
+        applyItem(item);
+        inventoryItem.equipped = true;
+    }
+
+    updateStats();
+}
+
 /**
  * 
- * Updates visible stat counters (gold, health etc.) and inventory, applies passive effects from everything in inventory
+ * Updates visible stat counters (gold, health etc.) and inventory, applies passive effects from everything equipped in inventory
  */
 function updateStats() {
     for (let key in stats) {
@@ -389,10 +410,27 @@ function updateStats() {
                 let consumeButton = document.createElement("button");
                 consumeButton.innerHTML = "Use";
                 consumeButton.addEventListener("click", (e) => {
-                    useItem(item);
+                    applyItem(item);
                     deleteItem(item);
                 });
                 newItem.appendChild(consumeButton);
+            }
+            
+            if (item.equippable) {
+                let equipButton = document.createElement("button");
+                if (item.equipped) {
+                    newItem.classList.add("equipped");
+                    equipButton.innerHTML = "Unequip";
+                } else {
+                    newItem.classList.remove("equipped");
+                    equipButton.innerHTML = "Equip";
+                }
+                equipButton.classList.add("equip");
+                equipButton.addEventListener("click", (e) => {
+                    toggleEquipped(item);
+                });
+                newItem.appendChild(equipButton);
+
             }
 
             newItem.appendChild(itemInfoBox);
@@ -435,20 +473,14 @@ function deleteItem(item) {
  * 
  * @param {object} item containing array of effects
  */
-function useItem(item) {
-    for (let i = 0; i < item.effects.length; i++) {
-        if (item.effects[i].health) {
-            stats.health += item.effects[i].health;
-        }
-        if (item.effects[i].attack) {
-            stats.attack += item.effects[i].attack;
-        }
-        if (item.effects[i].defence) {
-            stats.defence += item.effects[i].defence;
-        }
-        if (item.effects[i].drunkenness) {
-            stats.drunkenness += item.effects[i].drunkenness;
-
+function applyItem(item, positive = true) {
+    for (let effect of item.effects) {
+        for (let stat in effect) {
+            if (positive) {
+                stats[stat] += effect[stat];
+            } else {
+                stats[stat] -= effect[stat];
+            }
         }
     }
 
@@ -481,10 +513,6 @@ function buyItem(itemID, price) {
                 inventory.push(item);
             }
     
-            if (!item.consumable) {
-                useItem(item);
-            }
-
             pingUpdateMessage('inv-button', "+ "+item.name);
 
             if (price != 0) {
