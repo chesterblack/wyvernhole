@@ -11,9 +11,10 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 1;
+const startingRoom = 19;
 
 let stopTyping = false;
+let uniqueID = 0;
 let speed = 10;
 
 let stats = {
@@ -383,13 +384,13 @@ function toggleAutosave() {
 
 function toggleEquipped(item) {
     let inventoryItem = inventory[inventory.findIndex((invItem) => {
-        return invItem.id == item.id;
+        return invItem.uid == item.uid;
     })];
 
     if (inventoryItem.equipped) {
         if (equipped[item.slot] != null && Array.isArray(equipped[item.slot])) {
             for (let i in equipped[item.slot]) {
-                if (equipped[item.slot][i] && equipped[item.slot][i].id == item.id) {
+                if (equipped[item.slot][i] && equipped[item.slot][i].uid == item.uid) {
                     equipped[item.slot][i] = null;
                     break;
                 }
@@ -566,6 +567,8 @@ function buyItem(itemID, price) {
 
     ajax(url, (response) => {
         item = JSON.parse(response);
+        item.uid = uniqueID;
+        uniqueID++;
 
         if (stats.gold < price) {
             alert("Insufficient funds");
@@ -573,7 +576,7 @@ function buyItem(itemID, price) {
             stats.gold -= price;
 
             let alreadyOwns = inventory.find(invItem => invItem.id == item.id);
-            if (alreadyOwns) {
+            if (alreadyOwns && item.consumable) {
                 alreadyOwns.quantity++;
             } else {
                 item.quantity = 1;
