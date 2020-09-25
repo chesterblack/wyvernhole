@@ -16,6 +16,7 @@ const startingRoom = 19;
 let stopTyping = false;
 let uniqueID = 0;
 let speed = 10;
+let openInfoBox = false;
 
 let stats = {
     health: 100,
@@ -115,10 +116,15 @@ function typeWriter(txt, target, callback) {
  * @param {string} text the text to go in the button
  * @param {integer} id the room id of where the button goes
  * 
- * @returns {string} the button HTML
+ * @returns {HTMLElement} the button
  */
 function createChoiceBox(text, id) {
-    return "<button onclick=\"writeOutRoom("+id+")\">"+text+"</button>";
+    let optionButton = document.createElement("button");
+    optionButton.innerHTML = text;
+    optionButton.addEventListener("click", () => {
+        writeOutRoom(id);
+    });
+    return optionButton;
 }
 
 /**
@@ -127,10 +133,15 @@ function createChoiceBox(text, id) {
  * 
  * @param {object} item object containing id, price and name of item
  * 
- * @returns {string} the button HTML
+ * @returns {HTMLElement} the button
  */
 function createPurchaseBox(item) {
-    return "<button onclick=\"buyItem("+item.id+", "+item.price+")\">"+item.name+" ("+item.price+"gp)</button>";
+    let buyButton = document.createElement("button");
+    buyButton.innerHTML = item.name + " ("+item.price+"gp)";
+    buyButton.addEventListener("click", () => {
+        buyItem(item.id, item.price);
+    });
+    return buyButton;
 }
 
 /**
@@ -141,16 +152,33 @@ function createPurchaseBox(item) {
  */
 function presentChoices(options) {
     setTimeout(() => {
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].type == "option") {
-                responseBox.innerHTML += createChoiceBox(options[i].text, options[i].id);
-            } else if (options[i].type == "item") {
-                responseBox.innerHTML += createPurchaseBox(options[i]);
+        for (let option of options) {
+            if (option.type == "option") {
+                responseBox.appendChild(createChoiceBox(option.text, option.id));
+            } else if (option.type == "item") {
+                let buttonContainer = document.createElement("div");
+                buttonContainer.classList.add("shop-button");
+                let itemInfoButton = document.createElement("button");
+                getItem(option.id, (response) => {
+                    let item = JSON.parse(response);
+                    let itemInfoBox = createItemDescriptionBox(item);
+                    itemInfoButton.innerHTML = "?";
+                    itemInfoButton.addEventListener("click", () => {
+                        let infoBoxes = document.getElementsByClassName("item-info-box");
+                        for (let box of infoBoxes) {
+                            box.style.display = "none";
+                        }
+                        itemInfoBox.style.display = "block";
+                    });
+                    responseBox.appendChild(itemInfoBox);
+                })
+                buttonContainer.appendChild(createPurchaseBox(option));
+                buttonContainer.appendChild(itemInfoButton);
+                responseBox.appendChild(buttonContainer);
             }
         }
     }, speed*20);
 }
-
 
 /**
  * 
@@ -348,7 +376,7 @@ textSpeedInput.addEventListener("change", () => {
 
 /**
  * 
- * Autoload a game saved to the cookie, otherwise load the first room
+ * Autoload a game saved to the cookie, otherwise load the first room and give a free dagger
  */
 window.onload = () => {
     let autosaveSet = document.cookie.match(new RegExp('(^| )autosave=([^;]+)'));
@@ -358,10 +386,12 @@ window.onload = () => {
         if (savedGame) {
             loadGame(savedGame[2]);
         } else {
+            buyItem(2, 0, true);
             writeOutRoom(startingRoom);
         }
     } else {
         autosave = false;
+        buyItem(2, 0, true);
         writeOutRoom(startingRoom);
     }
 
@@ -432,7 +462,7 @@ function checkSlotIsFree(slot) {
 
 /**
  * 
- * Updates visible stat counters (gold, health etc.) and inventory, applies passive effects from everything equipped in inventory
+ * Updates visible stat counters (gold, health etc.) and inventory
  */
 function updateStats() {
     for (let key in stats) {
@@ -449,41 +479,6 @@ function updateStats() {
                 newItem.innerHTML += " x"+item.quantity;
             }
             newItem.dataset.itemid = item.id;
-            let itemInfoBox = document.createElement("ul");
-            itemInfoBox.classList.add("item-info");
-
-            let itemSlot = document.createElement("li");
-            itemSlot.classList.add("item-slot");
-            if (item.slot) {
-                itemSlot.innerHTML = item.slot;
-                itemInfoBox.appendChild(itemSlot);
-            }
-            if (item.consumable) {
-                itemSlot.innerHTML = "Consumable";
-            }
-            itemInfoBox.appendChild(itemSlot);
-
-            for (let effect in item.effects) {
-                effect = Object.entries(item.effects[effect])[0];
-                let effectElement = document.createElement("li");
-                let modifier;
-                if (effect[1] > 0) {
-                    modifier = "+";
-                }
-                effectElement.innerHTML = effect[0] + ": "+modifier+effect[1];
-                itemInfoBox.appendChild(effectElement);
-            }
-
-            if (item.consumable) {
-                let consumeButton = document.createElement("button");
-                consumeButton.innerHTML = "Use";
-                consumeButton.addEventListener("click", (e) => {
-                    applyItem(item);
-                    deleteItem(item);
-                });
-                newItem.appendChild(consumeButton);
-            }
-            
             if (item.equippable) {
                 let equipButton = document.createElement("button");
                 if (item.equipped) {
@@ -498,11 +493,31 @@ function updateStats() {
                     toggleEquipped(item);
                 });
                 newItem.appendChild(equipButton);
-
+            }
+            if (item.consumable) {
+                let consumeButton = document.createElement("button");
+                consumeButton.innerHTML = "Use";
+                consumeButton.addEventListener("click", (e) => {
+                    applyItem(item);
+                    deleteItem(item);
+                });
+                newItem.appendChild(consumeButton);
             }
 
-            newItem.appendChild(itemInfoBox);
+            let itemInfoBox = createItemDescriptionBox(item, newItem);
+            let itemInfoButton = document.createElement("button");
+            itemInfoButton.classList.add("info-button");
+            itemInfoButton.innerHTML = "?";
+            itemInfoButton.addEventListener("click", () => {
+                let infoBoxes = document.getElementsByClassName("item-info-box");
+                for (let box of infoBoxes) {
+                    box.style.display = "none";
+                }
+                itemInfoBox.style.display = "block";
+            });
 
+            newItem.appendChild(itemInfoButton);
+            newItem.appendChild(itemInfoBox);
             inventoryBox.appendChild(newItem);
         }
     }
@@ -557,12 +572,76 @@ function applyItem(item, positive = true) {
 
 /**
  * 
+ * Creates and returns a div with all the info on an item to be shown in a popup
+ * 
+ * @param {object} item full object with all data on the item as pulled from db
+ * 
+ * @returns {HTMLElement} the info box HTML element to be appended wherever
+ */
+function createItemDescriptionBox(item) {
+    let itemInfoBox = document.createElement("div");
+    itemInfoBox.classList.add("item-info-box");
+
+    let itemTitle = document.createElement("h2");
+    itemTitle.innerHTML = item.name;
+    itemInfoBox.appendChild(itemTitle);
+
+    if (item.quantity > 1) {
+        let itemQuantity = document.createElement("span");
+        itemQuantity.classList.add("quantity");
+        itemQuantity.innerHTML = "x"+item.quantity;
+        itemInfoBox.appendChild(itemQuantity);
+    }
+
+    if (item.description) {
+        let itemDesc = document.createElement("p");
+        itemDesc.innerHTML = itemDesc;
+        itemInfoBox.appendChild(itemDesc);
+    }
+
+    let itemCategory = document.createElement("h3");
+    itemCategory.classList.add("item-slot");
+    if (item.slot) {
+        itemCategory.innerHTML = item.slot;
+    }
+    if (item.consumable) {
+        itemCategory.innerHTML = "Consumable";
+    }
+    itemInfoBox.appendChild(itemCategory);
+
+    let effectsList = document.createElement("ul");
+    for (let effect in item.effects) {
+        effect = Object.entries(item.effects[effect])[0];
+        let effectElement = document.createElement("li");
+        let modifier;
+        if (effect[1] > 0) {
+            modifier = "+";
+        }
+        effectElement.innerHTML = effect[0] + ": "+modifier+effect[1];
+        effectsList.appendChild(effectElement);
+    }
+    itemInfoBox.appendChild(effectsList);
+
+    let closeButton = document.createElement("button");
+    closeButton.classList.add("close-button");
+    closeButton.innerHTML = "close";
+    closeButton.addEventListener("click", () => {
+        itemInfoBox.style.display = "none";
+    });
+
+    itemInfoBox.prepend(closeButton);
+    
+    return itemInfoBox;
+}
+
+/**
+ * 
  * Add an item to the inventory and reduce current money by it's price
  * 
  * @param {integer} itemID The id of the item being purchased
  * @param {integer} price how much the item costs
  */
-function buyItem(itemID, price) {
+function buyItem(itemID, price, autoequip = false) {
     let url = '/game.php?function=fetchItem&item=' + itemID;
 
     ajax(url, (response) => {
@@ -583,14 +662,32 @@ function buyItem(itemID, price) {
                 inventory.push(item);
             }
     
-            pingUpdateMessage('inv-button', "+ "+item.name);
-
             if (price != 0) {
                 pingUpdateMessage('gold', "-"+price+"gp");
             }
 
+            if (autoequip) {
+                toggleEquipped(item);
+            } else {
+                pingUpdateMessage('inv-button', "+ "+item.name);
+            }
+
             updateStats();
         }
+    });
+}
+
+/**
+ * 
+ * Grabs all available data from the db for a particular item
+ * 
+ * @param {integer} id id of the item
+ * @param {function} callback the callback function to run once the data is returned
+ */
+function getItem(id, callback) {
+    let url = '/game.php?function=fetchItem&item=' + id;
+    ajax(url, (response) => {
+        callback(response);
     });
 }
 

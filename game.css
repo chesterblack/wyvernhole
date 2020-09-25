@@ -151,27 +151,72 @@ textarea{
     justify-content: flex-end;
     position: relative;
 }
-.item-info {
-    position: absolute;
-    top: 100%;
+.item:hover .item-info-box{
+    /* display: block; */
+}
+.item-info-box{
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
     background: #000;
-    border: 2px solid #ffffff;
-    padding: 5px;
-    z-index: 10;
+    border: 3px solid;
+    padding: 15px;
+    text-align: left;
+    min-width: 20%;
+    min-height: 35%;
+}
+.item-info-box h2{
     margin: 0;
+    margin-right: 60px;
+}
+.item-info-box .quantity{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+.item-info-box ul{
     list-style: none;
     text-transform: capitalize;
-    display: none;
+    padding: 0;
+    margin: 0;
 }
-.item:hover .item-info{
-    display: block;
+.item-info-box .use-button,
+.item-info-box .equip{
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .gold{
     color: goldenrod;
 }
 .item-slot{
     border-bottom: 3px solid;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
+    border-top: 3px solid;
+    padding: 5px 0 8px;
+    margin: 11px 0 8px;
     font-style: italic;
+    text-transform: capitalize;
+    font-weight: normal;
+}
+.close-button{
+    position: absolute;
+    top: -34px;
+    right: -3px;
+    margin: 0;
+    border: 3px solid #ffffff;
+    background: #000000;
+}
+.close-button:hover,
+.close-button:focus{
+    background: #000000;
+    border: 3px solid #ffffff;
+}
+#inventory .info-button{
+    margin-left: 0;
+}
+.shop-button button{
+    display: inline-block;
 }

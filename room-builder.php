@@ -52,7 +52,6 @@
             let deleteDialogue = document.createElement("button");
             deleteDialogue.type = "button";
             deleteDialogue.innerHTML = "-";
-            deleteDialogue.classList.add("delete");
             deleteDialogue.addEventListener("click", (e) => {
                 let parent = e.target.parentElement
                 parent.parentNode.removeChild(parent)
