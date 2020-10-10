@@ -159,19 +159,17 @@ function presentChoices(options) {
                 let buttonContainer = document.createElement("div");
                 buttonContainer.classList.add("shop-button");
                 let itemInfoButton = document.createElement("button");
-                getItem(option.id, (response) => {
-                    let item = JSON.parse(response);
-                    let itemInfoBox = createItemDescriptionBox(item);
-                    itemInfoButton.innerHTML = "?";
-                    itemInfoButton.addEventListener("click", () => {
-                        let infoBoxes = document.getElementsByClassName("item-info-box");
-                        for (let box of infoBoxes) {
-                            box.style.display = "none";
-                        }
-                        itemInfoBox.style.display = "block";
-                    });
-                    responseBox.appendChild(itemInfoBox);
-                })
+                let itemInfoBox = createItemDescriptionBox(option);
+                itemInfoButton.innerHTML = "?";
+                itemInfoButton.addEventListener("click", () => {
+                    let infoBoxes = document.getElementsByClassName("item-info-box");
+                    for (let box of infoBoxes) {
+                        box.style.display = "none";
+                    }
+                    itemInfoBox.style.display = "block";
+                });
+                responseBox.appendChild(itemInfoBox);
+
                 buttonContainer.appendChild(createPurchaseBox(option));
                 buttonContainer.appendChild(itemInfoButton);
                 responseBox.appendChild(buttonContainer);
@@ -238,6 +236,8 @@ function writeOutRoom(id) {
         roomData = JSON.parse(response);
 
         let roomOptions = roomData.options;
+        let priceMod = roomData.priceMod ?? 1;
+        let shopItems = roomData.shop ?? [];
 
         if (roomOptions){
             for (let choice of roomOptions) {
@@ -245,23 +245,27 @@ function writeOutRoom(id) {
             }
         }
 
-        if (roomData.shop) {
-            for (let item of roomData.shop) {
-                item.type = "item";
-                roomOptions.unshift(item);
+        getItems(shopItems, (response) => {
+            if (response) {
+                response = JSON.parse(response);
+                for (let item of response) {
+                    item.type = "item";
+                    item.price = Math.round(item.basePrice * priceMod);
+                    roomOptions.unshift(item);
+                }
             }
-            stock[roomData.id] = roomData.shop;
-        }
-
-        typeWriter(roomData.message, textBox, () => {
-            if (roomData.dialogue) {
-                writeOutDialogue(roomData.dialogue, 0, () => {
-                    presentChoices(roomOptions);
-                });
-            } else {
-                presentChoices(roomOptions);
-            }
+            
+            typeWriter(roomData.message, textBox, () => {
+                if (roomData.dialogue) {
+                    writeOutDialogue(roomData.dialogue, 0, () => {
+                        presentChoices(roomOptions, priceMod);
+                    });
+                } else {
+                    presentChoices(roomOptions, priceMod);
+                }
+            });
         });
+
     });
 
     endTurn(id);
@@ -689,6 +693,27 @@ function getItem(id, callback) {
     ajax(url, (response) => {
         callback(response);
     });
+}
+
+/**
+ * 
+ * Grabs all available data from the db for a several items
+ * 
+ * @param {array} items array of objects
+ * @param {function} callback the callback function to run once the data is returned
+ */
+function getItems(items, callback) {
+    if (items[0]) {
+        let url = '/game.php?function=fetchItems';
+        for (let item of items) {
+            url += "&item[]=" + item.id;
+        }
+        ajax(url, (response) => {
+            callback(response);
+        });
+    } else {
+        callback(null);
+    }
 }
 
 /**
