@@ -1,19 +1,27 @@
 <?php
     error_reporting(E_ALL);
     include($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
+    $dbPassword = $_ENV['DB_PASSWORD'];
+
+    $client = new MongoDB\Client(
+        'mongodb+srv://chester:'.$dbPassword.'@wyvernhole.2ydpn.mongodb.net/wyvernhole?retryWrites=true&w=majority'
+    );
     
     switch ($_GET['function']) {
         case 'fetchRoom':
-            $collection = (new MongoDB\Client)->game->rooms;
+            $collection = $client->wyvernhole->rooms;
             $id = intval(htmlentities($_GET['room']));
             break;
         case 'fetchItem':
-            $collection = (new MongoDB\Client)->game->items;
+            $collection = $client->wyvernhole->items;
             $id = intval(htmlentities($_GET['item']));
             break;
         case 'fetchItems':
             $multiple = true;
-            $collection = (new MongoDB\Client)->game->items;
+            $collection = $client->wyvernhole->items;
             $options = [];
 
             foreach ($_GET['item'] as $item) {
