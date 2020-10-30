@@ -220,3 +220,11 @@ textarea{
 .shop-button button{
     display: inline-block;
 }
+.new-item{
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: absolute;
+    bottom: -5px;
+    right: 0;
+}

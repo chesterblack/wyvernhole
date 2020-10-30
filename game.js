@@ -11,7 +11,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 19;
+const startingRoom = 1;
 
 let stopTyping = false;
 let uniqueID = 0;
@@ -384,7 +384,7 @@ textSpeedInput.addEventListener("change", () => {
  */
 window.onload = () => {
     let autosaveSet = document.cookie.match(new RegExp('(^| )autosave=([^;]+)'));
-    if (autosaveSet[2] == "true") {
+    if (autosaveSet && autosaveSet[2] == "true") {
         let savedGame = document.cookie.match(new RegExp('(^| )saveCode=([^;]+)'));
         autosave = true;
         if (savedGame) {
@@ -473,9 +473,11 @@ function updateStats() {
         document.getElementById(key).innerHTML = stats[key];
     }
 
+    let newItems = false;
+
     inventoryBox.innerHTML = "";
     if (inventory[0]){
-        for (let item of inventory) {
+        inventory.forEach((item, i, inv) => {
             let newItem = document.createElement("div");
             newItem.classList.add("item");
             newItem.innerHTML = item.name;
@@ -483,6 +485,7 @@ function updateStats() {
                 newItem.innerHTML += " x"+item.quantity;
             }
             newItem.dataset.itemid = item.id;
+            newItem.dataset.invIndex = i;
             if (item.equippable) {
                 let equipButton = document.createElement("button");
                 if (item.equipped) {
@@ -520,12 +523,26 @@ function updateStats() {
                 itemInfoBox.style.display = "block";
             });
 
+            if (item.new) {
+                addNewTag(newItem);
+                newItem.addEventListener("mouseover", () => {
+                    removeNewTag(newItem);
+                });
+                newItems = true;
+            }
+
             newItem.appendChild(itemInfoButton);
             newItem.appendChild(itemInfoBox);
             inventoryBox.appendChild(newItem);
-        }
-    }
+        })
 
+    }
+    
+    let inventoryButton = document.getElementById('inv-button');
+    if (newItems && !inventoryButton.getElementsByClassName('new-item')[0]) {
+        addNewTag(inventoryButton);
+    }
+    
     if (stats.drunkenness > 0) {
         body.style.filter = "blur("+(stats.drunkenness / 10)+"px)";
         drunkennessBox.style.display = "block";
@@ -535,6 +552,44 @@ function updateStats() {
     }
 
     saveGame();
+}
+
+/**
+ * 
+ * Adds a span to an element that says 'New'
+ * 
+ * @param {HTMLelement} element element to add the span to
+ */
+function addNewTag(element) {
+    let newBox = document.createElement("span");
+    newBox.classList.add("new-item");
+    newBox.innerHTML = "New";
+    element.appendChild(newBox);
+}
+
+
+/**
+ * 
+ * Removes a span with the class 'new-item' from an element
+ * 
+ * @param {HTMLelement} element element to remove the span from
+ */
+function removeNewTag(element) {
+    if (element.dataset.invIndex) {
+        let index = element.dataset.invIndex;
+        inventory[index].new = false;
+    }
+
+    if (element.getElementsByClassName('new-item')[0]) {
+        let newTag = element.getElementsByClassName('new-item')[0];
+        newTag.remove();
+    }
+    
+    if (!document.getElementsByClassName('new-item')[1] && 
+        document.getElementsByClassName('new-item')[0]) {
+        let newTag = document.getElementsByClassName('new-item')[0];
+        newTag.remove();
+    }
 }
 
 /**
@@ -663,6 +718,7 @@ function buyItem(itemID, price, autoequip = false) {
                 alreadyOwns.quantity++;
             } else {
                 item.quantity = 1;
+                item.new = true;
                 inventory.push(item);
             }
     
