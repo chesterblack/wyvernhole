@@ -11,7 +11,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 1;
+const startingRoom = 3;
 
 let stopTyping = false;
 let uniqueID = 0;
@@ -88,6 +88,8 @@ function ajax(url, callback) {
  * 
  * Types out the text given one letter at a time like a typewriter
  * 
+ * Percentage chance of slurring each character based on drunkenness
+ * 
  * @param {string} txt Text to be typewritered out
  * @param {object} target Where the text needs to go
  * @param {function} callback What to do once the text has been typed
@@ -99,13 +101,43 @@ function typeWriter(txt, target, callback) {
     function typeText() {
         if (!stopTyping) {
             if (i < txt.length) {
-                target.innerHTML += txt.charAt(i);
+                let slurChance = Math.random() * 80;
+                if (slurChance > stats.drunkenness) {
+                    target.innerHTML += txt.charAt(i);
+                } else {
+                    target.innerHTML += slur(txt.charAt(i));
+                }
                 i++;
                 setTimeout(typeText, speed);
             } else {
                 callback();
             }
         }
+    }
+}
+
+/**
+ * 
+ * Takes a character and either removes it, duplicates it, shifts it or replaces it with a space
+ * 
+ * @param {string} letter single character to be slurred
+ * @return {string} slurred character
+ */
+function slur(letter) {
+    let rando = Math.random();
+
+    if (rando < 0.25) {
+        return "";
+    } else if (rando < 0.5) {
+        return letter + letter;
+    } else if (rando < 0.75) {
+        if (letter.match(/[a-z]/i)) {
+            return String.fromCharCode(letter.charCodeAt(0) + 1);
+        } else {
+            return letter;
+        }
+    } else {
+        return " ";
     }
 }
 
