@@ -4,24 +4,33 @@
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 
-    $dbPassword = $_ENV['DB_PASSWORD'];
+    if ($_ENV['local'] == "true") {
+        $client = (new MongoDB\Client);
+        $database = $client->game;
+    } else {
+        try {
+            $dbPassword = $_ENV['DB_PASSWORD'];
+            $client = new MongoDB\Client(
+                'mongodb+srv://chester:'.$dbPassword.'@wyvernhole.2ydpn.mongodb.net/wyvernhole?retryWrites=true&w=majority'
+            );
+            $database = $client->wyvernhole;
+        } catch (Throwable $t) {
+            echo $t->getMessage();
+        }
+    }
 
-    $client = new MongoDB\Client(
-        'mongodb+srv://chester:'.$dbPassword.'@wyvernhole.2ydpn.mongodb.net/wyvernhole?retryWrites=true&w=majority'
-    );
-    
     switch ($_GET['function']) {
         case 'fetchRoom':
-            $collection = $client->wyvernhole->rooms;
+            $collection = $database->rooms;
             $id = intval(htmlentities($_GET['room']));
             break;
         case 'fetchItem':
-            $collection = $client->wyvernhole->items;
+            $collection = $database->items;
             $id = intval(htmlentities($_GET['item']));
             break;
         case 'fetchItems':
             $multiple = true;
-            $collection = $client->wyvernhole->items;
+            $collection = $database->items;
             $options = [];
 
             foreach ($_GET['item'] as $item) {
