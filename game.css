@@ -103,10 +103,12 @@ button:active{
 }
 .menu-wrapper button{
     margin-left: auto;
+    position: relative;
 }
 .menu{
     overflow: hidden;
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: scroll;
     background-color: #000000;
     border-left: 2px solid goldenrod;
     position: absolute;
@@ -115,9 +117,7 @@ button:active{
     padding: 15px;
     box-sizing: border-box;
     z-index: 5;
-}
-#inventory-menu{
-    min-width: 251px;
+    min-width: 255px;
 }
 .closed{
     display: none;
@@ -220,11 +220,37 @@ textarea{
 .shop-button button{
     display: inline-block;
 }
-.new-item{
+.new{
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
     position: absolute;
-    bottom: -5px;
+    bottom: -13px;
     right: 0;
+    z-index: 2;
+    padding: 2px 4px 1px;
+    background: #000;
+    border: 2px solid #fff;
+}
+
+.quest{
+    border-bottom: 2px solid;
+    position: relative;
+}
+.quest h3{
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+    margin-top: 10px;
+}
+.quest-step{
+    display: block;
+    margin: 10px 0;
+    font-size: 23px;
+}
+.quest-step:not(:last-child)::after{
+    content: "+++";
+    display: block;
+    margin: 10px 0;
 }

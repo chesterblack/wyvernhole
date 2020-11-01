@@ -29,10 +29,15 @@
         <div class="menu-wrapper">
             <button onclick="toggleMenu('options')">Options</button>
             <button onclick="toggleMenu('inventory-menu')" id="inv-button">Inventory</button>
+            <button onclick="toggleMenu('quests-menu')" id="quests-button">Quests</button>
 
             <div id="inventory-menu" class="menu closed">
                 <button onclick="toggleMenu('inventory-menu')">Close</button>
                 <div id="inventory"></div>
+            </div>
+            <div id="quests-menu" class="menu closed">
+                <button onclick="toggleMenu('quests-menu')">Close</button>
+                <div id="quests"></div>
             </div>
             <div id="options" class="menu closed">
                 <button onclick="toggleMenu('options')">Close</button>

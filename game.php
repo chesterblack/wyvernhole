@@ -24,6 +24,10 @@
             $collection = $database->rooms;
             $id = intval(htmlentities($_GET['room']));
             break;
+        case 'fetchQuest':
+            $collection = $database->quests;
+            $id = intval(htmlentities($_GET['quest']));
+            break;
         case 'fetchItem':
             $collection = $database->items;
             $id = intval(htmlentities($_GET['item']));

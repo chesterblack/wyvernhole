@@ -7,11 +7,12 @@ const responseBox = document.getElementById("responses");
 const dialogueBox = document.getElementById("dialogue");
 const drunkennessBox = document.getElementById("drunkenness-counter");
 const inventoryBox = document.getElementById('inventory');
+const questsBox = document.getElementById('quests');
 const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 19;
+const startingRoom = 10;
 
 let stopTyping = false;
 let uniqueID = 0;
@@ -26,6 +27,8 @@ let stats = {
     attack: 0,
     defence: 0
 };
+
+let quests = [];
 
 let inventory = [];
 
@@ -182,10 +185,17 @@ function createPurchaseBox(item) {
  * 
  * @param {array} options array of objects to create the option buttons
  */
+// TODO: clean up the three options so it just sets a var from a func and then appends it at the end outside the conditionals
 function presentChoices(options) {
     setTimeout(() => {
         for (let option of options) {
-            if (option.type == "option") {
+            if (option.quest) {
+                let optionBox = createChoiceBox(option.text, option.id); 
+                optionBox.addEventListener("click", () => {
+                    addQuestStep(option.quest.id, option.quest.step);
+                });
+                responseBox.appendChild(optionBox);
+            } else if (option.type == "option") {
                 responseBox.appendChild(createChoiceBox(option.text, option.id));
             } else if (option.type == "item") {
                 let buttonContainer = document.createElement("div");
@@ -208,6 +218,42 @@ function presentChoices(options) {
             }
         }
     }, speed*20);
+}
+
+function addQuestStep(id, step) {
+    let questsButton = document.getElementById('quests-button');
+    let url = '/game.php?function=fetchQuest&quest='+id;
+    ajax(url, (response) => {
+        quest = JSON.parse(response);
+        
+        if (!quests.find(i => id == i.id)) {
+            addNewQuest(quest);
+            if (!questsButton.getElementsByClassName('new')[0]) {
+                addNewTag(questsButton, false);
+            }
+        }
+
+        let questItem = document.querySelector("[data-quest-id='"+id+"']");
+
+        let questIndex = questItem.dataset.questIndex;
+        quests[questIndex].steps[step].new = true;
+        let questStepItem = document.createElement('span');
+        questItem.appendChild(questStepItem);
+        questStepItem.classList.add('quest-step');
+        questStepItem.dataset.questStep = step;
+        questStepItem.innerHTML = quest.steps[step].description;
+        questStepItem = addNewTag(questStepItem, true);
+    })
+}
+
+function addNewQuest(quest) {
+    let newQuestItem = document.createElement("div");
+    newQuestItem.classList.add('quest');
+    newQuestItem.dataset.questId = quest.id;
+    quest.completed = false;
+    newQuestItem.dataset.questIndex = quests.push(quest) - 1;
+    newQuestItem.innerHTML = "<h3>"+quest.name+"</h3>";
+    questsBox.appendChild(newQuestItem);
 }
 
 /**
@@ -557,10 +603,7 @@ function updateStats() {
             });
 
             if (item.new) {
-                addNewTag(newItem);
-                newItem.addEventListener("mouseover", () => {
-                    removeNewTag(newItem);
-                });
+                addNewTag(newItem, true);
                 newItems = true;
             }
 
@@ -572,8 +615,10 @@ function updateStats() {
     }
     
     let inventoryButton = document.getElementById('inv-button');
-    if (newItems && !inventoryButton.getElementsByClassName('new-item')[0]) {
-        addNewTag(inventoryButton);
+    if (newItems && !inventoryButton.getElementsByClassName('new')[0]) {
+        addNewTag(inventoryButton, false);
+    } else if (inventoryButton.querySelector('.new')) {
+        removeNewTag(inventoryButton);
     }
     
     if (stats.drunkenness > 0) {
@@ -587,6 +632,17 @@ function updateStats() {
         drunkennessBox.style.display = "none";
     }
 
+    let newQuests = false;
+    let questsButton = document.getElementById('quests-button');
+    for (let i = 0; i < quests.length; i++) {
+        if (quests[i].new) {
+            newQuests = true;
+        };
+    }
+    if (!newQuests && questsButton.querySelector('.new')) {
+        document.getElementById('quests-button').getElementsByClassName('new')[0].remove();
+    }
+
     saveGame();
 }
 
@@ -595,11 +651,17 @@ function updateStats() {
  * Adds a span to an element that says 'New'
  * 
  * @param {HTMLelement} element element to add the span to
+ * @param {boolean} hoverRemove should hovering over the element should remove the tag
  */
-function addNewTag(element) {
+function addNewTag(element, hoverRemove) {
     let newBox = document.createElement("span");
-    newBox.classList.add("new-item");
+    newBox.classList.add("new");
     newBox.innerHTML = "New";
+    if (hoverRemove) {
+        element.addEventListener("mouseover", () => {
+            removeNewTag(element);
+        });
+    }
     element.appendChild(newBox);
 }
 
@@ -612,20 +674,18 @@ function addNewTag(element) {
  */
 function removeNewTag(element) {
     if (element.dataset.invIndex) {
-        let index = element.dataset.invIndex;
-        inventory[index].new = false;
+        inventory[element.dataset.invIndex].new = false;
+    } else if (element.dataset.questStep) {
+        let questIndex = element.parentElement.dataset.questIndex;
+        let step = element.dataset.questStep;
+        quests[questIndex].steps[step].new = false;
     }
 
-    if (element.getElementsByClassName('new-item')[0]) {
-        let newTag = element.getElementsByClassName('new-item')[0];
-        newTag.remove();
+    if (element.getElementsByClassName('new')[0]) {
+        element.getElementsByClassName('new')[0].remove();
     }
-    
-    if (!document.getElementsByClassName('new-item')[1] && 
-        document.getElementsByClassName('new-item')[0]) {
-        let newTag = document.getElementsByClassName('new-item')[0];
-        newTag.remove();
-    }
+
+    updateStats();
 }
 
 /**
