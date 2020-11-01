@@ -11,7 +11,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 3;
+const startingRoom = 19;
 
 let stopTyping = false;
 let uniqueID = 0;
@@ -387,10 +387,11 @@ function loadGame(saveCode) {
  * Copy what's currently in the save input to the clipboard
  */
 function copySaveCode() {
-  let copyText = saveGameOutput;
-  copyText.select();
-  copyText.setSelectionRange(0, 99999);
-  document.execCommand("copy");
+    let copyText = saveGameOutput;
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    pingUpdateMessage('copy-button', 'Copied to clipboard');
 }
 
 /**
@@ -578,7 +579,10 @@ function updateStats() {
     if (stats.drunkenness > 0) {
         body.style.filter = "blur("+(stats.drunkenness / 10)+"px)";
         drunkennessBox.style.display = "block";
-    } else {
+     } else {
+        if (stats.drunkenness < 0) {
+            stats.drunkenness = 0;
+        }
         body.style.filter = "blur(0)";
         drunkennessBox.style.display = "none";
     }
@@ -704,7 +708,7 @@ function createItemDescriptionBox(item) {
     for (let effect in item.effects) {
         effect = Object.entries(item.effects[effect])[0];
         let effectElement = document.createElement("li");
-        let modifier;
+        let modifier = "";
         if (effect[1] > 0) {
             modifier = "+";
         }
