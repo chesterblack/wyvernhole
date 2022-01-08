@@ -35,7 +35,8 @@ body{
 #responses{
     margin-top: 40px;
 }
-button{
+button,
+.btn{
     display: block;
     background: none;
     padding: 3px 10px 4px;
@@ -46,10 +47,13 @@ button{
     border-right: 2px solid rgb(33 33 33);
 }
 button:hover, 
-button:focus{
+button:focus,
+.btn:hover,
+.btn:focus{
     background-color: rgba(50,50,50,0.6);
 }
-button:active{
+button:active,
+.btn:active{
     border-bottom: 2px solid rgb(118 118 118);
     border-right: 2px solid rgb(118 118 118);
     border-top: 2px solid rgb(33 33 33);
@@ -227,4 +231,40 @@ textarea{
     position: absolute;
     bottom: -5px;
     right: 0;
+}
+
+.table {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 20px;
+    border: 2px solid #000;
+    display: grid;
+    width: fit-content;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+hr {
+    border-bottom: 3px solid #fff;
+}
+
+td,
+th {
+    border: 3px solid #fff;
+    padding: 5px 10px;
+}
+
+thead tr {
+    background-color: rgb(50,50,50);
+}
+
+tbody tr {
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background-color: rgba(50,50,50,0.6);
 }

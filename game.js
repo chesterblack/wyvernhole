@@ -11,7 +11,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 3;
+const startingRoom = 1;
 
 let stopTyping = false;
 let uniqueID = 0;
@@ -321,14 +321,13 @@ function saveGame(room) {
   if (room) {
     saveCode.r = room;
   }
-  saveCode.g = stats.gold;
-  saveCode.d = stats.drunkenness;
   saveCode.h = stats.health;
   saveCode.mh = stats.maxHealth;
+  saveCode.g = stats.gold;
   saveCode.s = speed;
-
-  saveCode.e = equipped;
+  saveCode.d = stats.drunkenness;
   saveCode.i = inventory;
+  saveCode.e = equipped;
 
   saveGameOutput.value = btoa(JSON.stringify(saveCode));
   if (autosave) {
@@ -362,13 +361,13 @@ function loadGame(saveCode) {
   }
   let decodedOptions = atob(saveCode);
   let loadedOptions = JSON.parse(decodedOptions);
-  stats.gold = loadedOptions.g;
-  stats.drunkenness = loadedOptions.d;
   stats.health = loadedOptions.h;
   stats.maxHealth = loadedOptions.mh;
+  stats.gold = loadedOptions.g;
+  speed = loadedOptions.s;
+  stats.drunkenness = loadedOptions.d;
   inventory = loadedOptions.i;
   equipped = loadedOptions.e;
-  speed = loadedOptions.s;
   textSpeedInput.value = speed;
   writeOutRoom(loadedOptions.r);
 }
@@ -390,8 +389,10 @@ function copySaveCode() {
  */
 function newGame() {
   loadGame(
-    'eyJyIjoxLCJoIjoxMDAsImciOjUwLCJzIjoxMCwiZCI6MCwiaSI6W3siaWQiOjQsIm5hbWUiOiJEYWdnZXIiLCJlZmZlY3RzIjpbeyJhdHRhY2siOjV9XSwicXVhbnRpdHkiOjF9XX0='
+    'eyJyIjoxLCJoIjoxMDAsIm1oIjoxMDAsImciOjUwLCJzIjoxMCwiZCI6MCwiaSI6W3siX2lkIjp7IiRvaWQiOiI1ZjZjY2JmOWE0OTEwNGE5YWViMDk5ZGIifSwiaWQiOjIsIm5hbWUiOiJEYWdnZXIiLCJlcXVpcHBhYmxlIjp0cnVlLCJzbG90IjoiaGFuZHMiLCJiYXNlUHJpY2UiOjUsImVmZmVjdHMiOlt7ImF0dGFjayI6NX1dLCJ1aWQiOjAsInF1YW50aXR5IjoxLCJuZXciOnRydWUsImVxdWlwcGVkIjp0cnVlfV0sImUiOnsiaGFuZHMiOlt7Il9pZCI6eyIkb2lkIjoiNWY2Y2NiZjlhNDkxMDRhOWFlYjA5OWRiIn0sImlkIjoyLCJuYW1lIjoiRGFnZ2VyIiwiZXF1aXBwYWJsZSI6dHJ1ZSwic2xvdCI6ImhhbmRzIiwiYmFzZVByaWNlIjo1LCJlZmZlY3RzIjpbeyJhdHRhY2siOjV9XSwidWlkIjowLCJxdWFudGl0eSI6MSwibmV3Ijp0cnVlLCJlcXVpcHBlZCI6dHJ1ZX0sbnVsbF0sImFybW91ciI6bnVsbCwiYm9vdHMiOm51bGwsImdsb3ZlcyI6bnVsbCwiaGVhZCI6bnVsbCwicmluZ3MiOltudWxsLG51bGwsbnVsbCxudWxsXSwiYW11bGV0IjpudWxsfX0='
   );
+
+  updateStats();
 }
 
 /**
