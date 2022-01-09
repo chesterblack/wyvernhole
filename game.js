@@ -12,7 +12,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 1;
+const startingRoom = 100;
 
 let stopTyping = false;
 let uniqueID = 0;
@@ -754,35 +754,13 @@ function createItemDescriptionBox(item) {
     itemInfoBox.appendChild(itemDesc);
   }
 
-  let itemCategory = document.createElement('h3');
-  itemCategory.classList.add('item-slot');
-  if (item.slot) {
-    itemCategory.innerHTML = item.slot;
-  }
-  if (item.consumable) {
-    itemCategory.innerHTML = 'Consumable';
-  }
-  itemInfoBox.appendChild(itemCategory);
-
-  let effectsList = document.createElement('ul');
-  for (let effect in item.effects) {
-    effect = Object.entries(item.effects[effect])[0];
-    let effectElement = document.createElement('li');
-    let modifier;
-    if (effect[1] > 0) {
-      modifier = '+';
-    }
-    effectElement.innerHTML = effect[0] + ': ' + modifier + effect[1];
-    effectsList.appendChild(effectElement);
-  }
-  itemInfoBox.appendChild(effectsList);
-
   let closeButton = document.createElement('button');
   closeButton.classList.add('close-button');
   closeButton.innerHTML = 'close';
   closeButton.addEventListener('click', () => {
     itemInfoBox.style.display = 'none';
   });
+  itemInfoBox.appendChild(closeButton);
 
   let itemCategory = document.createElement('h3');
   itemCategory.classList.add('item-slot');

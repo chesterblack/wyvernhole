@@ -12,7 +12,7 @@
         ],
         [
             "route" => "\/admin\/edit\/[0-9]+",
-            "template" => "/edit.php",
+            "template" => "/_edit/room.php",
         ],
     ];
 
@@ -25,7 +25,7 @@
     }
 
     if (!$routeFound) {
-        require __DIR__ . "/404.php";
+        $admin->get404();
     }
 
     include_once($_SERVER['DOCUMENT_ROOT'] . '/layouts/admin-footer.php');

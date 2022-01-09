@@ -1,6 +1,6 @@
 <?php
     error_reporting(E_ALL);
-    include($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 

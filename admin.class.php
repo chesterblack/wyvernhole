@@ -5,6 +5,12 @@
         public $database;
         public $collection;
 
+        /**
+         * 
+         * Sets up mongodb connection
+         * 
+         * @return void
+         */
         function __construct() {
             include($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
             $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -19,6 +25,57 @@
             } catch (Throwable $t) {
                 echo $t->getMessage();
             }
+        }
+
+        /**
+         * 
+         * Sets 404 header and displays 404 page
+         * 
+         * @return void 
+         */
+        public function get404() {
+            header("HTTP/1.1 404 Not Found");
+            require __DIR__ . "/admin/404.php";
+            die();
+        }
+
+        public function getRoom($id, $type) {
+            $collection = $this->database->$type;
+            $room = $collection->findOne(['id' => $id]);
+            return $room;
+        }
+
+        public function updateField($id, $type, $field, $data) {
+            $collection = $this->database->$type;
+            $result = $collection->updateOne(
+                ['id' => $id],
+                ['$set' => [$field => json_decode($data)]]
+            );
+            return $result;
+        }
+
+        public function removeOption($parentID, $childID, $text) {
+            $collection = $this->database->rooms;
+            $result = $collection->updateOne(
+                ['id' => $parentID],
+                ['$pull' => ['options' => [
+                    'id' => $childID,
+                    'text' => $text,
+                ]]]
+            );
+            return $result;
+        }
+
+        public function addOption($parentID, $childID, $text) {
+            $collection = $this->database->rooms;
+            $result = $collection->updateOne(
+                ['id' => $parentID],
+                ['$addToSet' => ['options' => [
+                    'id' => $childID,
+                    'text' => $text,
+                ]]]
+            );
+            return $result;
         }
     }
 

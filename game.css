@@ -45,6 +45,7 @@ button,
     border-left: 2px solid rgb(118 118 118);
     border-bottom: 2px solid rgb(33 33 33);
     border-right: 2px solid rgb(33 33 33);
+    text-decoration: none;
 }
 button:hover, 
 button:focus,
@@ -105,7 +106,7 @@ button:active,
     right: 15px;
     text-align: right;
 }
-.menu-wrapper button{
+.menu-wrapper button:not(.close-button){
     margin-left: auto;
     position: relative;
 }
@@ -231,6 +232,7 @@ textarea{
     position: absolute;
     bottom: -13px;
     right: 0;
+    z-index: 10;
 }
 
 .table {
@@ -293,4 +295,16 @@ tbody tr:hover {
     content: "+++";
     display: block;
     margin: 10px 0;
+}
+
+.admin-option {
+    display: flex;
+}
+
+.error {
+    border-color: firebrick;
+}
+
+.error::placeholder {
+    color: firebrick;
 }
