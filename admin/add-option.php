@@ -13,6 +13,6 @@
     if (!$childRoom) {
         echo json_encode("no room");
     } else {
-        $result = $admin->addOption($parentID, $childID, $text);
+        $result = $admin->addRoomOption($parentID, $childID, $text);
         echo json_encode($result);
     }

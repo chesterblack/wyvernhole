@@ -13,6 +13,17 @@ body{
     margin: 0;
     padding: 0;
 }
+
+section {
+    border-top: 3px solid #fff;
+    margin: 10px 0;
+    padding: 20px 0;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
 .container{
     max-width: 1000px;
     min-height: 100vh;
@@ -299,6 +310,8 @@ tbody tr:hover {
 
 .admin-option {
     display: flex;
+    align-items: center;
+    gap: 7px;
 }
 
 .error {
@@ -307,4 +320,14 @@ tbody tr:hover {
 
 .error::placeholder {
     color: firebrick;
+}
+
+.dialogue-option {
+    margin: 0 0 15px;
+}
+
+.dialogue-option-new input,
+.dialogue-option-new textarea,
+.dialogue-option-new button {
+    margin: 7px 0 0 0;
 }

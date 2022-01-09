@@ -12,7 +12,7 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 100;
+const startingRoom = 101;
 
 let stopTyping = false;
 let uniqueID = 0;

@@ -54,7 +54,7 @@
             return $result;
         }
 
-        public function removeOption($parentID, $childID, $text) {
+        public function removeRoomOption($parentID, $childID, $text) {
             $collection = $this->database->rooms;
             $result = $collection->updateOne(
                 ['id' => $parentID],
@@ -66,13 +66,43 @@
             return $result;
         }
 
-        public function addOption($parentID, $childID, $text) {
+        public function addRoomOption($parentID, $childID, $text) {
             $collection = $this->database->rooms;
             $result = $collection->updateOne(
                 ['id' => $parentID],
                 ['$addToSet' => ['options' => [
                     'id' => $childID,
                     'text' => $text,
+                ]]]
+            );
+            return $result;
+        }
+
+        public function removeDialogueOption($parentID, $speaker, $color, $message) {
+            $collection = $this->database->rooms;
+            $result = $collection->updateOne(
+                ['id' => $parentID],
+                ['$pull' => ['dialogue' => [
+                    'speaker' => [
+                        'name' => $speaker,
+                        'color' => $color
+                    ],
+                    'message' => $message,
+                ]]]
+            );
+            return $result;
+        }
+
+        public function addDialogueOption($parentID, $speaker, $color, $message) {
+            $collection = $this->database->rooms;
+            $result = $collection->updateOne(
+                ['id' => $parentID],
+                ['$addToSet' => ['dialogue' => [
+                    'speaker' => [
+                        'name' => $speaker,
+                        'color' => $color,
+                    ],
+                    'message' => $message,
                 ]]]
             );
             return $result;

@@ -12,128 +12,135 @@
 
 
     <h1>Edit <?= $room->name ?? 'Room '.$id; ?></h1>
-    <hr>
 
-    <div>
-        Name
-        <input type="text" name="name" value="<?= $room->name ?? ''; ?>" placeholder="Castle entrance hall">
-    </div>
+    <section>
+        <div>
+            Name
+            <input type="text" name="name" value="<?= $room->name ?? ''; ?>" placeholder="Castle entrance hall">
+        </div>
 
-    <div>
-        Message
-        <textarea type="text" name="message"><?= $room->message ?? ''; ?></textarea>
-    </div>
+        <div>
+            Message
+            <textarea type="text" name="message"><?= $room->message ?? ''; ?></textarea>
+        </div>
+    </section>
 
-    <div>
-        Options
+    <section>
+        <h2>Options</h2>
         <div class="existing-options">
             <?php
                 foreach ($room->options as $option) {
             ?>
-            <div class="admin-option">
+            <div class="admin-option" data-roomid="<?= $option->id; ?>" data-roomtext="<?= $option->text; ?>">
                 <a href="/admin/edit/<?= $option->id; ?>" class="btn">
                     <?= $option->text.' ['.$option->id.']'; ?>
                 </a>
-                <button class="delete" data-roomid="<?= $option->id; ?>" data-roomtext="<?= $option->text; ?>">-</button>
+                <button class="delete-option" data-roomid="<?= $option->id; ?>" data-roomtext="<?= $option->text; ?>">-</button>
             </div>
             <?php
                 }
             ?>
         </div>
         <div class="admin-option">
-            <input class="add-input-text" type="text" placeholder="Text for option">
-            <input class="add-input-id" type="text" placeholder="ID of room">
-            <button class="add">+</button>
+            <input class="add-input-text-option" type="text" placeholder="Text for option">
+            <input class="add-input-id-option" type="text" placeholder="ID of room">
+            <button class="add-option">+</button>
         </div>
-    </div>
+    </section>
 
+    <section>
+        <h2>Dialogue</h2>
+        <div class="existing-dialogue">
+            <?php
+                if (isset($room->dialogue)) {
+                    foreach ($room->dialogue as $dialogue) {
+            ?>
+                <div class="dialogue-option">
+                    <div class="admin-option">
+                        <button class="delete-dia">-</button>
+                        <div class="speaker" style="color: <?= $dialogue->speaker->color; ?>"><?= $dialogue->speaker->name; ?></div>
+                    </div>
+                    <div class="message" class="admin-option">
+                        <div ><?= $dialogue->message; ?></div>
+                    </div>
+                </div>
+            <?php
+                    }
+                }
+            ?>
+        </div>
+        <div class="dialogue-option-new">
+            <div class="admin-option">
+                <input type="text" placeholder="Speaker" class="add-speaker-dia">
+                <input type="text" placeholder="Color" class="add-color-dia">
+                <button class="add-dia">+</button>
+            </div>
+            <div class="admin-option">
+                <textarea class="add-message-dia" placeholder="Message"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <script src="/admin/room-js.js"></script>
     <script>
-        function deleteRoom(id, text) {
-            let data = {
-                parentid: '<?= $id; ?>',
-                childid: id,
-                text: text
-            };
-            data = JSON.stringify(data);
+        // OPTIONS
+        const optionAddButton = document.querySelector('.add-option');
+        const optionAddInputID = document.querySelector('.add-input-id-option');
+        const optionAddInputText = document.querySelector('.add-input-text-option');
+        const optionDeleteButtons = document.querySelectorAll('.delete-option');
 
-            fetch('/admin/remove-option.php', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: data,
-            });
-        }
-    
-        let deleteButtons = document.querySelectorAll('.delete');
-        for (let i = 0; i < deleteButtons.length; i++) {
-            const button = deleteButtons[i];
+        for (let i = 0; i < optionDeleteButtons.length; i++) {
+            const button = optionDeleteButtons[i];
             button.addEventListener('click', () => {
                 const id = button.dataset.roomid;
                 const text = button.dataset.roomtext;
-                deleteRoom(id, text);
+                removeRoomOption('<?= $id; ?>', id, text, button);
+            });
+        }
+
+        optionAddButton.addEventListener('click', async () => {
+            const newRoomID = parseInt(optionAddInputID.value);
+            const newRoomText = optionAddInputText.value;
+            let success = await addRoomOption('<?= $id; ?>', newRoomID, newRoomText);
+            if (success) {
+                optionAddInputID.value = '';
+                optionAddInputText.value = '';
+            }
+        });
+
+        optionAddInputID.addEventListener('keyup', () => {
+            optionAddInputID.classList.remove('error');
+            optionAddInputID.placeholder = 'ID of room';
+        });
+        // /OPTIONS
+
+        // DIALOGUE
+        const dialogueAddButton = document.querySelector('.add-dia');
+        const dialogueDeleteButtons = document.querySelectorAll('.delete-dia');
+
+        for (let i = 0; i < dialogueDeleteButtons.length; i++) {
+            const button = dialogueDeleteButtons[i];
+            
+            button.addEventListener('click', () => {
+                const parent = button.parentElement.parentElement;
+                const speaker = parent.querySelector('.speaker');
+                let color = speaker.style.color;
+                color = rgbToHex(color);
+                const name = speaker.innerText
+                const message = parent.querySelector('.message').innerText;
+
+                removeDialogueOption('<?= $id; ?>', name, color, message, parent);
             })
         }
 
-        const addButton = document.querySelector('.add');
-        const addInputID = document.querySelector('.add-input-id');
-        const addInputText = document.querySelector('.add-input-text');
+        dialogueAddButton.addEventListener('click', () => {
+            const speaker = document.querySelector('.add-speaker-dia').value;
+            const color = document.querySelector('.add-color-dia').value;
+            const message = document.querySelector('.add-message-dia').value;
 
-        addInputID.addEventListener('keyup', () => {
-            addInputID.classList.remove('error');
-            addInputID.placeholder = 'ID of room';
+            // TODO: Make sure color is in an appropriate 6-character hexidecimal format
+
+            addDialogueOption('<?= $id; ?>', speaker, color, message);
         })
 
-        addButton.addEventListener('click', () => {
-            const newRoomID = parseInt(addInputID.value);
-            const newRoomText = addInputText.value;
-            let data = {
-                parentid: '<?= $id; ?>',
-                childid: newRoomID,
-                text: newRoomText
-            };
-
-            let JSONdata = JSON.stringify(data);
-
-            fetch('/admin/add-option.php', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSONdata,
-            })
-                .then(response => response.json())
-                .then((response) => {
-                    if (response == 'no room') {
-                        addInputID.classList.add('error');
-                        addInputID.value = '';
-                        addInputID.placeholder = 'Invalid Id';
-                    } else {
-                        let newRoomContainer = document.createElement('div');
-                        newRoomContainer.classList.add('admin-option');
-
-                        let newRoomButton = document.createElement('a');
-                        newRoomButton.classList.add('btn');
-                        newRoomButton.href = `/admin/edit/${data.childid}`;
-                        newRoomButton.innerHTML = `${data.text} [${data.childid}]`;
-
-                        let newRoomDelete = document.createElement('button');
-                        newRoomDelete.classList.add('delete');
-                        newRoomDelete.dataset.roomid = data.childid;
-                        newRoomDelete.innerHTML = '-';
-                        newRoomDelete.addEventListener('click', () => {
-                            deleteRoom(data.childid, data.text);
-                        })
-
-                        newRoomContainer.appendChild(newRoomButton);
-                        newRoomContainer.appendChild(newRoomDelete);
-                        document.querySelector('.existing-options').appendChild(newRoomContainer);
-
-                        addInputID.value = '';
-                        addInputText.value = '';
-                    }
-                })
-        })
     </script>
