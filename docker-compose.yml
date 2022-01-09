@@ -1,0 +1,19 @@
+version: "3.1"
+
+services:
+  admin-server:
+    image: php8
+    container_name: wyvernhole
+    ports: 
+      - "8080:80"
+      - "443:443"
+    volumes: 
+      - ./:/var/www/html
+    links: 
+      - mongo-database
+
+  mongo-database:
+    image: mongo:latest
+    container_name: mongo-database
+    ports:
+      - 27017:27017
