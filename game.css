@@ -34,10 +34,12 @@ h2 {
     border-left: 3px solid goldenrod;
     border-right: 3px solid goldenrod;
 }
+
 .speaker{
     display: block;
     margin-bottom: 10px;
 }
+
 #text{
     margin-bottom: 20px;
     padding-bottom: 15px;
@@ -330,4 +332,14 @@ tbody tr:hover {
 .dialogue-option-new textarea,
 .dialogue-option-new button {
     margin: 7px 0 0 0;
+}
+
+header {
+    position: absolute;
+    top: 50px;
+}
+
+header .main-nav {
+    display: flex;
+    gap: 7px;
 }

@@ -14,7 +14,7 @@ function removeRoomOption(parentid, childid, text, button) {
   };
   data = JSON.stringify(data);
 
-  fetch('/admin/remove-option.php', {
+  fetch('/admin/_utilities/remove-option.php', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -41,7 +41,7 @@ function addRoomOption(parentid, childid, text) {
   };
   let JSONdata = JSON.stringify(data);
 
-  fetch('/admin/add-option.php', {
+  fetch('/admin/_utilities/add-option.php', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -63,7 +63,7 @@ function addRoomOption(parentid, childid, text) {
 
         let newRoomButton = document.createElement('a');
         newRoomButton.classList.add('btn');
-        newRoomButton.href = `/admin/edit/${data.childid}`;
+        newRoomButton.href = `/admin/rooms/edit/${data.childid}`;
         newRoomButton.innerHTML = `${data.text} [${data.childid}]`;
 
         let newRoomDelete = document.createElement('button');
@@ -94,7 +94,7 @@ function removeDialogueOption(parentid, speaker, color, message, parent) {
   };
   let JSONdata = JSON.stringify(data);
 
-  fetch('/admin/remove-dialogue.php', {
+  fetch('/admin/_utilities/remove-dialogue.php', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -115,7 +115,7 @@ function addDialogueOption(parentid, speaker, color, message) {
   };
   let JSONdata = JSON.stringify(data);
 
-  fetch('/admin/add-dialogue.php', {
+  fetch('/admin/_utilities/add-dialogue.php', {
     method: 'POST',
     headers: {
       Accept: 'application/json',

@@ -4,15 +4,14 @@
     $post = json_decode(file_get_contents('php://input'));
 
     $parentID = doubleval($post->parentid);
-    $speaker = htmlentities($post->speaker);
-    $color = htmlentities($post->color);
-    $message = htmlentities($post->message);
+    $childID = doubleval($post->childid);
+    $text = $post->text;
 
-    $room = $admin->getRoom(doubleval($parentID), 'rooms');
+    $room = $admin->getDocument(doubleval($parentID), 'rooms');
 
     if (!$room) {
         echo json_encode("No parent room");
     } else {
-        $result = $admin->removeDialogueOption($parentID, $speaker, $color, $message);
+        $result = $admin->removeRoomOption($parentID, $childID, $text);
         echo json_encode($result);
     }

@@ -12,7 +12,13 @@ const textSpeedInput = document.getElementById('text-speed');
 const saveGameOutput = document.getElementById('save-game');
 const loadGameInput = document.getElementById('load-game');
 
-const startingRoom = 101;
+let startingRoom = 101;
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+if (urlParams.get('room')) {
+  startingRoom = parseInt(urlParams.get('room'));
+}
 
 let stopTyping = false;
 let uniqueID = 0;

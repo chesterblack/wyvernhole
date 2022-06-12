@@ -39,7 +39,7 @@
             die();
         }
 
-        public function getRoom($id, $type) {
+        public function getDocument($id, $type) {
             $collection = $this->database->$type;
             $room = $collection->findOne(['id' => $id]);
             return $room;
@@ -106,6 +106,29 @@
                 ]]]
             );
             return $result;
+        }
+
+        public function getLatestID($type) {
+            $all = $this->database->$type->find();
+            $allArr = [];
+            foreach ($all as $result) {
+                $allArr[] = $result;
+            }
+            usort($allArr, function($a, $b) {
+                return ($a->id < $b->id) ? -1 : 1;
+            });
+            return $allArr[count($allArr)-1]->id;
+        }
+
+        public function addDocument($type, $attributes = []) {
+            if (!isset($attributes['id'])) {
+                $biggestID = (int)$this->getLatestID($type);
+                $newID = $biggestID + 1;
+                $attributes['id'] = $newID;
+            }
+
+            $this->database->$type->insertOne($attributes);
+            return $attributes['id'];
         }
     }
 

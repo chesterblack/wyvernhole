@@ -10,7 +10,6 @@
     }
 ?>
 
-
     <h1>Edit <?= $room->name ?? 'Room '.$id; ?></h1>
 
     <section>
@@ -29,15 +28,17 @@
         <h2>Options</h2>
         <div class="existing-options">
             <?php
-                foreach ($room->options as $option) {
+                if (isset($room->options)) {
+                    foreach ($room->options as $option) {
             ?>
             <div class="admin-option" data-roomid="<?= $option->id; ?>" data-roomtext="<?= $option->text; ?>">
-                <a href="/admin/edit/<?= $option->id; ?>" class="btn">
+                <a href="/admin/rooms/edit/<?= $option->id; ?>" class="btn">
                     <?= $option->text.' ['.$option->id.']'; ?>
                 </a>
                 <button class="delete-option" data-roomid="<?= $option->id; ?>" data-roomtext="<?= $option->text; ?>">-</button>
             </div>
             <?php
+                    }
                 }
             ?>
         </div>
@@ -80,6 +81,8 @@
             </div>
         </div>
     </section>
+
+    <a href="/?room=<?= $id; ?>" class="btn" target="_blank">View room</a>
 
     <script src="/admin/room-js.js"></script>
     <script>
@@ -131,16 +134,23 @@
 
                 removeDialogueOption('<?= $id; ?>', name, color, message, parent);
             })
-        }
+        };
 
         dialogueAddButton.addEventListener('click', () => {
             const speaker = document.querySelector('.add-speaker-dia').value;
-            const color = document.querySelector('.add-color-dia').value;
+            let color = document.querySelector('.add-color-dia').value;
+            color = color == '' ? '#ffffff' : color;
             const message = document.querySelector('.add-message-dia').value;
-
-            // TODO: Make sure color is in an appropriate 6-character hexidecimal format
-
+            const hexRegex = /\#[0-9A-Fa-f]{6}/g;
+            const hexlessRegex = /[0-9A-Fa-f]{6}/g;
+            if (!hexRegex.test(color)) {
+                if (hexlessRegex.test(color)) {
+                    color = '#'+color;
+                } else {
+                    alert('Invalid hex code for the colour');
+                    return;
+                }
+            }
             addDialogueOption('<?= $id; ?>', speaker, color, message);
-        })
-
+        });
     </script>

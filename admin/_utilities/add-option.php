@@ -8,7 +8,7 @@
     $childID = doubleval($post->childid);
     $text = htmlentities($post->text);
 
-    $childRoom = $admin->getRoom($childID, 'rooms');
+    $childRoom = $admin->getDocument($childID, 'rooms');
 
     if (!$childRoom) {
         echo json_encode("no room");
