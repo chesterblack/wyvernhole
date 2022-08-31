@@ -5,8 +5,7 @@ import { useInventoryContext } from './inventory-context';
 const SaveContext = createContext();
 
 export function SaveWrapper({ children }) {
-  const [textSpeed, setTextSpeed] = useState(10);
-  const { stats } = useStatsContext();
+  const { stats, textSpeed, setTextSpeed } = useStatsContext();
   const { inventory, equipped } = useInventoryContext().inventory;
 
   const defaultSaveCode = Buffer.from(
@@ -46,8 +45,6 @@ export function SaveWrapper({ children }) {
       value={{
         saveCode,
         setSaveCode,
-        textSpeed,
-        setTextSpeed,
         saveGame,
       }}
     >

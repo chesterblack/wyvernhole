@@ -12,6 +12,8 @@ export function StatsWrapper({ children }) {
     defence: 0,
   });
 
+  const [textSpeed, setTextSpeed] = useState(10);
+
   const statsChangeHandler = (key, value) => {
     setStats((prevStats) => {
       return { ...prevStats, [key]: value };
@@ -19,7 +21,9 @@ export function StatsWrapper({ children }) {
   };
 
   return (
-    <StatsContext.Provider value={{ stats, setStats, statsChangeHandler }}>
+    <StatsContext.Provider
+      value={{ stats, setStats, statsChangeHandler, textSpeed, setTextSpeed }}
+    >
       {children}
     </StatsContext.Provider>
   );

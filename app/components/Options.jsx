@@ -18,7 +18,7 @@ export default function OptionsMenu(props) {
 }
 
 function TextSpeed() {
-  const { textSpeed, setTextSpeed } = useSaveContext();
+  const { textSpeed, setTextSpeed } = useStatsContext();
 
   return (
     <div>
