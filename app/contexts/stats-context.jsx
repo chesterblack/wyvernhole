@@ -20,12 +20,13 @@ export function StatsWrapper({ children }) {
 
     return (
         <StatsContext.Provider
-            value={{stats, statsChangeHandler}}
+            value={{stats, setStats, statsChangeHandler}}
         >
             {children}
         </StatsContext.Provider>
     )
 }
+
 
 export function useStatsContext() {
     return useContext(StatsContext);

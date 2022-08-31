@@ -1,8 +1,7 @@
+import { useStatsContext } from "../contexts/stats-context";
+
 export default function Counters() {
-    let gold = 0;
-    let drunkenness = 0;
-    let attack = 0;
-    let defence = 0;
+    const { stats } = useStatsContext();
 
     return (
         <div className="counters">
@@ -10,26 +9,26 @@ export default function Counters() {
                 id='money-counter'
                 label='Money'
                 className='gold'
-                score={gold}
+                score={stats.gold}
             />
             <HealthCounter />
             <Counter
                 id='drunkenness-counter'
                 label='Drunkenness'
                 className='drunkenness'
-                score={drunkenness}
+                score={stats.drunkenness}
             />
             <Counter
                 id='attack-counter'
                 label='Attack'
                 className='attack'
-                score={attack}
+                score={stats.attack}
             />
             <Counter
                 id='defence-counter'
                 label='Defence'
                 className='defence'
-                score={defence}
+                score={stats.defence}
             />
         </div>
     );
