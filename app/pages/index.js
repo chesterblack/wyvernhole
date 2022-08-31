@@ -4,8 +4,10 @@ import React from 'react';
 import Counters from '../components/Counters';
 import MenuSidebar from '../components/Menu';
 import DescriptionBox from '../components/DescriptionBox';
-import DialogueBox from '../components/DialogueBox';
 import ConversationBox from '../components/ConversationBox';
+import ResponsesBox from '../components/ResponsesBox';
+
+import DialogueWrapper from '../contexts/dialogue-context';
 
 export default function FrontPage() {
   return (
@@ -16,9 +18,11 @@ export default function FrontPage() {
       <div className="container">
         <Counters />
         <MenuSidebar />
-        <DescriptionBox text="You approach a tavern, the sign on the door reads: The Savoury Salmon. It seems humble, but reasonably well-kept." />
-        <DialogueBox />
-        <ConversationBox />
+        <DialogueWrapper>
+          <DescriptionBox text="You approach a tavern, the sign on the door reads: The Savoury Salmon. It seems humble, but reasonably well-kept." />
+          <ConversationBox />
+          <ResponsesBox />
+        </DialogueWrapper>
       </div>
     </main>
   );
