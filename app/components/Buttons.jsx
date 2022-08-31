@@ -13,3 +13,13 @@ export function CloseButton(props) {
         </button>
     )
 }
+
+export function AutosaveToggle(props) {
+    let autosave = 'off';
+
+    return (
+        <button onClick={() => {console.log('autosave!');}}>
+            Autosave: <span>{autosave}</span>
+        </button>
+    )
+}

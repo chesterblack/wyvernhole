@@ -167,6 +167,19 @@ button:active,
     min-width: 255px;
 }
 
+.menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid white;
+    padding-bottom: 10px;
+    gap: 20px;
+}
+
+.menu-top h3 {
+    margin: 0;
+}
+
 .closed {
     display: none;
 }
