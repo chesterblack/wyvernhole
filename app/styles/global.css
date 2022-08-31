@@ -1,14 +1,21 @@
-*{
+@font-face {
+    font-family: 'VT323';
+    src: url(./VT323-Regular.ttf);
+}
+
+* {
     color: #ffffff;
     font-family: 'VT323', monospace;
     font-size: 26px;
     line-height: 84%;
     box-sizing: border-box;
 }
-*:focus{
+
+*:focus {
     outline: none;
 }
-body{
+
+body {
     background: #000000;
     margin: 0;
     padding: 0;
@@ -24,7 +31,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-.container{
+.container {
     max-width: 1000px;
     min-height: 100vh;
     margin: 0 auto;
@@ -35,21 +42,23 @@ h2 {
     border-right: 3px solid goldenrod;
 }
 
-.speaker{
+.speaker {
     display: block;
     margin-bottom: 10px;
 }
 
-#text{
+#text {
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 3px solid #ffffff;
 }
-#responses{
+
+#responses {
     margin-top: 40px;
 }
+
 button,
-.btn{
+.btn {
     display: block;
     background: none;
     padding: 3px 10px 4px;
@@ -60,39 +69,54 @@ button,
     border-right: 2px solid rgb(33 33 33);
     text-decoration: none;
 }
+
 button:hover, 
 button:focus,
 .btn:hover,
-.btn:focus{
+.btn:focus {
     background-color: rgba(50,50,50,0.6);
 }
+
 button:active,
-.btn:active{
+.btn:active {
     border-bottom: 2px solid rgb(118 118 118);
     border-right: 2px solid rgb(118 118 118);
     border-top: 2px solid rgb(33 33 33);
     border-left: 2px solid rgb(33 33 33);
 }
-.dialogue{
+
+.dialogue {
     display: flex;
 }
-#gold{
+
+#gold {
     color: goldenrod;
 }
-.counters{
+
+.counters {
     position: absolute;
     top: 15px;
     left: 15px;
 }
-#health,
-#maxHealth{
+
+.health {
     color: green;
 }
-#money-message{
+
+.overhealth {
+    color: lightgreen;
+}
+
+.white {
+    color: white;
+}
+
+#money-message {
     height: 5px;
     text-align: right;
 }
-.ping{
+
+.ping {
     -webkit-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
     -moz-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
     -ms-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
@@ -102,28 +126,33 @@ button:active,
     margin-top: -10px;
     z-index: 1;
 }
-.fade{
+
+.fade {
     opacity: 0;
     transform: translateY(20px);
 }
-#drunkenness-counter{
+
+#drunkenness-counter {
     display: none;
 }
-#drunkenness{
+
+#drunkenness {
     color: mediumpurple;
 }
 
-.menu-wrapper{
+.menu-wrapper {
     position: absolute;
     top: 15px;
     right: 15px;
     text-align: right;
 }
-.menu-wrapper button:not(.close-button){
+
+.menu-wrapper button:not(.close-button) {
     margin-left: auto;
     position: relative;
 }
-.menu{
+
+.menu {
     overflow: hidden;
     height: 100vh;
     overflow-y: scroll;
@@ -137,29 +166,33 @@ button:active,
     z-index: 5;
     min-width: 255px;
 }
-.closed{
+
+.closed {
     display: none;
 }
+
 input,
-textarea{
+textarea {
     border-radius: 0;
     border: 2px solid #ffffff;
     background: #000000;
     margin: 7px 0;
 }
 
-textarea{
+textarea {
     width: 100%;
     resize: vertical;
 }
 
-.menu > *{
+.menu > * {
     margin-bottom: 20px;
 }
-#inventory button{
+
+#inventory button {
     display: inline-block;
     margin: 0 0 0 10px;
 }
+
 .item {
     white-space: nowrap;
     margin: 5px 0;
@@ -169,10 +202,12 @@ textarea{
     justify-content: flex-end;
     position: relative;
 }
-.item:hover .item-info-box{
+
+.item:hover .item-info-box {
     /* display: block; */
 }
-.item-info-box{
+
+.item-info-box {
     position: fixed;
     top: 30%;
     left: 50%;
@@ -185,32 +220,38 @@ textarea{
     min-width: 20%;
     min-height: 35%;
 }
-.item-info-box h2{
+
+.item-info-box h2 {
     margin: 0;
     margin-right: 60px;
 }
-.item-info-box .quantity{
+
+.item-info-box .quantity {
     position: absolute;
     top: 15px;
     right: 15px;
 }
-.item-info-box ul{
+
+.item-info-box ul {
     list-style: none;
     text-transform: capitalize;
     padding: 0;
     margin: 0;
 }
+
 .item-info-box .use-button,
-.item-info-box .equip{
+.item-info-box .equip {
     position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
 }
-.gold{
+
+.gold {
     color: goldenrod;
 }
-.item-slot{
+
+.item-slot {
     border-bottom: 3px solid;
     border-top: 3px solid;
     padding: 5px 0 8px;
@@ -219,7 +260,8 @@ textarea{
     text-transform: capitalize;
     font-weight: normal;
 }
-.close-button{
+
+.close-button {
     position: absolute;
     top: -34px;
     right: -3px;
@@ -227,18 +269,22 @@ textarea{
     border: 3px solid #ffffff;
     background: #000000;
 }
+
 .close-button:hover,
-.close-button:focus{
+.close-button:focus {
     background: #000000;
     border: 3px solid #ffffff;
 }
-#inventory .info-button{
+
+#inventory .info-button {
     margin-left: 0;
 }
-.shop-button button{
+
+.shop-button button {
     display: inline-block;
 }
-.new{
+
+.new {
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -288,23 +334,26 @@ tbody tr:hover {
     border: 2px solid #fff;
 }
 
-.quest{
+.quest {
     border-bottom: 2px solid;
     position: relative;
 }
-.quest h3{
+
+.quest h3 {
     text-transform: uppercase;
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: 2px solid;
     margin-top: 10px;
 }
-.quest-step{
+
+.quest-step {
     display: block;
     margin: 10px 0;
     font-size: 23px;
 }
-.quest-step:not(:last-child)::after{
+
+.quest-step:not(:last-child)::after {
     content: "+++";
     display: block;
     margin: 10px 0;
