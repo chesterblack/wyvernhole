@@ -5,18 +5,18 @@
  * @param {string} message what does the ping say?
  */
 export function pingUpdateMessage(parentElement, message) {
-    let grandparentElement = parentElement.parentElement;
-    let element = document.createElement('div');
+  let grandparentElement = parentElement.parentElement;
+  let element = document.createElement('div');
 
-    element.classList.add('ping');
-    element.innerHTML = message;
+  element.classList.add('ping');
+  element.innerHTML = message;
 
-    grandparentElement.appendChild(element);
+  grandparentElement.appendChild(element);
 
+  setTimeout(() => {
+    element.classList.add('fade');
     setTimeout(() => {
-      element.classList.add('fade');
-      setTimeout(() => {
-        grandparentElement.removeChild(element);
-      }, 1500);
-    }, 100);  
+      grandparentElement.removeChild(element);
+    }, 1500);
+  }, 100);
 }

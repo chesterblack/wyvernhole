@@ -8,18 +8,18 @@ import DialogueBox from '../components/DialogueBox';
 import ResponseBox from '../components/ResponseBox';
 
 export default function FrontPage() {
-    return (
-        <main id='body'>
-            <Head key="head">
-                <title>Wyvernhole</title>
-            </Head>
-            <div className='container'>
-                <Counters />
-                <MenuSidebar />
-                <TextBox />
-                <DialogueBox />
-                <ResponseBox />
-            </div>
-        </main>
-    );
+  return (
+    <main id="body">
+      <Head key="head">
+        <title>Wyvernhole</title>
+      </Head>
+      <div className="container">
+        <Counters />
+        <MenuSidebar />
+        <TextBox />
+        <DialogueBox />
+        <ResponseBox />
+      </div>
+    </main>
+  );
 }
