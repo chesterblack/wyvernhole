@@ -1,0 +1,345 @@
+*{
+    color: #ffffff;
+    font-family: 'VT323', monospace;
+    font-size: 26px;
+    line-height: 84%;
+    box-sizing: border-box;
+}
+*:focus{
+    outline: none;
+}
+body{
+    background: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    border-top: 3px solid #fff;
+    margin: 10px 0;
+    padding: 20px 0;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.container{
+    max-width: 1000px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 5%;
+    padding-top: calc(60px + 5%);
+    background-color: #454545;
+    border-left: 3px solid goldenrod;
+    border-right: 3px solid goldenrod;
+}
+
+.speaker{
+    display: block;
+    margin-bottom: 10px;
+}
+
+#text{
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #ffffff;
+}
+#responses{
+    margin-top: 40px;
+}
+button,
+.btn{
+    display: block;
+    background: none;
+    padding: 3px 10px 4px;
+    margin: 5px 0;
+    border-top: 2px solid rgb(118 118 118);
+    border-left: 2px solid rgb(118 118 118);
+    border-bottom: 2px solid rgb(33 33 33);
+    border-right: 2px solid rgb(33 33 33);
+    text-decoration: none;
+}
+button:hover, 
+button:focus,
+.btn:hover,
+.btn:focus{
+    background-color: rgba(50,50,50,0.6);
+}
+button:active,
+.btn:active{
+    border-bottom: 2px solid rgb(118 118 118);
+    border-right: 2px solid rgb(118 118 118);
+    border-top: 2px solid rgb(33 33 33);
+    border-left: 2px solid rgb(33 33 33);
+}
+.dialogue{
+    display: flex;
+}
+#gold{
+    color: goldenrod;
+}
+.counters{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+#health,
+#maxHealth{
+    color: green;
+}
+#money-message{
+    height: 5px;
+    text-align: right;
+}
+.ping{
+    -webkit-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    -moz-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    -ms-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    -o-transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    position: absolute;
+    right: 0;
+    margin-top: -10px;
+    z-index: 1;
+}
+.fade{
+    opacity: 0;
+    transform: translateY(20px);
+}
+#drunkenness-counter{
+    display: none;
+}
+#drunkenness{
+    color: mediumpurple;
+}
+
+.menu-wrapper{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    text-align: right;
+}
+.menu-wrapper button:not(.close-button){
+    margin-left: auto;
+    position: relative;
+}
+.menu{
+    overflow: hidden;
+    height: 100vh;
+    overflow-y: scroll;
+    background-color: #000000;
+    border-left: 2px solid goldenrod;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    padding: 15px;
+    box-sizing: border-box;
+    z-index: 5;
+    min-width: 255px;
+}
+.closed{
+    display: none;
+}
+input,
+textarea{
+    border-radius: 0;
+    border: 2px solid #ffffff;
+    background: #000000;
+    margin: 7px 0;
+}
+
+textarea{
+    width: 100%;
+    resize: vertical;
+}
+
+.menu > *{
+    margin-bottom: 20px;
+}
+#inventory button{
+    display: inline-block;
+    margin: 0 0 0 10px;
+}
+.item {
+    white-space: nowrap;
+    margin: 5px 0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+}
+.item:hover .item-info-box{
+    /* display: block; */
+}
+.item-info-box{
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    background: #000;
+    border: 3px solid;
+    padding: 15px;
+    text-align: left;
+    min-width: 20%;
+    min-height: 35%;
+}
+.item-info-box h2{
+    margin: 0;
+    margin-right: 60px;
+}
+.item-info-box .quantity{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+.item-info-box ul{
+    list-style: none;
+    text-transform: capitalize;
+    padding: 0;
+    margin: 0;
+}
+.item-info-box .use-button,
+.item-info-box .equip{
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.gold{
+    color: goldenrod;
+}
+.item-slot{
+    border-bottom: 3px solid;
+    border-top: 3px solid;
+    padding: 5px 0 8px;
+    margin: 11px 0 8px;
+    font-style: italic;
+    text-transform: capitalize;
+    font-weight: normal;
+}
+.close-button{
+    position: absolute;
+    top: -34px;
+    right: -3px;
+    margin: 0;
+    border: 3px solid #ffffff;
+    background: #000000;
+}
+.close-button:hover,
+.close-button:focus{
+    background: #000000;
+    border: 3px solid #ffffff;
+}
+#inventory .info-button{
+    margin-left: 0;
+}
+.shop-button button{
+    display: inline-block;
+}
+.new{
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: absolute;
+    bottom: -13px;
+    right: 0;
+    z-index: 10;
+}
+
+.table {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 20px;
+    border: 2px solid #000;
+    display: grid;
+    width: fit-content;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+hr {
+    border-bottom: 3px solid #fff;
+}
+
+td,
+th {
+    border: 3px solid #fff;
+    padding: 5px 10px;
+}
+
+thead tr {
+    background-color: rgb(50,50,50);
+}
+
+tbody tr {
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background-color: rgba(50,50,50,0.6);
+    z-index: 2;
+    padding: 2px 4px 1px;
+    background: #000;
+    border: 2px solid #fff;
+}
+
+.quest{
+    border-bottom: 2px solid;
+    position: relative;
+}
+.quest h3{
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+    margin-top: 10px;
+}
+.quest-step{
+    display: block;
+    margin: 10px 0;
+    font-size: 23px;
+}
+.quest-step:not(:last-child)::after{
+    content: "+++";
+    display: block;
+    margin: 10px 0;
+}
+
+.admin-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.error {
+    border-color: firebrick;
+}
+
+.error::placeholder {
+    color: firebrick;
+}
+
+.dialogue-option {
+    margin: 0 0 15px;
+}
+
+.dialogue-option-new input,
+.dialogue-option-new textarea,
+.dialogue-option-new button {
+    margin: 7px 0 0 0;
+}
+
+header {
+    position: absolute;
+    top: 50px;
+}
+
+header .main-nav {
+    display: flex;
+    gap: 7px;
+}
