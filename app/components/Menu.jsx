@@ -1,43 +1,50 @@
 import Button, { CloseButton, AutosaveToggle } from './Buttons';
 import { useState } from 'react';
+import { SaveWrapper, useSaveContext } from '../contexts/save-context';
 
 export default function MenuSidebar() {
     return (
         <div className='menu-wrapper'>
-            <MenuItem
-                key='inventory-menu-item'
-                id='inventory'
-                label='Inventory'
-            />
-            <MenuItem
-                key='quests-menu-item'
-                id='quests'
-                label='Quests'
-            />
-            <MenuItem
-                key='options-menu-item'
-                id='options'
-                label='Options'
-                inner={<OptionsMenu />}
-            />
+            <SaveWrapper>
+                <MenuItem
+                    key='inventory-menu-item'
+                    id='inventory'
+                    label='Inventory'
+                />
+                <MenuItem
+                    key='quests-menu-item'
+                    id='quests'
+                    label='Quests'
+                />
+                <MenuItem
+                    key='options-menu-item'
+                    id='options'
+                    label='Options'
+                    inner={<OptionsMenu />}
+                />
+            </SaveWrapper>
         </div>
     );
 }
 
 function OptionsMenu(props) {
+    const { saveCode } = useSaveContext();
     return (
         <>
             <div>
-                Text Speed: <input type='number' id='text-speed' defaultValue='10' />
+                Text Speed:
+                <input type='number' id='text-speed' defaultValue='10' />
             </div>
             <div>
-                Save game: <input id='save-game' type='text'></input>
+                Save game:
+                <input id='save-game' type='text' value={saveCode} />
                 <Button label='Copy' onClick={() => {
-                    console.log('save!');
+                    navigator.clipboard.writeText(saveCode);
                 }} />
             </div>
             <div>
-                Load game: <input id='load-game' type='text'></input>
+                Load game:
+                <input id='load-game' type='text' />
                 <Button label='Load' onClick={() => {
                     console.log('load!');
                 }} />
