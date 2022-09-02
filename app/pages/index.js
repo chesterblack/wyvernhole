@@ -23,7 +23,7 @@ export default function FrontPage() {
         <MenuSidebar />
         <DescriptionBox roomID={roomID} />
         <ConversationBox roomID={roomID} />
-        <ResponsesBox />
+        <ResponsesBox roomID={roomID} />
       </div>
     </main>
   );

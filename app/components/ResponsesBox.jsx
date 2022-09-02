@@ -1,12 +1,38 @@
+import { useState, useEffect } from 'react';
+import { getEntry } from '../lib/contentful';
 import Button from './Buttons';
 
-export default function ResponsesBox() {
+export default function ResponsesBox(props) {
+  const [responses, setResponses] = useState(false);
+
+  useEffect(async () => {
+    let { fields } = await getEntry(props.roomID);
+    setResponses(fields.responses);
+  }, []);
+
   return (
-    <Button
-      label="Walk in"
-      onClick={() => {
-        console.log('walk in');
-      }}
-    />
+    <>
+      {(() => {
+        if (responses) {
+          let buttons = [];
+          for (let i = 0; i < responses.length; i++) {
+            if (typeof responses[i].fields !== 'undefined') {
+              const { text, room } = responses[i].fields;
+              buttons.push(
+                <Button
+                  key={`${text}-${room.sys.id}`}
+                  label={text}
+                  onClick={() => {
+                    console.log(room.sys.id);
+                  }}
+                />
+              );
+            }
+          }
+
+          return buttons;
+        }
+      })()}
+    </>
   );
 }

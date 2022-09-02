@@ -4,7 +4,7 @@ import { typeWriter } from '../lib/main';
 import { getEntry } from '../lib/contentful';
 
 export default function ConversationBox(props) {
-  const [dialoguePieces, setDialoguePieces] = useState([{}]);
+  const [dialoguePieces, setDialoguePieces] = useState(false);
 
   useEffect(async () => {
     let { fields } = await getEntry(props.roomID);
@@ -14,14 +14,22 @@ export default function ConversationBox(props) {
   return (
     <div id="conversation">
       {(() => {
-        for (let i = 0; i < dialoguePieces.length; i++) {
-          if (typeof dialoguePieces[i].fields !== 'undefined') {
-            let { message, speaker } = dialoguePieces[i].fields;
+        if (dialoguePieces) {
+          for (let i = 0; i < dialoguePieces.length; i++) {
+            if (typeof dialoguePieces[i].fields !== 'undefined') {
+              let { message, speaker } = dialoguePieces[i].fields;
 
-            speaker = speaker.fields;
-            message = `${speaker.name}: ${message}`;
+              speaker = speaker.fields;
+              message = `${speaker.name}: ${message}`;
 
-            return <DialogueBox text={message} color={speaker.colour} />;
+              return (
+                <DialogueBox
+                  key={message}
+                  text={message}
+                  color={speaker.colour}
+                />
+              );
+            }
           }
         }
       })()}

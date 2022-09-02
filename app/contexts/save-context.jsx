@@ -8,7 +8,7 @@ export function SaveWrapper({ children }) {
   const { stats, textSpeed, setTextSpeed } = useStatsContext();
   const { inventory, equipped } = useInventoryContext().inventory;
 
-  const defaultRoom = '5AGoh0HPQ7D2H4aziodOKL';
+  const defaultRoom = '75V5XZzhXs6r7Nhdy9JQMv';
 
   const saveCodeObj = {
     r: defaultRoom,
