@@ -9,7 +9,7 @@ export async function getAllRooms() {
   return client
     .getEntries({
       content_type: 'room',
-      include: 2,
+      includes: 2,
     })
     .then((entries) => {
       return entries;
@@ -17,7 +17,12 @@ export async function getAllRooms() {
 }
 
 export async function getEntry(ID) {
-  return client.getEntry(ID).then((entries) => {
-    return entries;
-  });
+  return client
+    .getEntries({
+      'sys.id': ID,
+      include: 2,
+    })
+    .then((entries) => {
+      return entries.items[0];
+    });
 }
