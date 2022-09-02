@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDialogueContext } from '../contexts/dialogue-context';
 import { useStatsContext } from '../contexts/stats-context';
-import { typeWriter } from '../functions/main';
+import { typeWriter } from '../lib/main';
 
 export default function ConversationBox() {
   return (

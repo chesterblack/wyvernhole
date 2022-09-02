@@ -19,7 +19,7 @@ export default function FrontPage() {
         <Counters />
         <MenuSidebar />
         <DialogueWrapper>
-          <DescriptionBox text="You approach a tavern, the sign on the door reads: The Savoury Salmon. It seems humble, but reasonably well-kept." />
+          <DescriptionBox roomID="75V5XZzhXs6r7Nhdy9JQMv" />
           <ConversationBox />
           <ResponsesBox />
         </DialogueWrapper>

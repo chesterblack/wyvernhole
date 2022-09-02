@@ -1,7 +1,7 @@
 import Button, { AutosaveToggle } from './Buttons';
 import { useSaveContext } from '../contexts/save-context';
 import { useStatsContext } from '../contexts/stats-context';
-import { pingUpdateMessage } from '../functions/main';
+import { pingUpdateMessage } from '../lib/main';
 
 export default function OptionsMenu(props) {
   return (
