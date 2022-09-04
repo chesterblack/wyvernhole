@@ -2,16 +2,16 @@ import { createContext, useContext, useState } from 'react';
 import { useStatsContext } from './stats-context';
 import { useInventoryContext } from './inventory-context';
 
+import { startingRoom } from '../constants/vars';
+
 const SaveContext = createContext();
 
 export function SaveWrapper({ children }) {
   const { stats, textSpeed, setTextSpeed } = useStatsContext();
   const { inventory, equipped } = useInventoryContext().inventory;
 
-  const defaultRoom = '75V5XZzhXs6r7Nhdy9JQMv';
-
   const saveCodeObj = {
-    r: defaultRoom,
+    r: startingRoom,
     h: stats.health,
     mh: stats.maxHealth,
     g: stats.gold,

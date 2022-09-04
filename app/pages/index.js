@@ -7,11 +7,10 @@ import DescriptionBox from '../components/DescriptionBox';
 import ConversationBox from '../components/ConversationBox';
 import ResponsesBox from '../components/ResponsesBox';
 
-import { useSaveContext } from '../contexts/save-context';
+import { DialogueWrapper } from '../contexts/dialogue-context';
 
 export default function FrontPage() {
-  const { saveCodeObj } = useSaveContext();
-  const roomID = saveCodeObj.r;
+  let roomID = '75V5XZzhXs6r7Nhdy9JQMv';
 
   return (
     <main id="body">
@@ -21,9 +20,11 @@ export default function FrontPage() {
       <div className="container">
         <Counters />
         <MenuSidebar />
-        <DescriptionBox roomID={roomID} />
-        <ConversationBox roomID={roomID} />
-        <ResponsesBox roomID={roomID} />
+        <DialogueWrapper>
+          <DescriptionBox />
+          <ConversationBox roomID={roomID} />
+          <ResponsesBox roomID={roomID} />
+        </DialogueWrapper>
       </div>
     </main>
   );
