@@ -9,13 +9,11 @@ export default function DescriptionBox(props) {
   const { stats, textSpeed } = useStatsContext();
   const { currentRoom } = useDialogueContext();
 
-  console.log(currentRoom);
-
   useEffect(async () => {
     let { fields } = await getEntry(currentRoom);
     setText(fields.description);
-    // typeWriter(fields.description, setText, stats, textSpeed);
-  }, []);
+    typeWriter(fields.description, setText, stats, textSpeed);
+  }, [currentRoom]);
 
   return <div id="text">{text}</div>;
 }

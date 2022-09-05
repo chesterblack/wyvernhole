@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useStatsContext } from '../contexts/stats-context';
+import { useDialogueContext } from '../contexts/dialogue-context';
 import { typeWriter } from '../lib/main';
 import { getEntry } from '../lib/contentful';
 
 export default function ConversationBox(props) {
   const [dialoguePieces, setDialoguePieces] = useState(false);
+  const { currentRoom } = useDialogueContext();
 
   useEffect(async () => {
-    let { fields } = await getEntry(props.roomID);
+    let { fields } = await getEntry(currentRoom);
     setDialoguePieces(fields.dialogue);
-  }, []);
+  }, [currentRoom]);
 
   return (
     <div id="conversation">

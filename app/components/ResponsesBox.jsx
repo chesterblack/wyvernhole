@@ -5,12 +5,12 @@ import Button from './Buttons';
 
 export default function ResponsesBox(props) {
   const [responses, setResponses] = useState(false);
-  const { setCurrentRoom } = useDialogueContext();
+  const { currentRoom, setCurrentRoom } = useDialogueContext();
 
   useEffect(async () => {
-    let { fields } = await getEntry(props.roomID);
+    let { fields } = await getEntry(currentRoom);
     setResponses(fields.responses);
-  }, []);
+  }, [currentRoom]);
 
   return (
     <>
