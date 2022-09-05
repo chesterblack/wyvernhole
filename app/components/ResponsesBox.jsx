@@ -25,7 +25,6 @@ export default function ResponsesBox(props) {
                   key={`${text}-${room.sys.id}`}
                   label={text}
                   onClick={() => {
-                    console.log(room.sys.id);
                     setCurrentRoom(room.sys.id);
                   }}
                 />

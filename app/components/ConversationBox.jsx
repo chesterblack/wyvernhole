@@ -16,6 +16,8 @@ export default function ConversationBox(props) {
   return (
     <div id="conversation">
       {(() => {
+        let dialogueBoxes = [];
+
         if (dialoguePieces) {
           for (let i = 0; i < dialoguePieces.length; i++) {
             if (typeof dialoguePieces[i].fields !== 'undefined') {
@@ -24,7 +26,7 @@ export default function ConversationBox(props) {
               speaker = speaker.fields;
               message = `${speaker.name}: ${message}`;
 
-              return (
+              dialogueBoxes.push(
                 <DialogueBox
                   key={message}
                   text={message}
@@ -34,6 +36,8 @@ export default function ConversationBox(props) {
             }
           }
         }
+
+        return dialogueBoxes;
       })()}
     </div>
   );
