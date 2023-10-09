@@ -1,7 +1,12 @@
 import Image from 'next/image'
 import styles from './page.module.css'
+import Player from './Character/classes/Player.class';
 
 export default function Home() {
+  const currentPlayer = new Player( 'Chester', 'human' );
+  
+  console.log(currentPlayer);
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
