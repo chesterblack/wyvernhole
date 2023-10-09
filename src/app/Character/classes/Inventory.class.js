@@ -11,12 +11,23 @@ export default class Inventory
       amulet: null,
       shoulders: null,
       armour: null,
-      hands: {
-        left: null,
-        right: null,
-      },
+      hands: [
+        null,
+        null,
+      ],
       rings: Array.from({length: 10}, () => null),
       feet: null,
     }
   }
 }
+
+/**
+ * Example item
+ * {
+ *   name: 'sword',
+ *   properties: {
+ *     attack: 2,
+ *     defence: 1,
+ *   }
+ * }
+ */

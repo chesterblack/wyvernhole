@@ -3,7 +3,11 @@ import styles from './page.module.css'
 import Player from './Character/classes/Player.class';
 
 export default function Home() {
-  const currentPlayer = new Player( 'Chester', 'human' );
+  const currentPlayer = new Player({
+    name: 'Chester',
+    race: 'human',
+    level: 1,
+  });
   
   console.log(currentPlayer);
 
