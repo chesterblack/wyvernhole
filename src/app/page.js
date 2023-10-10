@@ -7,7 +7,7 @@ export default function Home() {
   const currentPlayer = new Player({
     name: 'Chester',
     race: 'human',
-    level: 195,
+    level: 1,
     job: 'fighter',
   });
 

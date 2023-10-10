@@ -1,23 +1,31 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from './Button';
 import CharacterSheet from './CharacterSheet';
 import Menu from './Menu';
+import Tab from './Tab';
 
 export default function Menus({ currentPlayer }) {
   const [ openMenus, setOpenMenus ] = useState([]);
 
   return (
     <>
-    <Menu open={openMenus.includes('character-sheet')}>
-      <CharacterSheet character={currentPlayer} />
-    </Menu>
+      <Menu
+        open={openMenus.includes('character-sheet')}
+        menuID='character-sheet'
+      >
+        <Tab onClick={() => {
+          toggleMenu( openMenus, setOpenMenus, 'character-sheet' );
+        }}>
+          X
+        </Tab>
+        <CharacterSheet character={currentPlayer} />
+      </Menu>
 
       <Button
         onClick={() => {
           toggleMenu( openMenus, setOpenMenus, 'character-sheet' );
-          console.log(openMenus);
         }}
       >
         Character Sheet
@@ -34,7 +42,6 @@ function toggleMenu( openMenus, setOpenMenus, menu ) {
   });
 
   if (originalList.length === newList.length) {
-    console.log('adding');
     newList.push(menu);
   }
 

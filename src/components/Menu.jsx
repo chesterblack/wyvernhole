@@ -1,8 +1,10 @@
-export default function Menu({ children, open }) {
+export default function Menu({ children, open, menuID }) {
   return (
     <>
       {open && (
-        children
+        <div className="popup">
+          {children}
+        </div>
       )}
     </>
   );

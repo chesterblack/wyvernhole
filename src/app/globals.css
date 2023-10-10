@@ -7,6 +7,9 @@
     --canvas-background: dimgray;
     --canvas-trim: goldenrod;
 
+    --popup-background: black;
+    --popup-border: white;
+
     --main-text-colour: white;
 
     --button-colour: transparent;
@@ -53,6 +56,25 @@ button,
     border-right: 2px solid var(--button-edge-shadow);
     font-size: 1em;
     cursor: pointer;
+}
+
+.tab {
+    background-color: var(--popup-background);
+    border: 2px solid var(--popup-border);
+    border-bottom: none;
+    position: absolute;
+    top: -40px;
+    right: -2px;
+}
+
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid var(--popup-border);
+    background-color: var(--popup-background);
+    padding: 20px;
 }
 
 .character-sheet {
