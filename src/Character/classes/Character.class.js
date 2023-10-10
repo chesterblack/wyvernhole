@@ -6,7 +6,7 @@ import Stats from "./Stats.class";
 
 export default class Character
 {
-  constructor( { name, race, attributeMods = {}, level = 1 } ) {
+  constructor( { name, race, attributeMods = {}, level = 1, job = 'peasant' } ) {
     if (typeof races[race] === 'undefined') {
       throw `Invalid race '${race}'`;
     }
@@ -14,6 +14,7 @@ export default class Character
     this.name = name.toString();
     this.race = race;
     this.level = level > 99 ? 99 : level;
+    this.job = job;
     this.tier = this.determineTier();
     this.attributes = new Attributes( race, attributeMods );
     this.inventory = new Inventory();

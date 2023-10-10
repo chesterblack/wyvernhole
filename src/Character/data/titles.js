@@ -1,7 +1,7 @@
 const titles = {
   10: 'novice',
   20: 'apprentice',
-  30: 'reliable',
+  30: '',
   40: 'formidable',
   50: 'skilled',
   60: 'veteran',
