@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --grey-1: #606060;
+  --grey-2: #454545;
+  --grey-3: #3c3c3c;
+  --grey-4: #232323;
+
+  --font: 'VT323', monospace;
+
+  --background: black;
+  --canvas-background: var(--grey-2);
+  --canvas-trim: goldenrod;
+
+  --popup-background: black;
+  --popup-border: white;
+
+  --main-text-colour: white;
+
+  --button-colour: var(--grey-2);
+  --button-edge-highlight: var(--grey-1);
+  --button-edge-shadow: var(--grey-4);
+  --button-hover: var(--grey-3);
+
+  --base-font-size: 26px;
+
+  font-size: var(--base-font-size);
+}
+
+* {
+  box-sizing: border-box;;
+  color: var(--main-text-colour);
+  font-family: var(--font);
+}
+
+body {
+  background-color: var(--background);
+  padding: 0;
+  margin: 0;
+}
+
+main {
+  background-color: var(--canvas-background);
+  border-left: 3px solid var(--canvas-trim);
+  border-right: 3px solid var(--canvas-trim);
+  min-height: 100vh;
+  max-width: 1000px;
+  width: 95%;
+  margin: 0 auto;
+  padding: 10% 5% 0;
+}
+
+button,
+.button {
+  display: block;
+  margin: 5px 0;
+  padding: 3px 10px 4px;
+  background: none;
+  font-size: 1em;
+  cursor: pointer;
+
+  &:not(.tab) {
+    background-color: var(--button-colour);
+    border-top: 2px solid var(--button-edge-highlight);
+    border-left: 2px solid var(--button-edge-highlight);
+    border-bottom: 2px solid var(--button-edge-shadow);
+    border-right: 2px solid var(--button-edge-shadow);
+
+    &:hover {
+      background-color: var(--button-hover);
+    }
+
+    &:active,
+    &.pressed {
+      border-bottom: 2px solid var(--button-edge-highlight);
+      border-right: 2px solid var(--button-edge-highlight);
+      border-top: 2px solid var(--button-edge-shadow);
+      border-left: 2px solid var(--button-edge-shadow);
+    }
+  }
+}
+
+.tab {
+  background-color: var(--popup-background);
+  border: 2px solid var(--popup-border);
+  border-bottom: none;
+  position: absolute;
+  top: -40px;
+
+  &.right {
+    right: -2px;
+  }
+
+  &.left {
+    left: -2px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--popup-border);
+  background-color: var(--popup-background);
+  padding: 20px;
+}
+
+.character-sheet {
+  text-transform: capitalize;
+}
+
+.menus {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}

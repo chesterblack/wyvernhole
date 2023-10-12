@@ -1,6 +1,14 @@
 import { getTypedMod } from "../utilities";
 
-export default function CharacterSheet({ character }) {
+export default function CharacterSheet({ character = null }) {
+  if (!character) {
+    return (
+      <div className="character-sheet">
+        Character not found
+      </div>
+    )
+  }
+
   return (
     <div className='character-sheet'>
       <div>

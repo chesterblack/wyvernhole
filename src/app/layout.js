@@ -1,5 +1,4 @@
-import './globals.css'
-import { VT323 } from 'next/font/google'
+import './globals.scss'
 
 export const metadata = {
   title: 'NEW Wyvernhole',
