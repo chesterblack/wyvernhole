@@ -1,15 +1,16 @@
 "use client"
 
-import GlobalContext from '@/globalContext';
+import { useState } from 'react';
 import Player from '../Character/classes/Player.class';
 import MenuBar from '../components/MenuBar';
-import { useState } from 'react';
+import GlobalContext from '@/globalContext';
+import menus from '@/Character/data/menus';
 
 export default function Home() {
   const [openMenu, setOpenMenu] = useState(null);
   const [currentPlayer, setCurrentPlayer] = useState(new Player({
     name: 'Chester',
-    race: 'human',
+    race: 'elf',
     level: 1,
     job: 'fighter',
   }));
@@ -17,7 +18,8 @@ export default function Home() {
   return (
     <GlobalContext.Provider value={{
       currentPlayer, setCurrentPlayer,
-      openMenu, setOpenMenu
+      openMenu, setOpenMenu,
+      menus
     }}>
       <main>
         <MenuBar />

@@ -1,10 +1,17 @@
+import { useContext } from 'react';
 import MenuButton from './MenuButton';
+import GlobalContext from '@/globalContext';
 
 export default function MenuButtons() {
+  const { menus } = useContext(GlobalContext);
+
   return (
     <div className='menus'>
-      <MenuButton id='character-sheet' label='Character' />
-      <MenuButton id='inventory' label='Inventory' />
+      {menus.map((menu) => {
+        return (
+          <MenuButton key={menu.id} id={menu.id} label={menu.label} />
+        )
+      })}
     </div>
   );
 }

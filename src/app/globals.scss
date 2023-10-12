@@ -76,6 +76,7 @@ button,
       border-right: 2px solid var(--button-edge-highlight);
       border-top: 2px solid var(--button-edge-shadow);
       border-left: 2px solid var(--button-edge-shadow);
+      background-color: var(--button-hover);
     }
   }
 }
@@ -100,6 +101,22 @@ button,
   }
 }
 
+.menu-tabs {
+  position: absolute;
+  top: -42px;
+  left: 0px;
+  display: flex;
+
+  .tab {
+    position: static;
+    margin-left: -2px;
+
+    &:not(.active) {
+      border-bottom: 2px solid var(--popup-border);
+    }
+  }
+}
+
 .popup {
   position: absolute;
   top: 50%;
@@ -108,10 +125,16 @@ button,
   border: 2px solid var(--popup-border);
   background-color: var(--popup-background);
   padding: 20px;
+  width: 500px;
+  max-width: 100%;
 }
 
 .character-sheet {
   text-transform: capitalize;
+
+  .attribute-modifier {
+    float: right;
+  }
 }
 
 .menus {

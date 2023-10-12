@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react';
-import MenuPopups from './MenuPopups';
+import Menu from './Menu';
 import MenuButtons from './MenuButtons';
-import GlobalContext from '@/globalContext';
 
 export default function MenuBar({}) {
   return (
     <>
-      <MenuPopups />
+      <Menu />
       <MenuButtons />
     </>
   );
