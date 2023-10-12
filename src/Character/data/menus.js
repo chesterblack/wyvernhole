@@ -1,4 +1,5 @@
 import CharacterSheet from "@/components/CharacterSheet";
+import InventorySheet from "@/components/InventorySheet";
 
 const menus = [
   {
@@ -9,7 +10,7 @@ const menus = [
   {
     id: 'inventory',
     label: 'Inventory',
-    children: 'Inventory menu',
+    children: <InventorySheet key="inventory-sheet" character='player' />,
   },
 ];
 

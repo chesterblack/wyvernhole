@@ -11,12 +11,19 @@ export default class Inventory
       amulet: null,
       shoulders: null,
       armour: null,
+      feet: null,
       hands: [
-        null,
+        {
+          name: 'sword',
+          description: 'A simple sword, frequently swung, infrequently sharpened.',
+          properties: {
+            attack: 2,
+            defence: 1,
+          }
+        },
         null,
       ],
-      rings: Array.from({length: 10}, () => null),
-      feet: null,
+      rings: Array.from({length: 4}, () => null),
     }
   }
 }

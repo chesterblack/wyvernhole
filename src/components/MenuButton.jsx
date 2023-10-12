@@ -10,7 +10,7 @@ export default function MenuButton({ id, label }) {
       onClick={() => {
         toggleMenu( openMenu, setOpenMenu, id );
       }}
-      classes={openMenu === id ? 'pressed' : ''}
+      // classes={openMenu === id ? 'pressed' : ''}
     >
       {label}
     </Button>
