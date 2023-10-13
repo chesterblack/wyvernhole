@@ -14,6 +14,7 @@ export default class Inventory
       feet: null,
       hands: [
         {
+          id: 1,
           name: 'sword',
           description: 'A simple sword, frequently swung, infrequently sharpened.',
           properties: {
