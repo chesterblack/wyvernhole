@@ -46,16 +46,9 @@ export default class Stats
       if (Object.hasOwnProperty.call(collection, key)) {
         const slot = collection[key];
 
-        if (Array.isArray(slot)) {
-          // There's multiple items in this slot, ie. hands, rings
-          runningModifier = runningModifier + this.handleMultislotStatMods(stat, slot);
-        } else {
-          // This slot contains one or none items
-          const item = slot;
-          if (typeof item?.properties?.[stat] === 'number') {
-            runningModifier += + item.statEnhancements?.[stat];
-          }
-        }
+        slot.forEach(item => {
+          runningModifier += item?.properties?.[stat] ?? 0;
+        });
       }
     }
 

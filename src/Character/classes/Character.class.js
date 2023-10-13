@@ -1,3 +1,4 @@
+import items from "@/data/items";
 import races from "../../data/races";
 import titles from "../../data/titles";
 import Attributes from "./Attributes.class";
@@ -17,7 +18,11 @@ export default class Character
     this.job = job;
     this.tier = this.determineTier();
     this.attributes = new Attributes( race, attributeMods );
-    this.inventory = new Inventory();
+    this.inventory = new Inventory(null, [
+      items.sword,
+      items.sword,
+      items.sword,
+    ]);
     this.stats = new Stats( this.attributes, this.equipment );
   }
 

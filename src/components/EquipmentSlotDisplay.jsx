@@ -1,32 +1,22 @@
 import Item from "./Item";
 
-export default function EquipmentSlotDisplay({ slot, inSlot }) {
-  let slotContents;
-  if (Array.isArray(inSlot)) {
-    slotContents = [];
-    let i = 0;
+export default function EquipmentSlotDisplay({ character, slot, inSlot }) {
+  let slotContents = [];
+  let i = 0;
 
-    inSlot.forEach(element => {
-      slotContents.push(
-        <Item
-          key={`${slot}-${i}`}
-          item={element}
-          equipped
-          slot={[slot, i]}
-        />
-      );
-
-      i++;
-    });
-  } else {
-    slotContents = (
+  inSlot.forEach(element => {
+    slotContents.push(
       <Item
-        item={inSlot}
+        character={character}
+        key={`${slot}-${i}`}
+        item={element}
         equipped
-        slot={slot}
+        slot={[slot, i]}
       />
     );
-  }
+
+    i++;
+  });
 
   return (
     <div className="equipment-slot">

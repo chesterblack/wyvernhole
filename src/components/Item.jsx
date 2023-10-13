@@ -3,33 +3,9 @@ import ItemTooltip from "./ItemTooltip";
 import { useContext, useState } from "react";
 import GlobalContext from "@/globalContext";
 
-export default function Item({ item, slot }) {
+export default function Item({ character, item, slot }) {
   const [ tooltipShown, setTooltipShown ] = useState(false);
-  const { currentPlayer } = useContext(GlobalContext);
-  const [ equipped, setEquipped ] = useState(
-    Object.keys(currentPlayer.inventory.equipped).filter((key) => {
-      const equippedSlot = currentPlayer.inventory.equipped[key];
-      let shallReturn = false;
-  
-      if (equippedSlot && item) {
-        if (Array.isArray(equippedSlot)) {
-          equippedSlot.forEach((slot) => {
-            if (slot) {
-              if (slot.id === item.id) {
-                shallReturn = true;
-              }
-            }
-          });
-        } else {
-          if (equippedSlot.id === item.id) {
-            shallReturn = true;
-          }
-        }
-      }
-  
-      return shallReturn;
-    }).length > 0
-  );
+  const [ equipped, setEquipped ] = useState(!!slot);
 
   if (!item) {
     return <div className="item empty">Empty</div>;
@@ -37,37 +13,52 @@ export default function Item({ item, slot }) {
 
   return (
     <>
-      {equipped && (
-        <div className="item">
-          <span>{item.name}</span>
+      <div className="item">
+        <span>{item.name}</span>
 
-          <Button
-            onClick={() => {
-              setEquipped(!equipped);
+        {/* <Button
+          onClick={() => {
+              currentPlayer.inventory.unequipItem(slot);
+              currentPlayer.inventory.equipItem(slot);
+          }}
+        >
+          {equipped ? 'Unequip' : 'Equip'}
+        </Button> */}
 
-              if (equipped) {
-                currentPlayer.inventory.unequipItem(slot);
-              } else {
-                currentPlayer.inventory.equipItem(slot);
-              }
-            }}
-          >
-            {equipped ? 'Unequip' : 'Equip'}
-          </Button>
-
+        {slot ?
           <Button
             classes='info'
             onClick={() => {
-              setTooltipShown(!tooltipShown);
+              character.inventory.unequipItem(slot);
+              setEquipped(!equipped);
             }}
           >
-            ?
+            U
           </Button>
-        </div>
-      )}
+          :
+          <Button
+            classes='info'
+            onClick={() => {
+              character.inventory.equipItem(item);
+              setEquipped(!equipped);
+            }}
+          >
+            E
+          </Button>
+        }
+
+        <Button
+          classes='info'
+          onClick={() => {
+            setTooltipShown(!tooltipShown);
+          }}
+        >
+          ?
+        </Button>
+      </div>
 
       {tooltipShown && (
-        <ItemTooltip setTooltipShown={setTooltipShown} item={item} equipped={equipped} slot={slot} />
+        <ItemTooltip setTooltipShown={setTooltipShown} item={item} slot={slot} />
       )}
     </>
   );

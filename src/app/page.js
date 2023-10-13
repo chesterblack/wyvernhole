@@ -10,7 +10,7 @@ export default function Home() {
   const [openMenu, setOpenMenu] = useState(null);
   const [currentPlayer, setCurrentPlayer] = useState(new Player({
     name: 'Chester',
-    race: 'elf',
+    race: 'human',
     level: 1,
     job: 'fighter',
   }));

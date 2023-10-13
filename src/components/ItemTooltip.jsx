@@ -1,13 +1,9 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Tab from "./Tab";
 import { getTypedMod } from "@/utilities";
-import Button from "./Button";
-import GlobalContext from "@/globalContext";
 
-export default function ItemTooltip({ item, setTooltipShown, equipped, slot }) {
+export default function ItemTooltip({ item, setTooltipShown }) {
   const [ modifiedTop, setModifiedTop ] = useState('50%');
-  const [ itemEquipped, setItemEquipped ] = useState(equipped);
-  const { currentPlayer } = useContext(GlobalContext);
   const ref = useRef();
 
   // Prevents vertical half-pixels on the popup
@@ -52,22 +48,6 @@ export default function ItemTooltip({ item, setTooltipShown, equipped, slot }) {
 
           return <div key={propertyName}>{propertyName} {property}</div>
         })}
-
-        {item.properties.equipable && (
-          <Button
-            onClick={() => {
-              setItemEquipped(!itemEquipped);
-
-              if (itemEquipped) {
-                const equippedSlot = Array.isArray(slot) ? slot[0][slot[1]] : slot;
-                currentPlayer.inventory.unequipItem(equippedSlot);
-                console.log(currentPlayer.inventory);
-              }
-            }}
-          >
-            {itemEquipped ? 'Unequip' : 'Equip'}
-          </Button>
-        )}
       </div>
     </div>
   );
