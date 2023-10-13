@@ -1,5 +1,5 @@
-import races from "../data/races";
-import titles from "../data/titles";
+import races from "../../data/races";
+import titles from "../../data/titles";
 import Attributes from "./Attributes.class";
 import Inventory from "./Inventory.class";
 import Stats from "./Stats.class";

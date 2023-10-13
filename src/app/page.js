@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Player from '../Character/classes/Player.class';
 import MenuBar from '../components/MenuBar';
 import GlobalContext from '@/globalContext';
-import menus from '@/Character/data/menus';
+import menus from '@/data/menus';
 
 export default function Home() {
   const [openMenu, setOpenMenu] = useState(null);

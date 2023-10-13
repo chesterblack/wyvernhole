@@ -1,9 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import CloseButton from "./CloseButton";
+import { useContext, useEffect, useRef, useState } from "react";
 import Tab from "./Tab";
+import { getTypedMod } from "@/utilities";
+import Button from "./Button";
+import GlobalContext from "@/globalContext";
 
-export default function ItemTooltip({ item, setTooltipShown }) {
+export default function ItemTooltip({ item, setTooltipShown, equipped, slot }) {
   const [ modifiedTop, setModifiedTop ] = useState('50%');
+  const [ itemEquipped, setItemEquipped ] = useState(equipped);
+  const { currentPlayer } = useContext(GlobalContext);
   const ref = useRef();
 
   // Prevents vertical half-pixels on the popup
@@ -40,12 +44,30 @@ export default function ItemTooltip({ item, setTooltipShown }) {
 
       <div className="properties">
         {Object.keys(item.properties).map((propertyName) => {
-          const property = item.properties[propertyName];
+          let property = item.properties[propertyName];
+
           if (typeof property === 'number') {
-            
+            property = getTypedMod(property);
           }
-          return <div key={propertyName}>{propertyName}: {property}</div>
+
+          return <div key={propertyName}>{propertyName} {property}</div>
         })}
+
+        {item.properties.equipable && (
+          <Button
+            onClick={() => {
+              setItemEquipped(!itemEquipped);
+
+              if (itemEquipped) {
+                const equippedSlot = Array.isArray(slot) ? slot[0][slot[1]] : slot;
+                currentPlayer.inventory.unequipItem(equippedSlot);
+                console.log(currentPlayer.inventory);
+              }
+            }}
+          >
+            {itemEquipped ? 'Unequip' : 'Equip'}
+          </Button>
+        )}
       </div>
     </div>
   );

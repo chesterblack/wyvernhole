@@ -17,6 +17,7 @@ export default class Inventory
           name: 'sword',
           description: 'A simple sword, frequently swung, infrequently sharpened.',
           properties: {
+            equipable: true,
             attack: 2,
             defence: 1,
           }
@@ -25,6 +26,27 @@ export default class Inventory
       ],
       rings: Array.from({length: 4}, () => null),
     }
+  }
+
+  unequipItem(slot) {
+    console.log(slot);
+
+    console.log(this.equipped);
+    console.log(this.stored);
+
+    let item;
+    if (Array.isArray(slot)) {
+      item = this.equipped[slot[0]][slot[1]];
+      this.equipped[slot[0]][slot[1]] = null;
+    } else {
+      item = this.equipped[slot];
+      this.equipped[slot] = null;
+    }
+
+    this.stored.push(item);
+
+    console.log(this.equipped);
+    console.log(this.stored);
   }
 }
 

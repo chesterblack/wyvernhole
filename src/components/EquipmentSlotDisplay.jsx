@@ -5,12 +5,27 @@ export default function EquipmentSlotDisplay({ slot, inSlot }) {
   if (Array.isArray(inSlot)) {
     slotContents = [];
     let i = 0;
+
     inSlot.forEach(element => {
+      slotContents.push(
+        <Item
+          key={`${slot}-${i}`}
+          item={element}
+          equipped
+          slot={[slot, i]}
+        />
+      );
+
       i++;
-      slotContents.push( <Item key={`${slot}-${i}`} item={element} /> );
     });
   } else {
-    slotContents = <Item item={inSlot} />
+    slotContents = (
+      <Item
+        item={inSlot}
+        equipped
+        slot={slot}
+      />
+    );
   }
 
   return (

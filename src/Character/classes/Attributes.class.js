@@ -1,4 +1,4 @@
-import races from "../data/races";
+import races from "../../data/races";
 
 export default class Attributes
 {
