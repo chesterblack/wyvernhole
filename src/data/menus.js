@@ -1,5 +1,6 @@
-import CharacterSheet from "@/components/CharacterSheet";
-import InventorySheet from "@/components/InventorySheet";
+import CharacterSheet from "@/components/sheets/CharacterSheet";
+import InventorySheet from "@/components/sheets/InventorySheet";
+import StatSheet from "@/components/sheets/StatSheet";
 
 const menus = [
   {
@@ -12,6 +13,11 @@ const menus = [
     label: 'Inventory',
     children: <InventorySheet key="inventory-sheet" character='player' />,
   },
+  {
+    id: 'stats',
+    label: 'Stats',
+    children: <StatSheet key="stat-sheet" character='player' />,
+  }
 ];
 
 export default menus;

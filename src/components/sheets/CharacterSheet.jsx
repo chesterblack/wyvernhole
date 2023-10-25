@@ -1,9 +1,10 @@
 import { useContext } from "react";
-import { getTypedNumber } from "../utilities";
+import { getTypedNumber } from "../../utilities";
 import GlobalContext from "@/globalContext";
 
 export default function CharacterSheet({ character = null }) {
   const { currentPlayer } = useContext(GlobalContext);
+  character = character === 'player' ? currentPlayer : character;
 
   if (!character) {
     return (
@@ -13,15 +14,15 @@ export default function CharacterSheet({ character = null }) {
     )
   }
 
-  character = character === 'player' ? currentPlayer : character;
-
   return (
     <div className='character-sheet'>
       <div>
-        {character.name} - Level {character.level} {character.tier.title} {character.race} {character.job}
+        <h2>{character.name}</h2>
+        <span>Level {character.level} {character.tier.title} {character.race} {character.job}</span>
       </div>
       <hr />
       <div>
+        <h2>Attributes</h2>
         {Object.keys(character.attributes).map((key) => {
           const attribute = character.attributes[key];
           return (

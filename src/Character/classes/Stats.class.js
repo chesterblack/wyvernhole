@@ -17,21 +17,47 @@ export default class Stats
     this.level = character.level;
 
     this.attackMod = {
-      melee: this.calculateStatMods('dexterity', ['attack', 'meleeAttack']),
-      ranged: this.calculateStatMods('dexterity', ['attack', 'rangedAttack']),
-      magic: this.calculateStatMods('dexterity', ['attack', 'magicAttack']),
+      title: 'Attack Modifiers',
+      melee: {
+        title: 'Melee Attack Modifier', 
+        ...this.calculateStatMods('dexterity', ['attack', 'meleeAttack'])
+      },
+      ranged: {
+        title: 'Ranged Attack Modifier',
+        ...this.calculateStatMods('dexterity', ['attack', 'rangedAttack'])
+      },
+      magic: {
+        title: 'Magical Attack Modifier',
+        ...this.calculateStatMods('dexterity', ['attack', 'magicAttack'])
+      },
     };
 
     this.defenceMod = {
-      melee: this.calculateStatMods('agility', ['defence', 'physicalDefence']),
-      ranged: this.calculateStatMods('agility', ['defence', 'physicalDefence']),
-      magic: this.calculateStatMods('agility', ['defence', 'magicDefence']),
+      title: 'Defence Modifiers',
+      melee: {
+        title: 'Physical Defence',
+        ...this.calculateStatMods('agility', ['defence', 'physicalDefence'])
+      },
+      magic: {
+        title: 'Magical Defence',
+        ...this.calculateStatMods('agility', ['defence', 'magicDefence'])
+      },
     };
 
     this.damageMod = {
-      melee: this.calculateStatMods('strength', ['attack', 'meleeAttack']),
-      ranged: this.calculateStatMods(null, ['attack', 'rangedAttack']),
-      magic: this.calculateStatMods('willpower', ['attack', 'magicAttack']),
+      title: 'Damage Modifiers',
+      melee: {
+        title: 'Melee Damage Modifier',
+        ...this.calculateStatMods('strength', ['attack', 'meleeAttack'])
+      },
+      ranged: {
+        title: 'Ranged Damage Modifier',
+        ...this.calculateStatMods(null, ['attack', 'rangedAttack'])
+      },
+      magic: {
+        title: 'Magical Damage Modifier',
+        ...this.calculateStatMods('willpower', ['attack', 'magicAttack'])
+      },
     };
 
     delete this.attributes;

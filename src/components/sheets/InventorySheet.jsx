@@ -1,8 +1,7 @@
 import GlobalContext, { InventoryContext } from "@/globalContext";
-import { useContext, useEffect, useState } from "react";
-import EquipmentDisplay from "./EquipmentDisplay";
-import Button from "./Button";
-import Item from "./Item";
+import { useContext, useState } from "react";
+import EquipmentDisplay from "../EquipmentDisplay";
+import Item from "../Item";
 
 export default function InventorySheet({ character = null }) {
   const { currentPlayer } = useContext(GlobalContext);

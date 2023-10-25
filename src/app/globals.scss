@@ -93,6 +93,11 @@ button,
       background-color: var(--button-hover);
     }
   }
+
+  &.info {
+    font-size: .6em;
+    padding: 1px 4px;
+  }
 }
 
 .tab {
@@ -184,29 +189,51 @@ button,
     position: relative;
     text-transform: capitalize;
 
-    .info {
-      font-size: .6em;
-      padding: 1px 4px;
+    .item-name {
+      text-align: right;
+      margin-right: 5px;
+      line-height: 16px;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.stat-sheet {
+  .stat-group {
+    &:not(:last-child) {
+      border-bottom: 2px solid var(--popup-border);
+      padding-bottom: 15px;
+      margin-bottom: 15px;
     }
   }
 
-  .item-tooltip {
-    position: absolute;
-    z-index: 1;
-    background-color: var(--popup-background);
-    border: 2px solid var(--popup-border);
-    padding: 10px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .stat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
 
-    h3 {
-      text-transform: capitalize;
-    }
+.tooltip {
+  position: absolute;
+  z-index: 1;
+  background-color: var(--popup-background);
+  border: 2px solid var(--popup-border);
+  padding: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    .properties {
-      text-transform: capitalize;
-    }
+  h3 {
+    text-transform: capitalize;
+  }
+
+  .properties {
+    text-transform: capitalize;
   }
 }
 

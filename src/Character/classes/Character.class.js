@@ -26,8 +26,8 @@ export default class Character
     this.tier = this.determineTier();
     this.attributes = new Attributes( race, attributeMods );
     this.inventory = new Inventory( this, null, [
-      items.sword,
-      items.sword,
+      items.dagger,
+      items.tower_shield,
       items.sword,
     ] );
     this.stats = new Stats( this );

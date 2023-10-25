@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Tab from "./Tab";
 import { getTypedNumber } from "@/utilities";
 
-export default function ItemTooltip({ item, setTooltipShown }) {
+export default function ModTooltip({ title, mod, setTooltipShown }) {
   const [ modifiedTop, setModifiedTop ] = useState('50%');``
   const ref = useRef();
 
@@ -30,23 +30,17 @@ export default function ItemTooltip({ item, setTooltipShown }) {
         Close
       </Tab>
 
-      <h3>{item.name}</h3>
-
-      <div>
-        {item.description}
-      </div>
-
-      <hr />
+      <h3>{title}</h3>
 
       <div className="properties">
-        {Object.keys(item.properties).map((propertyName) => {
-          let property = item.properties[propertyName];
-
-          if (typeof property === 'number') {
-            property = getTypedNumber(property);
+        {Object.keys(mod).map((modType) => {
+          if (modType !== 'total') {
+            return (
+              <div key={modType}>
+                {modType}: {getTypedNumber(mod[modType])}
+              </div>
+            );
           }
-
-          return <div key={propertyName}>{propertyName}: {property}</div>
         })}
       </div>
     </div>
