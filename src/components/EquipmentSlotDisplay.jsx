@@ -1,13 +1,12 @@
 import Item from "./Item";
 
-export default function EquipmentSlotDisplay({ character, slot, inSlot }) {
+export default function EquipmentSlotDisplay({ slot, inSlot }) {
   let slotContents = [];
   let i = 0;
 
   inSlot.forEach(element => {
     slotContents.push(
       <Item
-        character={character}
         key={`${slot}-${i}`}
         item={element}
         equipped

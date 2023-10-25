@@ -25,17 +25,15 @@ export default class Character
     this.job = job;
     this.tier = this.determineTier();
     this.attributes = new Attributes( race, attributeMods );
-    this.inventory = new Inventory(null, [
+    this.inventory = new Inventory( this, null, [
       items.sword,
       items.sword,
       items.sword,
-    ]);
-    this.stats = new Stats( this.attributes, this.equipment );
+    ] );
+    this.stats = new Stats( this );
 
     this.maxHealth = 100;
     this.health = 100;
-
-    console.log(this);
   }
 
   determineTier() {
@@ -55,7 +53,7 @@ export default class Character
 
   meleeAttack( target ) {
     const attackRoll = this.meleeAttackRoll();
-    console.log(`Attack roll: ${attackRoll}`);
+    console.log(`Modified attack roll: ${attackRoll}`);
     const targetDefence = target.stats.defenceMod.melee.total;
     console.log(`Target def: ${targetDefence}`);
     
@@ -71,10 +69,17 @@ export default class Character
 
       target.takeDamage(damage);
     }
+
+    console.log('--- ---');
   }
 
   meleeAttackRoll() {
-    return roll(this.tier.dice) + this.stats.attackMod.melee.total;
+    const diceRoll = roll(this.tier.dice);
+    const mod = this.stats.attackMod.melee.total;
+
+    console.log(`roll: ${diceRoll}, mod: ${mod}`);
+
+    return diceRoll + mod;
   }
 
   takeDamage( damage ) {

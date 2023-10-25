@@ -6,10 +6,15 @@ import { sumOfObject } from "../../utilities";
 
 export default class Stats
 {
-  constructor( attributes, equipment, level = 1 ) {
-    this.attributes = attributes;
-    this.equipment = equipment;
-    this.level = level;
+  constructor( character ) {
+    this.character = character;
+    this.updateStats( character );
+  }
+
+  updateStats( character ) {
+    this.attributes = character.attributes;
+    this.equipment = character.inventory.equipped;
+    this.level = character.level;
 
     this.attackMod = {
       melee: this.calculateStatMods('dexterity', ['attack', 'meleeAttack']),
@@ -43,7 +48,7 @@ export default class Stats
     return runningTotal;
   }
 
-  equipmentStatMods( stat, collection = this.equipment ) {
+  equipmentStatMods( stats, collection = this.equipment ) {
     let runningModifier = 0;
 
     for (const key in collection) {
@@ -51,7 +56,11 @@ export default class Stats
         const slot = collection[key];
 
         slot.forEach(item => {
-          runningModifier += item?.properties?.[stat] ?? 0;
+          if (item !== null) {
+            stats.forEach(stat => {
+              runningModifier += item?.properties?.[stat] ?? 0;
+            });
+          }
         });
       }
     }

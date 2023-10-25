@@ -1,11 +1,12 @@
 import Button from "./Button";
 import ItemTooltip from "./ItemTooltip";
 import { useContext, useState } from "react";
-import GlobalContext from "@/globalContext";
+import GlobalContext, { InventoryContext } from "@/globalContext";
 
 export default function Item({ character, item, slot }) {
   const [ tooltipShown, setTooltipShown ] = useState(false);
   const [ equipped, setEquipped ] = useState(!!slot);
+  const { selectedCharacter, setSelectedCharacter } = useContext(InventoryContext);
 
   if (!item) {
     return <div className="item empty">Empty</div>;
@@ -15,22 +16,12 @@ export default function Item({ character, item, slot }) {
     <>
       <div className="item">
         <span>{item.name}</span>
-
-        {/* <Button
-          onClick={() => {
-              currentPlayer.inventory.unequipItem(slot);
-              currentPlayer.inventory.equipItem(slot);
-          }}
-        >
-          {equipped ? 'Unequip' : 'Equip'}
-        </Button> */}
-
         {slot ?
           <Button
             classes='info'
             onClick={() => {
-              character.inventory.unequipItem(slot);
-              setEquipped(!equipped);
+              selectedCharacter.inventory.unequipItem(slot);
+              setSelectedCharacter({...selectedCharacter});
             }}
           >
             U
@@ -39,8 +30,8 @@ export default function Item({ character, item, slot }) {
           <Button
             classes='info'
             onClick={() => {
-              character.inventory.equipItem(item);
-              setEquipped(!equipped);
+              selectedCharacter.inventory.equipItem(item);
+              setSelectedCharacter({...selectedCharacter});
             }}
           >
             E

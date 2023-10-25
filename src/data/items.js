@@ -5,8 +5,8 @@ const items = {
     name: 'Sword',
     description: 'A simple sword, frequently swung, infrequently sharpened.',
     properties: {
-      attack: 2,
-      defence: 1,
+      meleeAttack: 2,
+      physicalDefence: 1,
     }
   },
 }

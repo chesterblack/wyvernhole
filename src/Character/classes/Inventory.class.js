@@ -2,7 +2,8 @@ import items from "@/data/items";
 
 export default class Inventory
 {
-  constructor( equipped = this.equipmentSlots(), stored = [] ) {
+  constructor( parent, equipped = this.equipmentSlots(), stored = [] ) {
+    this.parent = parent;
     this.equipped = equipped ?? this.equipmentSlots();
     this.stored = stored ?? [];
   }
@@ -62,6 +63,7 @@ export default class Inventory
     console.log('---');
 
     this.stored.splice(exists, 1);
+    this.parent.stats.updateStats(this.parent);
   }
 
   unequipItem(slot) {
@@ -75,6 +77,7 @@ export default class Inventory
     }
 
     this.stored.push(item);
+    this.parent.stats.updateStats(this.parent);
   }
 }
 

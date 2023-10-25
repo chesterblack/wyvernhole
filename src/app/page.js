@@ -32,9 +32,8 @@ export default function Home() {
       <main>
         <MenuBar />
         <button onClick={() => {
-          console.log(target);
+          console.log(currentPlayer);
           currentPlayer.meleeAttack(target);
-          console.log(target);
         }}>
           Melee Attack
         </button>
