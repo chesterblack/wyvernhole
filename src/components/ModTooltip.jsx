@@ -34,7 +34,7 @@ export default function ModTooltip({ title, mod, setTooltipShown }) {
 
       <div className="properties">
         {Object.keys(mod).map((modType) => {
-          if (modType !== 'total') {
+          if (modType !== 'total' && modType !== 'title' ) {
             return (
               <div key={modType}>
                 {modType}: {getTypedNumber(mod[modType])}

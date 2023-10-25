@@ -37,10 +37,12 @@ export default class Character
   }
 
   determineTier() {
+    const rank = Math.floor( this.level / 10 ) + 1;
     const dice = this.calculateDiceSize();
-    const title = titles[dice];
+    const title = titles[rank];
 
     return {
+      rank,
       title,
       dice,
     }
@@ -48,7 +50,7 @@ export default class Character
 
   calculateDiceSize() {
     const multiplier = Math.floor( this.level / 10 ) + 1;
-    return 5 * multiplier;
+    return 5 + (3 * multiplier);
   }
 
   meleeAttack( target ) {

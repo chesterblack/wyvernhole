@@ -14,7 +14,7 @@ export default class Stats
   updateStats( character ) {
     this.attributes = character.attributes;
     this.equipment = character.inventory.equipped;
-    this.level = character.level;
+    this.tier = character.tier;
 
     this.attackMod = {
       title: 'Attack Modifiers',
@@ -62,7 +62,7 @@ export default class Stats
 
     delete this.attributes;
     delete this.equipment;
-    delete this.level;
+    delete this.tier;
   }
 
   handleMultislotStatMods( stat, slot ) {
@@ -98,7 +98,7 @@ export default class Stats
     attributes = typeof attributes == "object" ? attributes : [ attributes ];
     let mods = {};
 
-    mods.level = this.level;
+    mods.level = this.tier.rank;
     if (attributes) {
       attributes.forEach(attribute => {
         mods[attribute] = this.attributes[attribute].modifier;
