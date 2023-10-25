@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Tab from "./Tab";
-import { getTypedMod } from "@/utilities";
+import { getTypedNumber } from "@/utilities";
 import Button from "./Button";
 import GlobalContext from "@/globalContext";
 
@@ -47,7 +47,7 @@ export default function ItemTooltip({ item, setTooltipShown, equipped, slot }) {
           let property = item.properties[propertyName];
 
           if (typeof property === 'number') {
-            property = getTypedMod(property);
+            property = getTypedNumber(property);
           }
 
           return <div key={propertyName}>{propertyName} {property}</div>

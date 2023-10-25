@@ -1,4 +1,8 @@
-import { sumOfArray } from "../../utilities";
+import { sumOfObject } from "../../utilities";
+
+// To hit: Attacker’s DEX + items + level + tier roll
+// AC: Defender’s AGI + level + items
+// Damage: Attacker's STR + to hit amount over defence - defender’s items
 
 export default class Stats
 {
@@ -8,21 +12,21 @@ export default class Stats
     this.level = level;
 
     this.attackMod = {
-      melee: this.calculateMeleeAttack(),
-      ranged: this.calculateRangedAttack(),
-      magic: this.calculateMagicAttack(),
+      melee: this.calculateStatMods('dexterity', ['attack', 'meleeAttack']),
+      ranged: this.calculateStatMods('dexterity', ['attack', 'rangedAttack']),
+      magic: this.calculateStatMods('dexterity', ['attack', 'magicAttack']),
     };
 
     this.defenceMod = {
-      melee: this.calculateMeleeDefence(),
-      ranged: this.calculateRangedDefence(),
-      magic: this.calculateMagicDefence(),
+      melee: this.calculateStatMods('agility', ['defence', 'physicalDefence']),
+      ranged: this.calculateStatMods('agility', ['defence', 'physicalDefence']),
+      magic: this.calculateStatMods('agility', ['defence', 'magicDefence']),
     };
 
     this.damageMod = {
-      melee: this.calculateMeleeDamage(),
-      ranged: this.calculateRangedDamage(),
-      magic: this.calculateMagicDamage(),
+      melee: this.calculateStatMods('strength', ['attack', 'meleeAttack']),
+      ranged: this.calculateStatMods(null, ['attack', 'rangedAttack']),
+      magic: this.calculateStatMods('willpower', ['attack', 'magicAttack']),
     };
 
     delete this.attributes;
@@ -39,121 +43,46 @@ export default class Stats
     return runningTotal;
   }
 
-  equipmentStatMods( stat, collection = this.equipment ) {
+  equipmentStatMods( stats, collection = this.equipment ) {
     let runningModifier = 0;
 
-    for (const key in collection) {
-      if (Object.hasOwnProperty.call(collection, key)) {
-        const slot = collection[key];
+    stats = typeof stats == "object" ? stats : [ stats ];
 
-        if (Array.isArray(slot)) {
-          // There's multiple items in this slot, ie. hands, rings
-          runningModifier = runningModifier + this.handleMultislotStatMods(stat, slot);
-        } else {
-          // This slot contains one or none items
-          const item = slot;
-          if (typeof item?.properties?.[stat] === 'number') {
-            runningModifier += + item.statEnhancements?.[stat];
+    stats.forEach(stat => {
+      for (const key in collection) {
+        if (Object.hasOwnProperty.call(collection, key)) {
+          const slot = collection[key];
+  
+          if (Array.isArray(slot)) {
+            // There's multiple items in this slot, ie. hands, rings
+            runningModifier = runningModifier + this.handleMultislotStatMods(stat, slot);
+          } else {
+            // This slot contains one or none items
+            const item = slot;
+            if (typeof item?.properties?.[stat] === 'number') {
+              runningModifier += + item.statEnhancements?.[stat];
+            }
           }
         }
       }
-    }
+    });
 
     return runningModifier;
   }
 
-  calculateMeleeAttack() {
-    const mods = [
-      this.level,
-      this.attributes.dexterity.modifier,
-      this.equipmentStatMods( 'attack' ),
-      this.equipmentStatMods( 'meleeAttack' ),
-    ];
+  calculateStatMods( attributes, equipmentStats ) {
+    attributes = typeof attributes == "object" ? attributes : [ attributes ];
+    let mods = {};
 
-    return sumOfArray( mods );
-  }
+    mods.level = this.level;
+    if (attributes) {
+      attributes.forEach(attribute => {
+        mods[attribute] = this.attributes[attribute].modifier;
+      });
+    }
+    mods.equipment = this.equipmentStatMods(equipmentStats);
+    mods.total = sumOfObject(mods);
 
-  calculateRangedAttack() {
-    const mods = [
-      this.level,
-      this.attributes.dexterity.modifier,
-      this.equipmentStatMods( 'attack' ),
-      this.equipmentStatMods( 'rangedAttack' ),
-    ];
-
-    return sumOfArray( mods );
-  }
-
-  calculateMagicAttack() {
-    const mods = [
-      this.level,
-      this.attributes.dexterity.modifier,
-      this.equipmentStatMods( 'magicAttack' ),
-    ];
-
-    return sumOfArray( mods );
-  }
-
-  calculateMeleeDamage() {
-    const mods = [
-      this.level,
-      this.attributes.strength.modifier,
-      this.equipmentStatMods( 'attack' ),
-      this.equipmentStatMods( 'meleeAttack' ),
-    ];
-
-    return sumOfArray( mods );
-  }
-  
-  calculateRangedDamage() {
-    const mods = [
-      this.level,
-      this.equipmentStatMods( 'attack' ),
-      this.equipmentStatMods( 'rangedAttack' ),
-    ];
-  
-    return sumOfArray( mods );
-  }
-
-  calculateMagicDamage() {
-    const mods = [
-      this.level,
-      this.attributes.willpower.modifier,
-      this.equipmentStatMods( 'magicAttack' ),
-    ];
-
-    return sumOfArray( mods );
-  }
-
-  calculateMeleeDefence() {
-    const mods = [
-      this.level,
-      this.attributes.agility.modifier,
-      this.equipmentStatMods( 'defence' ),
-      this.equipmentStatMods( 'meleeDefence' ),
-    ];
-
-    return sumOfArray( mods );
-  }
-
-  calculateRangedDefence() {
-    const mods = [
-      this.level,
-      this.attributes.agility.modifier,
-      this.equipmentStatMods( 'defence' ),
-      this.equipmentStatMods( 'rangedDefence' ),
-    ];
-
-    return sumOfArray( mods );
-  }
-
-  calculateMagicDefence() {
-    const mods = [
-      this.level,
-      this.attributes.agility.modifier,
-      this.equipmentStatMods( 'magicDefence' ),
-    ];
-
-    return sumOfArray( mods );
+    return mods;
   }
 }

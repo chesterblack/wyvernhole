@@ -19,8 +19,8 @@ export default class Inventory
           description: 'A simple sword, frequently swung, infrequently sharpened.',
           properties: {
             equipable: true,
-            attack: 2,
-            defence: 1,
+            meleeAttack: 2,
+            physicalDefence: 1,
           }
         },
         null,
@@ -30,11 +30,6 @@ export default class Inventory
   }
 
   unequipItem(slot) {
-    console.log(slot);
-
-    console.log(this.equipped);
-    console.log(this.stored);
-
     let item;
     if (Array.isArray(slot)) {
       item = this.equipped[slot[0]][slot[1]];
@@ -45,9 +40,6 @@ export default class Inventory
     }
 
     this.stored.push(item);
-
-    console.log(this.equipped);
-    console.log(this.stored);
   }
 }
 

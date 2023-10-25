@@ -1,3 +1,4 @@
+import { roll } from "@/utilities";
 import races from "../../data/races";
 import titles from "../../data/titles";
 import Attributes from "./Attributes.class";
@@ -6,7 +7,13 @@ import Stats from "./Stats.class";
 
 export default class Character
 {
-  constructor( { name, race, attributeMods = {}, level = 1, job = 'peasant' } ) {
+  constructor({
+    name,
+    race,
+    attributeMods = {},
+    level = 1,
+    job = 'peasant'
+  }) {
     if (typeof races[race] === 'undefined') {
       throw `Invalid race '${race}'`;
     }
@@ -19,6 +26,11 @@ export default class Character
     this.attributes = new Attributes( race, attributeMods );
     this.inventory = new Inventory();
     this.stats = new Stats( this.attributes, this.equipment );
+
+    this.maxHealth = 100;
+    this.health = 100;
+
+    console.log(this);
   }
 
   determineTier() {
@@ -33,7 +45,36 @@ export default class Character
 
   calculateDiceSize() {
     const multiplier = Math.floor( this.level / 10 ) + 1;
-    return 10 * multiplier;
+    return 5 * multiplier;
+  }
+
+  meleeAttack( target ) {
+    const attackRoll = this.meleeAttackRoll();
+    console.log(`Attack roll: ${attackRoll}`);
+    const targetDefence = target.stats.defenceMod.melee.total;
+    console.log(`Target def: ${targetDefence}`);
+    
+    const hit = attackRoll > targetDefence;
+    console.log(`Hit: ${hit}`);
+    if (hit) {
+      const overDamage = (targetDefence - attackRoll) * -1;
+      console.log(`Overdamage: ${overDamage}`);
+      const targetArmour = target.stats.defenceMod.melee.equipment;
+      console.log(`Target armour: ${targetArmour}`);
+      const damage = this.strength.modifier + overDamage - targetArmour;
+      console.log(`Total damage: ${damage}`);
+
+      target.takeDamage(damage);
+    }
+  }
+
+  meleeAttackRoll() {
+    return roll(this.tier.dice) + this.stats.attackMod.melee.total;
+  }
+
+  takeDamage( damage ) {
+    this.health = this.health - damage;
+    console.log(`Target health: ${this.health}`);
   }
 
   get strength() {
