@@ -65,12 +65,16 @@ export default class Inventory
   }
 
   unequipItem(slot) {
-    console.log('---');
-    console.log(slot);
-    const item = this.equipped[slot[0]][slot[1]];
-    console.log(item);
+    let item;
+    if (Array.isArray(slot)) {
+      item = this.equipped[slot[0]][slot[1]];
+      this.equipped[slot[0]][slot[1]] = null;
+    } else {
+      item = this.equipped[slot];
+      this.equipped[slot] = null;
+    }
+
     this.stored.push(item);
-    this.equipped[slot[0]][slot[1]] = null;
   }
 }
 

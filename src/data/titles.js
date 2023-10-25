@@ -1,14 +1,14 @@
 const titles = {
-  10: 'novice',
-  20: 'apprentice',
-  30: '',
-  40: 'formidable',
-  50: 'skilled',
-  60: 'veteran',
-  70: 'expert',
-  80: 'master',
-  90: 'legendary',
-  100: 'paragon',
+  5: 'novice',
+  10: 'apprentice',
+  15: '',
+  20: 'formidable',
+  25: 'skilled',
+  30: 'veteran',
+  35: 'expert',
+  40: 'master',
+  45: 'legendary',
+  50: 'paragon',
 }
 
 export default titles

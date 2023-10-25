@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { getTypedMod } from "../utilities";
+import { getTypedNumber } from "../utilities";
 import GlobalContext from "@/globalContext";
 
 export default function CharacterSheet({ character = null }) {
@@ -28,7 +28,7 @@ export default function CharacterSheet({ character = null }) {
             <div key={key}>
               {key}: {attribute.score}
               <span className="attribute-modifier">
-                {getTypedMod(attribute.modifier)}
+                {getTypedNumber(attribute.modifier)}
               </span>
             </div>
           )
