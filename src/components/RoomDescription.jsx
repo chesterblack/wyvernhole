@@ -7,32 +7,30 @@ export default function RoomDescription({}) {
   const [ writtenText, setWrittenText ] = useState('');
 
   useEffect(() => {
-    console.log(currentRoom.description);
-    setTyping(true);
-    setWrittenText('');
-    setCurrentLetter(0);
-  }, [setTyping, setCurrentLetter, setWrittenText, currentRoom]);
-
-  useEffect(() => {
-    const description = currentRoom.description;
-    if (currentLetter < description.length) {
-      setTimeout(() => {
-        setWrittenText(writtenText + description[currentLetter]);
+    if (currentLetter < currentRoom.description.length) {
+      const typewriter = setTimeout(() => {
+        setTyping(true);
+        setWrittenText(writtenText + currentRoom.description[currentLetter]);
         setCurrentLetter(currentLetter + 1);
       }, textSpeed);
+
+      return () => clearTimeout(typewriter);
     } else {
-      console.log('typing done');
       setTyping(false);
     }
-  },
-  [
+  }, [
     currentLetter,
     writtenText,
     currentRoom,
+    setTyping,
     textSpeed,
-    setTyping
   ]);
 
+  useEffect(() => {
+    setWrittenText('');
+    setCurrentLetter(0);
+  }, [setTyping, setCurrentLetter, setWrittenText, currentRoom]);
+    
   return (
     <div className="room-description">
       {textSpeed === 0 ? currentRoom.description : writtenText}

@@ -26,7 +26,7 @@ const rooms = [
     ]
   },
   {
-    description: "Old men",
+    description: "Bar",
     options: [
       {
         text: "Back",
@@ -35,7 +35,7 @@ const rooms = [
     ]
   },
   {
-    description: "Bar",
+    description: "Old men",
     options: [
       {
         text: "Back",

@@ -7,7 +7,6 @@ export default function RoomOptions({}) {
   const [ canDisplay, setCanDisplay ] = useState(false);
 
   useEffect(() => {
-    console.log('typing changed: ', typing.toString());
     setCanDisplay(!typing);
   }, [ typing ]);
 
@@ -15,7 +14,15 @@ export default function RoomOptions({}) {
     <>
       {canDisplay && (
         <div className="room-options">
-          {currentRoom.options.map((option) => <RoomOption key={option.roomKey} option={option} />)}
+          {currentRoom.options.map((option) => {
+            return (
+              <RoomOption
+                key={option.roomKey}
+                option={option}
+                setCanDisplay={setCanDisplay}
+              />
+            );
+          })}
         </div>
       )}
     </>

@@ -8,7 +8,6 @@ export default function Room({}) {
 
   return (
     <>
-      {`typing: ${typing.toString()}`}
       <RoomDescription />
       <RoomOptions />
     </>

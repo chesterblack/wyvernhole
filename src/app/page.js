@@ -29,7 +29,7 @@ export default function Home() {
       currentRoom, setCurrentRoom,
       typing, setTyping,
       menus,
-      textSpeed: 5,
+      textSpeed: 10,
     }}>
       <main>
         <MenuBar />
