@@ -10,7 +10,7 @@ export default class Character
 {
   constructor({
     name,
-    race,
+    race = 'human',
     attributeMods = {},
     level = 1,
     job = 'peasant'

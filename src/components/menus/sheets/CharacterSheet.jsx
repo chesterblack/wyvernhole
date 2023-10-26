@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { getTypedNumber } from "../../utilities";
+import { getTypedNumber } from "../../../utilities";
 import GlobalContext from "@/globalContext";
 
 export default function CharacterSheet({ character = null }) {

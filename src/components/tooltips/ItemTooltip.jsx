@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Tab from "./Tab";
+import Tab from "../Tab";
 import { getTypedNumber } from "@/utilities";
 
 export default function ItemTooltip({ item, setTooltipShown }) {

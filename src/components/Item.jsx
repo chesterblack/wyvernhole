@@ -1,5 +1,5 @@
 import Button from "./Button";
-import ItemTooltip from "./ItemTooltip";
+import ItemTooltip from "./tooltips/ItemTooltip";
 import { useContext, useState } from "react";
 import GlobalContext, { InventoryContext } from "@/globalContext";
 

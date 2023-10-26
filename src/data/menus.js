@@ -1,6 +1,6 @@
-import CharacterSheet from "@/components/sheets/CharacterSheet";
-import InventorySheet from "@/components/sheets/InventorySheet";
-import StatSheet from "@/components/sheets/StatSheet";
+import CharacterSheet from "@/components/menus/sheets/CharacterSheet";
+import InventorySheet from "@/components/menus/sheets/InventorySheet";
+import StatSheet from "@/components/menus/sheets/StatSheet";
 
 const menus = [
   {

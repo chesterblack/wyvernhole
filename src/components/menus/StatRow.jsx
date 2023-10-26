@@ -1,6 +1,6 @@
 import { getTypedNumber } from "@/utilities";
-import Button from "./Button";
-import ModTooltip from "./ModTooltip";
+import Button from "../Button";
+import ModTooltip from "../tooltips/ModTooltip";
 import { useState } from "react";
 
 export default function StatRow({ stat }) {

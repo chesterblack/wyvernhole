@@ -3,18 +3,17 @@
 import { useState } from 'react';
 import Character from '@/character/classes/Character.class';
 import Player from '@/character/classes/Player.class';
-import MenuBar from '@/components/MenuBar';
+import MenuBar from '@/components/menus/MenuBar';
 import GlobalContext from '@/globalContext';
 import menus from '@/data/menus';
+import rooms from '@/data/rooms';
+import Room from '@/components/Room';
 
 export default function Home() {
-  const [openMenu, setOpenMenu] = useState(null);
-  const [currentPlayer, setCurrentPlayer] = useState(new Player({
-    name: 'Chester',
-    race: 'human',
-    level: 1,
-    job: 'fighter',
-  }));
+  const [ openMenu, setOpenMenu ] = useState(null);
+  const [ currentPlayer, setCurrentPlayer ] = useState(new Player({ name: 'Chester' }));
+  const [ currentRoom, setCurrentRoom ] = useState(rooms[0]);
+  const [ typing, setTyping ] = useState(true);
 
   const target = new Character({
     name: 'Orc',
@@ -27,16 +26,14 @@ export default function Home() {
     <GlobalContext.Provider value={{
       currentPlayer, setCurrentPlayer,
       openMenu, setOpenMenu,
-      menus
+      currentRoom, setCurrentRoom,
+      typing, setTyping,
+      menus,
+      textSpeed: 5,
     }}>
       <main>
         <MenuBar />
-        <button onClick={() => {
-          console.log(currentPlayer);
-          currentPlayer.meleeAttack(target);
-        }}>
-          Melee Attack
-        </button>
+        <Room />
       </main>
     </GlobalContext.Provider>
   )

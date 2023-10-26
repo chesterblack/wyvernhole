@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Button from "./Button";
+import Button from "../Button";
 import GlobalContext from "@/globalContext";
 
 export default function MenuButton({ id, label }) {
