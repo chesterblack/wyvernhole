@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
-import Menu from './Menu';
 import MenuButtons from './MenuButtons';
 import GlobalContext from '@/globalContext';
+import MenuPopups from './MenuPopups';
 
 export default function MenuBar({}) {
   const { setOpenMenu } = useContext(GlobalContext);
@@ -15,7 +15,7 @@ export default function MenuBar({}) {
 
   return (
     <>
-      <Menu />
+      <MenuPopups />
       <MenuButtons />
     </>
   );

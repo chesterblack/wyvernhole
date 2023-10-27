@@ -64,6 +64,44 @@ h3 {
   text-decoration: underline;
 }
 
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 0;
+
+  &::-webkit-slider-thumb {
+    margin-top: -5px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 14px;
+    width: 8px;
+    background: var(--popup-border);
+  }
+  
+  &::-moz-range-thumb {
+    border: none;
+    border-radius: 0;
+    height: 14px;
+    width: 8px;
+    background: var(--popup-border);  
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 0;
+  }
+  
+  &::-moz-range-track {
+    height: 4px;
+  }
+
+  &.inverted {
+    direction: rtl;
+  }
+}
+
 button,
 .button {
   display: block;
@@ -218,6 +256,15 @@ button,
   }
 }
 
+.settings-sheet {
+  .setting {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}
+
 .tooltip {
   position: absolute;
   z-index: 1;
@@ -245,6 +292,7 @@ button,
   & > button,
   & > .button {
     width: 100%;
+    max-height: 37px;
   }
 }
 

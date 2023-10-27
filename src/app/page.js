@@ -14,6 +14,7 @@ export default function Home() {
   const [ currentPlayer, setCurrentPlayer ] = useState(new Player({ name: 'Chester' }));
   const [ currentRoom, setCurrentRoom ] = useState(rooms[0]);
   const [ typing, setTyping ] = useState(true);
+  const [ textSpeed, setTextSpeed ] = useState(7);
 
   const target = new Character({
     name: 'Orc',
@@ -28,8 +29,8 @@ export default function Home() {
       openMenu, setOpenMenu,
       currentRoom, setCurrentRoom,
       typing, setTyping,
+      textSpeed, setTextSpeed,
       menus,
-      textSpeed: 10,
     }}>
       <main>
         <MenuBar />

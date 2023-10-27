@@ -16,7 +16,7 @@ export default function MenuTabs({}) {
               setOpenMenu(menu.id)
             }}
           >
-            {menu.label}
+            {menu.tab}
           </Tab>
         )
       })}
