@@ -1,33 +1,17 @@
-* {
+*{
 	color: #ffffff;
 	font-family: 'VT323', monospace;
 	font-size: 26px;
 	line-height: 84%;
 	box-sizing: border-box;
 }
-*:focus {
+*:focus{
 	outline: none;
 }
-
-body {
+body{
 	background: #000000;
 	margin: 0;
 	padding: 0;
-}
-
-dialogue-speaker{
-	display: block;
-	margin-bottom: 10px;
-}
-
-.narrator {
-	margin-bottom: 20px;
-	padding-bottom: 15px;
-	border-bottom: 3px solid #ffffff;
-}
-
-.dialogue {
-	margin-bottom: 50px;
 }
 
 section {
@@ -50,11 +34,22 @@ main {
 	border-left: 3px solid goldenrod;
 	border-right: 3px solid goldenrod;
 }
+
+.speaker{
+	display: block;
+	margin-bottom: 10px;
+}
+
+#text{
+	margin-bottom: 20px;
+	padding-bottom: 15px;
+	border-bottom: 3px solid #ffffff;
+}
 #responses{
 	margin-top: 40px;
 }
 button,
-.button{
+.btn{
 	display: block;
 	background: none;
 	padding: 3px 10px 4px;
@@ -64,17 +59,15 @@ button,
 	border-bottom: 2px solid rgb(33 33 33);
 	border-right: 2px solid rgb(33 33 33);
 	text-decoration: none;
-	cursor: pointer;
-	width: fit-content;
 }
 button:hover, 
 button:focus,
-.button:hover,
-.button:focus{
+.btn:hover,
+.btn:focus{
 	background-color: rgba(50,50,50,0.6);
 }
 button:active,
-.button:active{
+.btn:active{
 	border-bottom: 2px solid rgb(118 118 118);
 	border-right: 2px solid rgb(118 118 118);
 	border-top: 2px solid rgb(33 33 33);

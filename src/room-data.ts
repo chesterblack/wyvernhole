@@ -1,32 +1,63 @@
-[
-    {
-        "id": 1,
+export type RoomId = string;
+export type ItemId = string;
+
+export type RoomAction = {
+    text: string,
+    id: RoomId
+}
+
+export type Speaker = {
+    name: string,
+    color: `#${string}`
+}
+
+export type DialogueStatement = {
+    speaker: Speaker,
+    message: string
+}
+
+export type ShopItem = {
+    name: string,
+    stock: number,
+    price: number,
+    id: ItemId
+}
+
+export type Shop = ShopItem[]
+
+export type Room = {
+    actions: RoomAction[],
+    message?: string,
+    dialogue?: DialogueStatement[],
+    shop?: Shop
+}
+
+export const roomData: Record<string, Room> = {
+    "1": {
         "message": "You approach a tavern, the sign on the door reads: The Savoury Salmon. It seems humble, but reasonably well-kept.",
-        "options": [
+        "actions": [
             {
                 "text": "Walk in",
-                "id": 2
+                "id": "2"
             }
         ]
     },
 
-    {
-        "id": 2,
+    "2": {
         "message": "A middle-aged woman smiles at you from behind the bar, two old men sit bickering at a nearby table.",
-        "options": [
+        "actions": [
             {
                 "text": "Approach the bar",
-                "id": 7
+                "id": "7"
             },
             {
                 "text": "Approach the old men",
-                "id": 4
+                "id": "4"
             }
         ]
     },
 
-    {
-        "id": 3,
+    "3": {
         "message": "",
         "dialogue": [
             {
@@ -42,25 +73,24 @@
                 "name": "Ale",
                 "stock": 100,
                 "price": 2,
-                "id": 4
+                "id": "4"
             },
             {
                 "name": "Ale",
                 "stock": 100,
                 "price": 2,
-                "id": 4
+                "id": "4"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "Actually, I don't really like ale",
-                "id": 7
+                "id": "7"
             }
         ]
     },
 
-    {
-        "id": 7,
+    "7": {
         "message": "The barkeep smiles warmly as you stand at the bar",
         "dialogue": [
             {
@@ -71,24 +101,23 @@
                 "message": "What can I do for you?"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "I'd like a drink",
-                "id": 3
+                "id": "3"
             },
             {
                 "text": "Heard any rumours recently?",
-                "id": 8
+                "id": "8"
             },
             {
                 "text": "Just passing through",
-                "id": 2
+                "id": "2"
             }
         ]
     },
 
-    {
-        "id": 8,
+    "8": {
         "message": "She points towards the two old man at the table",
         "dialogue": [
             {
@@ -99,24 +128,23 @@
                 "message": "Well if it's rumours you're looking for, those two over there are always spouting off tall tales, need anything else?"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "I'd like a drink",
-                "id": 3
+                "id": "3"
             },
             {
                 "text": "Approach the old men",
-                "id": 4
+                "id": "4"
             },
             {
                 "text": "I'm good thanks",
-                "id": 2
+                "id": "2"
             }
         ]
     },
 
-    {
-        "id": 5,
+    "5": {
         "message": "It's not the best ale you've ever had, but it's certainly drinkable",
         "effects": {
             "gold" : -2,
@@ -132,24 +160,23 @@
                 "message": "Anything else I can get for you?"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "Another ale please (2gp)",
-                "id": 5
+                "id": "5"
             },
             {
                 "text": "Heard any rumours lately?",
-                "id": 8
+                "id": "8"
             },
             {
                 "text": "I'm good thanks",
-                "id": 2
+                "id": "2"
             }
         ]
     },
 
-    {
-        "id": 4,
+    "4": {
         "message": "You approach a pair of equally toothless old men who appear to be arguing about the disappearance of someone named \"One-eyed Jack\"",
         "dialogue": [
             {
@@ -157,7 +184,7 @@
                     "name": "Old Man 1",
                     "color": "#ff9c9c"
                 },
-                "message": "I tells ya, it's that damn harpy that's taken ol' One-eyed Jack, bandits would've captu#ff9c9c him and sent a ransom note"
+                "message": "I tells ya, it's that damn harpy that's taken ol' One-eyed Jack, bandits would've captured him and sent a ransom note"
             },
             {
                 "speaker": {
@@ -167,24 +194,23 @@
                 "message": "You're crazy, no bandit round 'ere has ever sent a ransom note, you know damn well no one round 'ere's got any money, least of all to buy Jack back. He's buried in a shallow grave in the woods somewhere, or fed to the dogs."
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "Ask what's going on",
-                "id": 9
+                "id": "9"
             },
             {
                 "text": "Agree that it probably is a harpy",
-                "id": 10
+                "id": "10"
             },
             {
                 "text": "Agree that it must be bandits",
-                "id": 6
+                "id": "6"
             }
         ]
     },
 
-    {
-        "id": 10,
+    "10": {
         "message": "The first old man nods his head approvingly, whilst the other splutters in disbelief",
         "dialogue": [
             {
@@ -195,20 +221,19 @@
                 "message": "Now you just listen here, if you go off into them there woods and find a harpy, come back and I'll buy you a round my damn self"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "I'll be back soon",
-                "id": 13
+                "id": "13"
             },
             {
                 "text": "Sounds a bit too dangerous for me",
-                "id": 13
+                "id": "13"
             }
         ]
     },
 
-    {
-        "id": 6,
+    "6": {
         "message": "The second old man nods his head approvingly, whilst the other splutters in disbelief",
         "dialogue": [
             {
@@ -219,20 +244,19 @@
                 "message": "Now you just listen here, if you go off into them there woods and find a harpy, come back and I'll buy you a round my damn self"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "I'll be back soon",
-                "id": 13
+                "id": "13"
             },
             {
                 "text": "Sounds a bit too dangerous for me",
-                "id": 13
+                "id": "13"
             }
         ]
     },
 
-    {
-        "id": 9,
+    "9": {
         "message": "",
         "dialogue": [
             {
@@ -247,38 +271,36 @@
                     "name": "Old Man 2",
                     "color": "#8ada8b"
                 },
-                "message": "Ignore him, that harpy took his eye years ago, it's long gone by now. We've been havin' trouble with bandits the last few weeks, and it's <em>them</em> that done ol' Jack in, the poor fool."
+                "message": "Ignore him, that harpy took his eye years ago, it's long gone by now. We've been havin' trouble with bandits the last few weeks, and it's them that done ol' Jack in, the poor fool."
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "Agree that it probably is a harpy",
-                "id": 10
+                "id": "10"
             },
             {
                 "text": "Agree that it must be bandits",
-                "id": 6
+                "id": "6"
             }
         ]
     },
 
-    {
-        "id": 13,
+    "13": {
         "message": "The barkeep is nowhere to be seen, but you can hear and smell bacon frying from a back-room. The old men look at you expectantly.",
-        "options": [
+        "actions": [
             {
                 "text": "Leave",
-                "id": 12
+                "id": "12"
             },
             {
                 "text": "Speak to the old men again",
-                "id": 11
+                "id": "11"
             }
         ]
     },
 
-    {
-        "id": 11,
+    "11": {
         "message": "You approach the two old men",
         "dialogue": [
             {
@@ -296,35 +318,33 @@
                 "message": "If you come back in one piece we'll pay ya."
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "I'll be back soon",
-                "id": 13
+                "id": "13"
             }
         ]
     },
 
-    {
-        "id": 12,
+    "12": {
         "message": "You step out onto the street, one direction leads into the nearby woods, the other to a ramshackle little building with a sign out front saying \"Genral Stoar\"",
-        "options": [
+        "actions": [
             {
                 "text": "Go to the \"Genral Stoar\"",
-                "id": 14
+                "id": "14"
             },
             {
                 "text": "Head into the woods",
-                "id": 15
+                "id": "15"
             },
             {
                 "text": "Go back inside the tavern",
-                "id": 13
+                "id": "13"
             }
         ]
     },
 
-    {
-        "id": 14,
+    "14": {
         "message": "A small weaselly man gives a start as you walk through the door",
         "dialogue": [
             {
@@ -335,21 +355,19 @@
                 "message": "Oh, t-t-terribly sorry, b-but I'm afraid we're c-c-closed, there's been too many b-b-b-bandit attacks lately and n-not enough caravans have come through with stock"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "Leave",
-                "id": 12
+                "id": "12"
             }
         ]
     },
 
-    {
-        "id": 15,
+    "15": {
         "message": "You trot up the dusty path towards the woods and are stuck with a strange feeling that this is the start of quite the adventure...."
     },
 
-    {
-        "id": 17,
+    "17": {
         "message": "Combat test",
         "combat": {
             "combatants": [
@@ -362,8 +380,7 @@
         }
     },
 
-    {
-        "id": 16,
+    "16": {
         "message": "",
         "dialogue": [
             {
@@ -374,46 +391,45 @@
                 "message": "Ah, sorry, but you don't have enough money"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "Know of any rumours around here?",
-                "id": 8
+                "id": "8"
             },
             {
                 "text": "Leave",
-                "id": 2
+                "id": "2"
             }
         ]
     },
 
-    {
-        "id": 19,
+    "19": {
         "message": "shop test",
         "shop": [
             {
                 "name": "Sword",
                 "price": 10,
                 "stock": 1,
-                "id": 1
+                "id": "1"
             },
             {
                 "name": "Shield",
                 "price": 10,
                 "stock": 1,
-                "id": 2
+                "id": "2"
             },
             {
                 "name": "Health potion",
                 "price": 5,
                 "stock": 5,
-                "id": 3
+                "id": "3"
             }
         ],
-        "options": [
+        "actions": [
             {
                 "text": "Leave",
-                "id": 12
+                "id": "12"
             }
         ]
     }
-]
+};
