@@ -1,5 +1,5 @@
 // ----- ----- ----- //
-//    GLOBAL VARS    //
+//		GLOBAL VARS		//
 // ----- ----- ----- //
 const body = document.getElementById('body');
 const textBox = document.getElementById('text');
@@ -17,7 +17,7 @@ let startingRoom = 101;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 if (urlParams.get('room')) {
-  startingRoom = parseInt(urlParams.get('room'));
+	startingRoom = parseInt(urlParams.get('room'));
 }
 
 let stopTyping = false;
@@ -26,12 +26,12 @@ let speed = 10;
 let openInfoBox = false;
 
 let stats = {
-  health: 100,
-  maxHealth: 100,
-  gold: 50,
-  drunkenness: 0,
-  attack: 0,
-  defence: 0,
+	health: 100,
+	maxHealth: 100,
+	gold: 50,
+	drunkenness: 0,
+	attack: 0,
+	defence: 0,
 };
 
 let quests = [];
@@ -39,13 +39,13 @@ let quests = [];
 let inventory = [];
 
 let equipped = {
-  hands: [null, null],
-  armour: null,
-  boots: null,
-  gloves: null,
-  head: null,
-  rings: [null, null, null, null],
-  amulet: null,
+	hands: [null, null],
+	armour: null,
+	boots: null,
+	gloves: null,
+	head: null,
+	rings: [null, null, null, null],
+	amulet: null,
 };
 
 let roomData;
@@ -54,35 +54,35 @@ let autosave = true;
 let stock = {};
 
 let saveCode = {
-  r: 1,
-  h: stats.health,
-  mh: stats.maxHealth,
-  g: stats.gold,
-  s: speed,
-  d: stats.drunkenness,
-  i: inventory,
-  e: equipped,
+	r: 1,
+	h: stats.health,
+	mh: stats.maxHealth,
+	g: stats.gold,
+	s: speed,
+	d: stats.drunkenness,
+	i: inventory,
+	e: equipped,
 };
 
 // ----- ----- ----- //
-//     FUNCTIONS     //
+//		 FUNCTIONS		 //
 // ----- ----- ----- //
 function ajax(url, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url);
-  xhr.send(null);
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url);
+	xhr.send(null);
 
-  xhr.onreadystatechange = function () {
-    var DONE = 4;
-    var OK = 200;
-    if (xhr.readyState === DONE) {
-      if (xhr.status === OK) {
-        callback(xhr.responseText);
-      } else {
-        console.log('Error: ' + xhr.status);
-      }
-    }
-  };
+	xhr.onreadystatechange = function () {
+		var DONE = 4;
+		var OK = 200;
+		if (xhr.readyState === DONE) {
+			if (xhr.status === OK) {
+				callback(xhr.responseText);
+			} else {
+				console.log('Error: ' + xhr.status);
+			}
+		}
+	};
 }
 
 /**
@@ -96,25 +96,25 @@ function ajax(url, callback) {
  * @param {function} callback What to do once the text has been typed
  */
 function typeWriter(txt, target, callback) {
-  responseBox.innerHTML = '';
-  let i = 0;
-  typeText();
-  function typeText() {
-    if (!stopTyping) {
-      if (i < txt.length) {
-        let slurChance = Math.random() * 80;
-        if (slurChance > stats.drunkenness) {
-          target.innerHTML += txt.charAt(i);
-        } else {
-          target.innerHTML += slur(txt.charAt(i));
-        }
-        i++;
-        setTimeout(typeText, speed);
-      } else {
-        callback();
-      }
-    }
-  }
+	responseBox.innerHTML = '';
+	let i = 0;
+	typeText();
+	function typeText() {
+		if (!stopTyping) {
+			if (i < txt.length) {
+				let slurChance = Math.random() * 80;
+				if (slurChance > stats.drunkenness) {
+					target.innerHTML += txt.charAt(i);
+				} else {
+					target.innerHTML += slur(txt.charAt(i));
+				}
+				i++;
+				setTimeout(typeText, speed);
+			} else {
+				callback();
+			}
+		}
+	}
 }
 
 /**
@@ -125,21 +125,21 @@ function typeWriter(txt, target, callback) {
  * @return {string} slurred character
  */
 function slur(letter) {
-  let rando = Math.random();
+	let rando = Math.random();
 
-  if (rando < 0.25) {
-    return '';
-  } else if (rando < 0.5) {
-    return letter + letter;
-  } else if (rando < 0.75) {
-    if (letter.match(/[a-z]/i)) {
-      return String.fromCharCode(letter.charCodeAt(0) + 1);
-    } else {
-      return letter;
-    }
-  } else {
-    return ' ';
-  }
+	if (rando < 0.25) {
+		return '';
+	} else if (rando < 0.5) {
+		return letter + letter;
+	} else if (rando < 0.75) {
+		if (letter.match(/[a-z]/i)) {
+			return String.fromCharCode(letter.charCodeAt(0) + 1);
+		} else {
+			return letter;
+		}
+	} else {
+		return ' ';
+	}
 }
 
 /**
@@ -152,12 +152,12 @@ function slur(letter) {
  * @returns {HTMLElement} the button
  */
 function createChoiceBox(text, id) {
-  let optionButton = document.createElement('button');
-  optionButton.innerHTML = text;
-  optionButton.addEventListener('click', () => {
-    writeOutRoom(id);
-  });
-  return optionButton;
+	let optionButton = document.createElement('button');
+	optionButton.innerHTML = text;
+	optionButton.addEventListener('click', () => {
+		writeOutRoom(id);
+	});
+	return optionButton;
 }
 
 /**
@@ -169,12 +169,12 @@ function createChoiceBox(text, id) {
  * @returns {HTMLElement} the button
  */
 function createPurchaseBox(item) {
-  let buyButton = document.createElement('button');
-  buyButton.innerHTML = item.name + ' (' + item.price + 'gp)';
-  buyButton.addEventListener('click', () => {
-    buyItem(item.id, item.price);
-  });
-  return buyButton;
+	let buyButton = document.createElement('button');
+	buyButton.innerHTML = item.name + ' (' + item.price + 'gp)';
+	buyButton.addEventListener('click', () => {
+		buyItem(item.id, item.price);
+	});
+	return buyButton;
 }
 
 /**
@@ -185,73 +185,73 @@ function createPurchaseBox(item) {
  */
 // TODO: clean up the three options so it just sets a var from a func and then appends it at the end outside the conditionals
 function presentChoices(options) {
-  setTimeout(() => {
-    for (let option of options) {
-      if (option.quest) {
-        let optionBox = createChoiceBox(option.text, option.id);
-        optionBox.addEventListener('click', () => {
-          addQuestStep(option.quest.id, option.quest.step);
-        });
-        responseBox.appendChild(optionBox);
-      } else if (option.type == 'option') {
-        responseBox.appendChild(createChoiceBox(option.text, option.id));
-      } else if (option.type == 'item') {
-        let buttonContainer = document.createElement('div');
-        buttonContainer.classList.add('shop-button');
-        let itemInfoButton = document.createElement('button');
-        let itemInfoBox = createItemDescriptionBox(option);
-        itemInfoButton.innerHTML = '?';
-        itemInfoButton.addEventListener('click', () => {
-          let infoBoxes = document.getElementsByClassName('item-info-box');
-          for (let box of infoBoxes) {
-            box.style.display = 'none';
-          }
-          itemInfoBox.style.display = 'block';
-        });
-        responseBox.appendChild(itemInfoBox);
+	setTimeout(() => {
+		for (let option of options) {
+			if (option.quest) {
+				let optionBox = createChoiceBox(option.text, option.id);
+				optionBox.addEventListener('click', () => {
+					addQuestStep(option.quest.id, option.quest.step);
+				});
+				responseBox.appendChild(optionBox);
+			} else if (option.type == 'option') {
+				responseBox.appendChild(createChoiceBox(option.text, option.id));
+			} else if (option.type == 'item') {
+				let buttonContainer = document.createElement('div');
+				buttonContainer.classList.add('shop-button');
+				let itemInfoButton = document.createElement('button');
+				let itemInfoBox = createItemDescriptionBox(option);
+				itemInfoButton.innerHTML = '?';
+				itemInfoButton.addEventListener('click', () => {
+					let infoBoxes = document.getElementsByClassName('item-info-box');
+					for (let box of infoBoxes) {
+						box.style.display = 'none';
+					}
+					itemInfoBox.style.display = 'block';
+				});
+				responseBox.appendChild(itemInfoBox);
 
-        buttonContainer.appendChild(createPurchaseBox(option));
-        buttonContainer.appendChild(itemInfoButton);
-        responseBox.appendChild(buttonContainer);
-      }
-    }
-  }, speed * 20);
+				buttonContainer.appendChild(createPurchaseBox(option));
+				buttonContainer.appendChild(itemInfoButton);
+				responseBox.appendChild(buttonContainer);
+			}
+		}
+	}, speed * 20);
 }
 
 function addQuestStep(id, step) {
-  let questsButton = document.getElementById('quests-button');
-  let url = '/game.php?function=fetchQuest&quest=' + id;
-  ajax(url, (response) => {
-    quest = JSON.parse(response);
+	let questsButton = document.getElementById('quests-button');
+	let url = '/game.php?function=fetchQuest&quest=' + id;
+	ajax(url, (response) => {
+		quest = JSON.parse(response);
 
-    if (!quests.find((i) => id == i.id)) {
-      addNewQuest(quest);
-      if (!questsButton.getElementsByClassName('new')[0]) {
-        addNewTag(questsButton, false);
-      }
-    }
+		if (!quests.find((i) => id == i.id)) {
+			addNewQuest(quest);
+			if (!questsButton.getElementsByClassName('new')[0]) {
+				addNewTag(questsButton, false);
+			}
+		}
 
-    let questItem = document.querySelector("[data-quest-id='" + id + "']");
+		let questItem = document.querySelector("[data-quest-id='" + id + "']");
 
-    let questIndex = questItem.dataset.questIndex;
-    quests[questIndex].steps[step].new = true;
-    let questStepItem = document.createElement('span');
-    questItem.appendChild(questStepItem);
-    questStepItem.classList.add('quest-step');
-    questStepItem.dataset.questStep = step;
-    questStepItem.innerHTML = quest.steps[step].description;
-    questStepItem = addNewTag(questStepItem, true);
-  });
+		let questIndex = questItem.dataset.questIndex;
+		quests[questIndex].steps[step].new = true;
+		let questStepItem = document.createElement('span');
+		questItem.appendChild(questStepItem);
+		questStepItem.classList.add('quest-step');
+		questStepItem.dataset.questStep = step;
+		questStepItem.innerHTML = quest.steps[step].description;
+		questStepItem = addNewTag(questStepItem, true);
+	});
 }
 
 function addNewQuest(quest) {
-  let newQuestItem = document.createElement('div');
-  newQuestItem.classList.add('quest');
-  newQuestItem.dataset.questId = quest.id;
-  quest.completed = false;
-  newQuestItem.dataset.questIndex = quests.push(quest) - 1;
-  newQuestItem.innerHTML = '<h3>' + quest.name + '</h3>';
-  questsBox.appendChild(newQuestItem);
+	let newQuestItem = document.createElement('div');
+	newQuestItem.classList.add('quest');
+	newQuestItem.dataset.questId = quest.id;
+	quest.completed = false;
+	newQuestItem.dataset.questIndex = quests.push(quest) - 1;
+	newQuestItem.innerHTML = '<h3>' + quest.name + '</h3>';
+	questsBox.appendChild(newQuestItem);
 }
 
 /**
@@ -262,11 +262,11 @@ function addNewQuest(quest) {
  * @returns {element} span element
  */
 function createDialogueBox(speaker) {
-  let span = document.createElement('span');
-  span.classList.add('speaker');
-  span.style.color = speaker.color;
-  dialogueBox.appendChild(span);
-  return span;
+	let span = document.createElement('span');
+	span.classList.add('speaker');
+	span.style.color = speaker.color;
+	dialogueBox.appendChild(span);
+	return span;
 }
 
 /**
@@ -278,19 +278,19 @@ function createDialogueBox(speaker) {
  * @param {function} callback what to do once all the dialogue texts have been written
  */
 function writeOutDialogue(dialogue, i, callback) {
-  let target;
-  if (dialogue.length == i) {
-    callback();
-  } else {
-    target = createDialogueBox(dialogue[i].speaker);
-    typeWriter(
-      dialogue[i].speaker.name + ': ' + dialogue[i].message,
-      target,
-      () => {
-        writeOutDialogue(dialogue, i + 1, callback);
-      }
-    );
-  }
+	let target;
+	if (dialogue.length == i) {
+		callback();
+	} else {
+		target = createDialogueBox(dialogue[i].speaker);
+		typeWriter(
+			dialogue[i].speaker.name + ': ' + dialogue[i].message,
+			target,
+			() => {
+				writeOutDialogue(dialogue, i + 1, callback);
+			}
+		);
+	}
 }
 
 /**
@@ -301,49 +301,49 @@ function writeOutDialogue(dialogue, i, callback) {
  *
  */
 function writeOutRoom(id) {
-  stopTyping = true;
-  let url = '/game.php?function=fetchRoom&room=' + id;
-  responseBox.innerHTML = '';
-  textBox.innerHTML = '';
-  dialogueBox.innerHTML = '';
+	stopTyping = true;
+	let url = '/game.php?function=fetchRoom&room=' + id;
+	responseBox.innerHTML = '';
+	textBox.innerHTML = '';
+	dialogueBox.innerHTML = '';
 
-  ajax(url, (response) => {
-    stopTyping = false;
-    roomData = JSON.parse(response);
+	ajax(url, (response) => {
+		stopTyping = false;
+		roomData = JSON.parse(response);
 
-    let roomOptions = roomData.options;
-    let priceMod = roomData.priceMod ?? 1;
-    let shopItems = roomData.shop ?? [];
+		let roomOptions = roomData.options;
+		let priceMod = roomData.priceMod ?? 1;
+		let shopItems = roomData.shop ?? [];
 
-    if (roomOptions) {
-      for (let choice of roomOptions) {
-        choice.type = 'option';
-      }
-    }
+		if (roomOptions) {
+			for (let choice of roomOptions) {
+				choice.type = 'option';
+			}
+		}
 
-    getItems(shopItems, (response) => {
-      if (response) {
-        response = JSON.parse(response);
-        for (let item of response) {
-          item.type = 'item';
-          item.price = Math.round(item.basePrice * priceMod);
-          roomOptions.unshift(item);
-        }
-      }
+		getItems(shopItems, (response) => {
+			if (response) {
+				response = JSON.parse(response);
+				for (let item of response) {
+					item.type = 'item';
+					item.price = Math.round(item.basePrice * priceMod);
+					roomOptions.unshift(item);
+				}
+			}
 
-      typeWriter(roomData.message, textBox, () => {
-        if (roomData.dialogue) {
-          writeOutDialogue(roomData.dialogue, 0, () => {
-            presentChoices(roomOptions, priceMod);
-          });
-        } else {
-          presentChoices(roomOptions, priceMod);
-        }
-      });
-    });
-  });
+			typeWriter(roomData.message, textBox, () => {
+				if (roomData.dialogue) {
+					writeOutDialogue(roomData.dialogue, 0, () => {
+						presentChoices(roomOptions, priceMod);
+					});
+				} else {
+					presentChoices(roomOptions, priceMod);
+				}
+			});
+		});
+	});
 
-  endTurn(id);
+	endTurn(id);
 }
 
 /**
@@ -353,14 +353,14 @@ function writeOutRoom(id) {
  * @param {integer} id optional, current room id to pass through to saveGame()
  */
 function endTurn(id) {
-  if (stats.drunkenness > 0) {
-    stats.drunkenness--;
-  }
-  if (stats.health > stats.maxHealth) {
-    stats.health -= 5;
-  }
-  updateStats();
-  saveGame(id);
+	if (stats.drunkenness > 0) {
+		stats.drunkenness--;
+	}
+	if (stats.health > stats.maxHealth) {
+		stats.health -= 5;
+	}
+	updateStats();
+	saveGame(id);
 }
 
 /**
@@ -370,24 +370,24 @@ function endTurn(id) {
  * @param {integer} room what room id are we on (optional)
  */
 function saveGame(room) {
-  if (room) {
-    saveCode.r = room;
-  }
-  saveCode.h = stats.health;
-  saveCode.mh = stats.maxHealth;
-  saveCode.g = stats.gold;
-  saveCode.s = speed;
-  saveCode.d = stats.drunkenness;
-  saveCode.i = inventory;
-  saveCode.e = equipped;
+	if (room) {
+		saveCode.r = room;
+	}
+	saveCode.h = stats.health;
+	saveCode.mh = stats.maxHealth;
+	saveCode.g = stats.gold;
+	saveCode.s = speed;
+	saveCode.d = stats.drunkenness;
+	saveCode.i = inventory;
+	saveCode.e = equipped;
 
-  saveGameOutput.value = btoa(JSON.stringify(saveCode));
-  if (autosave) {
-    document.cookie = 'saveCode=' + btoa(JSON.stringify(saveCode));
-  } else {
-    document.getElementById('autosave').innerHTML = 'off';
-    document.cookie = 'saveCode=; Max-Age=-1;';
-  }
+	saveGameOutput.value = btoa(JSON.stringify(saveCode));
+	if (autosave) {
+		document.cookie = 'saveCode=' + btoa(JSON.stringify(saveCode));
+	} else {
+		document.getElementById('autosave').innerHTML = 'off';
+		document.cookie = 'saveCode=; Max-Age=-1;';
+	}
 }
 
 /**
@@ -395,12 +395,12 @@ function saveGame(room) {
  * Open/close the options menu
  */
 function toggleMenu(id) {
-  let menu = document.getElementById(id);
-  if (menu.classList.contains('closed')) {
-    menu.classList.remove('closed');
-  } else {
-    menu.classList.add('closed');
-  }
+	let menu = document.getElementById(id);
+	if (menu.classList.contains('closed')) {
+		menu.classList.remove('closed');
+	} else {
+		menu.classList.add('closed');
+	}
 }
 
 /**
@@ -408,20 +408,20 @@ function toggleMenu(id) {
  * Replace current gold, room etc. with loaded base64 encoded string pasted into the load input
  */
 function loadGame(saveCode) {
-  if (!saveCode) {
-    saveCode = loadGameInput.value;
-  }
-  let decodedOptions = atob(saveCode);
-  let loadedOptions = JSON.parse(decodedOptions);
-  stats.health = loadedOptions.h;
-  stats.maxHealth = loadedOptions.mh;
-  stats.gold = loadedOptions.g;
-  speed = loadedOptions.s;
-  stats.drunkenness = loadedOptions.d;
-  inventory = loadedOptions.i;
-  equipped = loadedOptions.e;
-  textSpeedInput.value = speed;
-  writeOutRoom(loadedOptions.r);
+	if (!saveCode) {
+		saveCode = loadGameInput.value;
+	}
+	let decodedOptions = atob(saveCode);
+	let loadedOptions = JSON.parse(decodedOptions);
+	stats.health = loadedOptions.h;
+	stats.maxHealth = loadedOptions.mh;
+	stats.gold = loadedOptions.g;
+	speed = loadedOptions.s;
+	stats.drunkenness = loadedOptions.d;
+	inventory = loadedOptions.i;
+	equipped = loadedOptions.e;
+	textSpeedInput.value = speed;
+	writeOutRoom(loadedOptions.r);
 }
 
 /**
@@ -429,11 +429,11 @@ function loadGame(saveCode) {
  * Copy what's currently in the save input to the clipboard
  */
 function copySaveCode() {
-  let copyText = saveGameOutput;
-  copyText.select();
-  copyText.setSelectionRange(0, 99999);
-  document.execCommand('copy');
-  pingUpdateMessage('copy-button', 'Copied to clipboard');
+	let copyText = saveGameOutput;
+	copyText.select();
+	copyText.setSelectionRange(0, 99999);
+	document.execCommand('copy');
+	pingUpdateMessage('copy-button', 'Copied to clipboard');
 }
 
 /**
@@ -441,11 +441,11 @@ function copySaveCode() {
  * Loads a new game using the default options
  */
 function newGame() {
-  loadGame(
-    'eyJyIjoxLCJoIjoxMDAsIm1oIjoxMDAsImciOjUwLCJzIjoxMCwiZCI6MCwiaSI6W3siX2lkIjp7IiRvaWQiOiI1ZjZjY2JmOWE0OTEwNGE5YWViMDk5ZGIifSwiaWQiOjIsIm5hbWUiOiJEYWdnZXIiLCJlcXVpcHBhYmxlIjp0cnVlLCJzbG90IjoiaGFuZHMiLCJiYXNlUHJpY2UiOjUsImVmZmVjdHMiOlt7ImF0dGFjayI6NX1dLCJ1aWQiOjAsInF1YW50aXR5IjoxLCJuZXciOnRydWUsImVxdWlwcGVkIjp0cnVlfV0sImUiOnsiaGFuZHMiOlt7Il9pZCI6eyIkb2lkIjoiNWY2Y2NiZjlhNDkxMDRhOWFlYjA5OWRiIn0sImlkIjoyLCJuYW1lIjoiRGFnZ2VyIiwiZXF1aXBwYWJsZSI6dHJ1ZSwic2xvdCI6ImhhbmRzIiwiYmFzZVByaWNlIjo1LCJlZmZlY3RzIjpbeyJhdHRhY2siOjV9XSwidWlkIjowLCJxdWFudGl0eSI6MSwibmV3Ijp0cnVlLCJlcXVpcHBlZCI6dHJ1ZX0sbnVsbF0sImFybW91ciI6bnVsbCwiYm9vdHMiOm51bGwsImdsb3ZlcyI6bnVsbCwiaGVhZCI6bnVsbCwicmluZ3MiOltudWxsLG51bGwsbnVsbCxudWxsXSwiYW11bGV0IjpudWxsfX0='
-  );
+	loadGame(
+		'eyJyIjoxLCJoIjoxMDAsIm1oIjoxMDAsImciOjUwLCJzIjoxMCwiZCI6MCwiaSI6W3siX2lkIjp7IiRvaWQiOiI1ZjZjY2JmOWE0OTEwNGE5YWViMDk5ZGIifSwiaWQiOjIsIm5hbWUiOiJEYWdnZXIiLCJlcXVpcHBhYmxlIjp0cnVlLCJzbG90IjoiaGFuZHMiLCJiYXNlUHJpY2UiOjUsImVmZmVjdHMiOlt7ImF0dGFjayI6NX1dLCJ1aWQiOjAsInF1YW50aXR5IjoxLCJuZXciOnRydWUsImVxdWlwcGVkIjp0cnVlfV0sImUiOnsiaGFuZHMiOlt7Il9pZCI6eyIkb2lkIjoiNWY2Y2NiZjlhNDkxMDRhOWFlYjA5OWRiIn0sImlkIjoyLCJuYW1lIjoiRGFnZ2VyIiwiZXF1aXBwYWJsZSI6dHJ1ZSwic2xvdCI6ImhhbmRzIiwiYmFzZVByaWNlIjo1LCJlZmZlY3RzIjpbeyJhdHRhY2siOjV9XSwidWlkIjowLCJxdWFudGl0eSI6MSwibmV3Ijp0cnVlLCJlcXVpcHBlZCI6dHJ1ZX0sbnVsbF0sImFybW91ciI6bnVsbCwiYm9vdHMiOm51bGwsImdsb3ZlcyI6bnVsbCwiaGVhZCI6bnVsbCwicmluZ3MiOltudWxsLG51bGwsbnVsbCxudWxsXSwiYW11bGV0IjpudWxsfX0='
+	);
 
-  updateStats();
+	updateStats();
 }
 
 /**
@@ -453,8 +453,8 @@ function newGame() {
  * Update the speed variable that determines how fast the text will type
  */
 textSpeedInput.addEventListener('change', () => {
-  speed = textSpeedInput.value;
-  saveGame();
+	speed = textSpeedInput.value;
+	saveGame();
 });
 
 /**
@@ -462,23 +462,23 @@ textSpeedInput.addEventListener('change', () => {
  * Autoload a game saved to the cookie, otherwise load the first room and give a free dagger
  */
 window.onload = () => {
-  let autosaveSet = document.cookie.match(new RegExp('(^| )autosave=([^;]+)'));
-  if (autosaveSet && autosaveSet[2] == 'true') {
-    let savedGame = document.cookie.match(new RegExp('(^| )saveCode=([^;]+)'));
-    autosave = true;
-    if (savedGame) {
-      loadGame(savedGame[2]);
-    } else {
-      buyItem(2, 0, true);
-      writeOutRoom(startingRoom);
-    }
-  } else {
-    autosave = false;
-    buyItem(2, 0, true);
-    writeOutRoom(startingRoom);
-  }
+	let autosaveSet = document.cookie.match(new RegExp('(^| )autosave=([^;]+)'));
+	if (autosaveSet && autosaveSet[2] == 'true') {
+		let savedGame = document.cookie.match(new RegExp('(^| )saveCode=([^;]+)'));
+		autosave = true;
+		if (savedGame) {
+			loadGame(savedGame[2]);
+		} else {
+			buyItem(2, 0, true);
+			writeOutRoom(startingRoom);
+		}
+	} else {
+		autosave = false;
+		buyItem(2, 0, true);
+		writeOutRoom(startingRoom);
+	}
 
-  updateStats();
+	updateStats();
 };
 
 /**
@@ -486,66 +486,66 @@ window.onload = () => {
  * Toggles whether data is saved into a cookie to be automatically loaded
  */
 function toggleAutosave() {
-  autosave = autosave ? false : true;
-  document.cookie = 'autosave=' + autosave;
-  if (autosave) {
-    document.getElementById('autosave').innerHTML = 'on';
-  } else {
-    document.getElementById('autosave').innerHTML = 'off';
-  }
+	autosave = autosave ? false : true;
+	document.cookie = 'autosave=' + autosave;
+	if (autosave) {
+		document.getElementById('autosave').innerHTML = 'on';
+	} else {
+		document.getElementById('autosave').innerHTML = 'off';
+	}
 }
 
 function toggleEquipped(item) {
-  let inventoryItem =
-    inventory[
-      inventory.findIndex((invItem) => {
-        return invItem.uid == item.uid;
-      })
-    ];
+	let inventoryItem =
+		inventory[
+			inventory.findIndex((invItem) => {
+				return invItem.uid == item.uid;
+			})
+		];
 
-  if (inventoryItem.equipped) {
-    if (equipped[item.slot] != null && Array.isArray(equipped[item.slot])) {
-      for (let i in equipped[item.slot]) {
-        if (equipped[item.slot][i] && equipped[item.slot][i].uid == item.uid) {
-          equipped[item.slot][i] = null;
-          break;
-        }
-      }
-    } else {
-      equipped[item.slot] = null;
-    }
-    applyItem(item, false);
-    inventoryItem.equipped = false;
-  } else {
-    let freeSlot = checkSlotIsFree(item.slot);
-    if (freeSlot === true) {
-      applyItem(item);
-      inventoryItem.equipped = true;
-      equipped[item.slot] = item;
-    } else if (freeSlot !== false) {
-      applyItem(item);
-      inventoryItem.equipped = true;
-      equipped[item.slot][freeSlot] = item;
-    } else {
-      alert(
-        "Sorry, you can't equip another item in the " + item.slot + ' slot'
-      );
-    }
-  }
-  updateStats();
+	if (inventoryItem.equipped) {
+		if (equipped[item.slot] != null && Array.isArray(equipped[item.slot])) {
+			for (let i in equipped[item.slot]) {
+				if (equipped[item.slot][i] && equipped[item.slot][i].uid == item.uid) {
+					equipped[item.slot][i] = null;
+					break;
+				}
+			}
+		} else {
+			equipped[item.slot] = null;
+		}
+		applyItem(item, false);
+		inventoryItem.equipped = false;
+	} else {
+		let freeSlot = checkSlotIsFree(item.slot);
+		if (freeSlot === true) {
+			applyItem(item);
+			inventoryItem.equipped = true;
+			equipped[item.slot] = item;
+		} else if (freeSlot !== false) {
+			applyItem(item);
+			inventoryItem.equipped = true;
+			equipped[item.slot][freeSlot] = item;
+		} else {
+			alert(
+				"Sorry, you can't equip another item in the " + item.slot + ' slot'
+			);
+		}
+	}
+	updateStats();
 }
 
 function checkSlotIsFree(slot) {
-  if (equipped[slot] != null && Array.isArray(equipped[slot])) {
-    for (let item in equipped[slot]) {
-      if (equipped[slot][item] == null) {
-        return item;
-      }
-    }
-    return false;
-  } else {
-    return equipped[slot] == null;
-  }
+	if (equipped[slot] != null && Array.isArray(equipped[slot])) {
+		for (let item in equipped[slot]) {
+			if (equipped[slot][item] == null) {
+				return item;
+			}
+		}
+		return false;
+	} else {
+		return equipped[slot] == null;
+	}
 }
 
 /**
@@ -553,104 +553,104 @@ function checkSlotIsFree(slot) {
  * Updates visible stat counters (gold, health etc.) and inventory
  */
 function updateStats() {
-  for (let key in stats) {
-    document.getElementById(key).innerHTML = stats[key];
-  }
+	for (let key in stats) {
+		document.getElementById(key).innerHTML = stats[key];
+	}
 
-  let newItems = false;
+	let newItems = false;
 
-  inventoryBox.innerHTML = '';
-  if (inventory[0]) {
-    inventory.forEach((item, i, inv) => {
-      let newItem = document.createElement('div');
-      newItem.classList.add('item');
-      newItem.innerHTML = item.name;
-      if (item.quantity > 1) {
-        newItem.innerHTML += ' x' + item.quantity;
-      }
-      newItem.dataset.itemid = item.id;
-      newItem.dataset.invIndex = i;
-      if (item.equippable) {
-        let equipButton = document.createElement('button');
-        if (item.equipped) {
-          newItem.classList.add('equipped');
-          equipButton.innerHTML = 'Unequip';
-        } else {
-          newItem.classList.remove('equipped');
-          equipButton.innerHTML = 'Equip';
-        }
-        equipButton.classList.add('equip');
-        equipButton.addEventListener('click', (e) => {
-          toggleEquipped(item);
-        });
-        newItem.appendChild(equipButton);
-      }
-      if (item.consumable) {
-        let consumeButton = document.createElement('button');
-        consumeButton.innerHTML = 'Use';
-        consumeButton.addEventListener('click', (e) => {
-          applyItem(item);
-          deleteItem(item);
-        });
-        newItem.appendChild(consumeButton);
-      }
+	inventoryBox.innerHTML = '';
+	if (inventory[0]) {
+		inventory.forEach((item, i, inv) => {
+			let newItem = document.createElement('div');
+			newItem.classList.add('item');
+			newItem.innerHTML = item.name;
+			if (item.quantity > 1) {
+				newItem.innerHTML += ' x' + item.quantity;
+			}
+			newItem.dataset.itemid = item.id;
+			newItem.dataset.invIndex = i;
+			if (item.equippable) {
+				let equipButton = document.createElement('button');
+				if (item.equipped) {
+					newItem.classList.add('equipped');
+					equipButton.innerHTML = 'Unequip';
+				} else {
+					newItem.classList.remove('equipped');
+					equipButton.innerHTML = 'Equip';
+				}
+				equipButton.classList.add('equip');
+				equipButton.addEventListener('click', (e) => {
+					toggleEquipped(item);
+				});
+				newItem.appendChild(equipButton);
+			}
+			if (item.consumable) {
+				let consumeButton = document.createElement('button');
+				consumeButton.innerHTML = 'Use';
+				consumeButton.addEventListener('click', (e) => {
+					applyItem(item);
+					deleteItem(item);
+				});
+				newItem.appendChild(consumeButton);
+			}
 
-      let itemInfoBox = createItemDescriptionBox(item, newItem);
-      let itemInfoButton = document.createElement('button');
-      itemInfoButton.classList.add('info-button');
-      itemInfoButton.innerHTML = '?';
-      itemInfoButton.addEventListener('click', () => {
-        let infoBoxes = document.getElementsByClassName('item-info-box');
-        for (let box of infoBoxes) {
-          box.style.display = 'none';
-        }
-        itemInfoBox.style.display = 'block';
-      });
+			let itemInfoBox = createItemDescriptionBox(item, newItem);
+			let itemInfoButton = document.createElement('button');
+			itemInfoButton.classList.add('info-button');
+			itemInfoButton.innerHTML = '?';
+			itemInfoButton.addEventListener('click', () => {
+				let infoBoxes = document.getElementsByClassName('item-info-box');
+				for (let box of infoBoxes) {
+					box.style.display = 'none';
+				}
+				itemInfoBox.style.display = 'block';
+			});
 
-      if (item.new) {
-        addNewTag(newItem, true);
-        newItems = true;
-      }
+			if (item.new) {
+				addNewTag(newItem, true);
+				newItems = true;
+			}
 
-      newItem.appendChild(itemInfoButton);
-      newItem.appendChild(itemInfoBox);
-      inventoryBox.appendChild(newItem);
-    });
-  }
+			newItem.appendChild(itemInfoButton);
+			newItem.appendChild(itemInfoBox);
+			inventoryBox.appendChild(newItem);
+		});
+	}
 
-  let inventoryButton = document.getElementById('inv-button');
-  if (newItems && !inventoryButton.getElementsByClassName('new')[0]) {
-    addNewTag(inventoryButton, false);
-  } else if (inventoryButton.querySelector('.new')) {
-    removeNewTag(inventoryButton);
-  }
+	let inventoryButton = document.getElementById('inv-button');
+	if (newItems && !inventoryButton.getElementsByClassName('new')[0]) {
+		addNewTag(inventoryButton, false);
+	} else if (inventoryButton.querySelector('.new')) {
+		removeNewTag(inventoryButton);
+	}
 
-  if (stats.drunkenness > 0) {
-    body.style.filter = 'blur(' + stats.drunkenness / 10 + 'px)';
-    drunkennessBox.style.display = 'block';
-  } else {
-    if (stats.drunkenness < 0) {
-      stats.drunkenness = 0;
-    }
-    body.style.filter = 'blur(0)';
-    drunkennessBox.style.display = 'none';
-  }
+	if (stats.drunkenness > 0) {
+		body.style.filter = 'blur(' + stats.drunkenness / 10 + 'px)';
+		drunkennessBox.style.display = 'block';
+	} else {
+		if (stats.drunkenness < 0) {
+			stats.drunkenness = 0;
+		}
+		body.style.filter = 'blur(0)';
+		drunkennessBox.style.display = 'none';
+	}
 
-  let newQuests = false;
-  let questsButton = document.getElementById('quests-button');
-  for (let i = 0; i < quests.length; i++) {
-    if (quests[i].new) {
-      newQuests = true;
-    }
-  }
-  if (!newQuests && questsButton.querySelector('.new')) {
-    document
-      .getElementById('quests-button')
-      .getElementsByClassName('new')[0]
-      .remove();
-  }
+	let newQuests = false;
+	let questsButton = document.getElementById('quests-button');
+	for (let i = 0; i < quests.length; i++) {
+		if (quests[i].new) {
+			newQuests = true;
+		}
+	}
+	if (!newQuests && questsButton.querySelector('.new')) {
+		document
+			.getElementById('quests-button')
+			.getElementsByClassName('new')[0]
+			.remove();
+	}
 
-  saveGame();
+	saveGame();
 }
 
 /**
@@ -661,15 +661,15 @@ function updateStats() {
  * @param {boolean} hoverRemove should hovering over the element should remove the tag
  */
 function addNewTag(element, hoverRemove) {
-  let newBox = document.createElement('span');
-  newBox.classList.add('new');
-  newBox.innerHTML = 'New';
-  if (hoverRemove) {
-    element.addEventListener('mouseover', () => {
-      removeNewTag(element);
-    });
-  }
-  element.appendChild(newBox);
+	let newBox = document.createElement('span');
+	newBox.classList.add('new');
+	newBox.innerHTML = 'New';
+	if (hoverRemove) {
+		element.addEventListener('mouseover', () => {
+			removeNewTag(element);
+		});
+	}
+	element.appendChild(newBox);
 }
 
 /**
@@ -679,19 +679,19 @@ function addNewTag(element, hoverRemove) {
  * @param {HTMLelement} element element to remove the span from
  */
 function removeNewTag(element) {
-  if (element.dataset.invIndex) {
-    inventory[element.dataset.invIndex].new = false;
-  } else if (element.dataset.questStep) {
-    let questIndex = element.parentElement.dataset.questIndex;
-    let step = element.dataset.questStep;
-    quests[questIndex].steps[step].new = false;
-  }
+	if (element.dataset.invIndex) {
+		inventory[element.dataset.invIndex].new = false;
+	} else if (element.dataset.questStep) {
+		let questIndex = element.parentElement.dataset.questIndex;
+		let step = element.dataset.questStep;
+		quests[questIndex].steps[step].new = false;
+	}
 
-  if (element.getElementsByClassName('new')[0]) {
-    element.getElementsByClassName('new')[0].remove();
-  }
+	if (element.getElementsByClassName('new')[0]) {
+		element.getElementsByClassName('new')[0].remove();
+	}
 
-  updateStats();
+	updateStats();
 }
 
 /**
@@ -701,14 +701,14 @@ function removeNewTag(element) {
  * @param {object} item only required attribute is id
  */
 function deleteItem(item) {
-  let invItem = inventory.find((invItem) => invItem.id == item.id);
-  if (invItem.quantity > 1) {
-    invItem.quantity--;
-  } else {
-    inventory = inventory.filter((i) => i.id != invItem.id);
-  }
+	let invItem = inventory.find((invItem) => invItem.id == item.id);
+	if (invItem.quantity > 1) {
+		invItem.quantity--;
+	} else {
+		inventory = inventory.filter((i) => i.id != invItem.id);
+	}
 
-  updateStats();
+	updateStats();
 }
 
 /**
@@ -718,17 +718,17 @@ function deleteItem(item) {
  * @param {object} item containing array of effects
  */
 function applyItem(item, positive = true) {
-  for (let effect of item.effects) {
-    for (let stat in effect) {
-      if (positive) {
-        stats[stat] += effect[stat];
-      } else {
-        stats[stat] -= effect[stat];
-      }
-    }
-  }
+	for (let effect of item.effects) {
+		for (let stat in effect) {
+			if (positive) {
+				stats[stat] += effect[stat];
+			} else {
+				stats[stat] -= effect[stat];
+			}
+		}
+	}
 
-  updateStats();
+	updateStats();
 }
 
 /**
@@ -740,58 +740,58 @@ function applyItem(item, positive = true) {
  * @returns {HTMLElement} the info box HTML element to be appended wherever
  */
 function createItemDescriptionBox(item) {
-  let itemInfoBox = document.createElement('div');
-  itemInfoBox.classList.add('item-info-box');
+	let itemInfoBox = document.createElement('div');
+	itemInfoBox.classList.add('item-info-box');
 
-  let itemTitle = document.createElement('h2');
-  itemTitle.innerHTML = item.name;
-  itemInfoBox.appendChild(itemTitle);
+	let itemTitle = document.createElement('h2');
+	itemTitle.innerHTML = item.name;
+	itemInfoBox.appendChild(itemTitle);
 
-  if (item.quantity > 1) {
-    let itemQuantity = document.createElement('span');
-    itemQuantity.classList.add('quantity');
-    itemQuantity.innerHTML = 'x' + item.quantity;
-    itemInfoBox.appendChild(itemQuantity);
-  }
+	if (item.quantity > 1) {
+		let itemQuantity = document.createElement('span');
+		itemQuantity.classList.add('quantity');
+		itemQuantity.innerHTML = 'x' + item.quantity;
+		itemInfoBox.appendChild(itemQuantity);
+	}
 
-  if (item.description) {
-    let itemDesc = document.createElement('p');
-    itemDesc.innerHTML = itemDesc;
-    itemInfoBox.appendChild(itemDesc);
-  }
+	if (item.description) {
+		let itemDesc = document.createElement('p');
+		itemDesc.innerHTML = itemDesc;
+		itemInfoBox.appendChild(itemDesc);
+	}
 
-  let closeButton = document.createElement('button');
-  closeButton.classList.add('close-button');
-  closeButton.innerHTML = 'close';
-  closeButton.addEventListener('click', () => {
-    itemInfoBox.style.display = 'none';
-  });
-  itemInfoBox.appendChild(closeButton);
+	let closeButton = document.createElement('button');
+	closeButton.classList.add('close-button');
+	closeButton.innerHTML = 'close';
+	closeButton.addEventListener('click', () => {
+		itemInfoBox.style.display = 'none';
+	});
+	itemInfoBox.appendChild(closeButton);
 
-  let itemCategory = document.createElement('h3');
-  itemCategory.classList.add('item-slot');
-  if (item.slot) {
-    itemCategory.innerHTML = item.slot;
-  }
-  if (item.consumable) {
-    itemCategory.innerHTML = 'Consumable';
-  }
-  itemInfoBox.appendChild(itemCategory);
+	let itemCategory = document.createElement('h3');
+	itemCategory.classList.add('item-slot');
+	if (item.slot) {
+		itemCategory.innerHTML = item.slot;
+	}
+	if (item.consumable) {
+		itemCategory.innerHTML = 'Consumable';
+	}
+	itemInfoBox.appendChild(itemCategory);
 
-  let effectsList = document.createElement('ul');
-  for (let effect in item.effects) {
-    effect = Object.entries(item.effects[effect])[0];
-    let effectElement = document.createElement('li');
-    let modifier = '';
-    if (effect[1] > 0) {
-      modifier = '+';
-    }
-    effectElement.innerHTML = effect[0] + ': ' + modifier + effect[1];
-    effectsList.appendChild(effectElement);
-  }
-  itemInfoBox.appendChild(effectsList);
+	let effectsList = document.createElement('ul');
+	for (let effect in item.effects) {
+		effect = Object.entries(item.effects[effect])[0];
+		let effectElement = document.createElement('li');
+		let modifier = '';
+		if (effect[1] > 0) {
+			modifier = '+';
+		}
+		effectElement.innerHTML = effect[0] + ': ' + modifier + effect[1];
+		effectsList.appendChild(effectElement);
+	}
+	itemInfoBox.appendChild(effectsList);
 
-  return itemInfoBox;
+	return itemInfoBox;
 }
 
 /**
@@ -802,40 +802,40 @@ function createItemDescriptionBox(item) {
  * @param {integer} price how much the item costs
  */
 function buyItem(itemID, price, autoequip = false) {
-  let url = '/game.php?function=fetchItem&item=' + itemID;
+	let url = '/game.php?function=fetchItem&item=' + itemID;
 
-  ajax(url, (response) => {
-    item = JSON.parse(response);
-    item.uid = uniqueID;
-    uniqueID++;
+	ajax(url, (response) => {
+		item = JSON.parse(response);
+		item.uid = uniqueID;
+		uniqueID++;
 
-    if (stats.gold < price) {
-      alert('Insufficient funds');
-    } else {
-      stats.gold -= price;
+		if (stats.gold < price) {
+			alert('Insufficient funds');
+		} else {
+			stats.gold -= price;
 
-      let alreadyOwns = inventory.find((invItem) => invItem.id == item.id);
-      if (alreadyOwns && item.consumable) {
-        alreadyOwns.quantity++;
-      } else {
-        item.quantity = 1;
-        item.new = true;
-        inventory.push(item);
-      }
+			let alreadyOwns = inventory.find((invItem) => invItem.id == item.id);
+			if (alreadyOwns && item.consumable) {
+				alreadyOwns.quantity++;
+			} else {
+				item.quantity = 1;
+				item.new = true;
+				inventory.push(item);
+			}
 
-      if (price != 0) {
-        pingUpdateMessage('gold', '-' + price + 'gp');
-      }
+			if (price != 0) {
+				pingUpdateMessage('gold', '-' + price + 'gp');
+			}
 
-      if (autoequip) {
-        toggleEquipped(item);
-      } else {
-        pingUpdateMessage('inv-button', '+ ' + item.name);
-      }
+			if (autoequip) {
+				toggleEquipped(item);
+			} else {
+				pingUpdateMessage('inv-button', '+ ' + item.name);
+			}
 
-      updateStats();
-    }
-  });
+			updateStats();
+		}
+	});
 }
 
 /**
@@ -846,10 +846,10 @@ function buyItem(itemID, price, autoequip = false) {
  * @param {function} callback the callback function to run once the data is returned
  */
 function getItem(id, callback) {
-  let url = '/game.php?function=fetchItem&item=' + id;
-  ajax(url, (response) => {
-    callback(response);
-  });
+	let url = '/game.php?function=fetchItem&item=' + id;
+	ajax(url, (response) => {
+		callback(response);
+	});
 }
 
 /**
@@ -860,17 +860,17 @@ function getItem(id, callback) {
  * @param {function} callback the callback function to run once the data is returned
  */
 function getItems(items, callback) {
-  if (items[0]) {
-    let url = '/game.php?function=fetchItems';
-    for (let item of items) {
-      url += '&item[]=' + item.id;
-    }
-    ajax(url, (response) => {
-      callback(response);
-    });
-  } else {
-    callback(null);
-  }
+	if (items[0]) {
+		let url = '/game.php?function=fetchItems';
+		for (let item of items) {
+			url += '&item[]=' + item.id;
+		}
+		ajax(url, (response) => {
+			callback(response);
+		});
+	} else {
+		callback(null);
+	}
 }
 
 /**
@@ -881,16 +881,16 @@ function getItems(items, callback) {
  * @param {string} message what does the ping say?
  */
 function pingUpdateMessage(id, message) {
-  let parentElement = document.getElementById(id);
-  let grandparentElement = parentElement.parentElement;
-  let element = document.createElement('div');
-  element.classList.add('ping');
-  element.innerHTML = message;
-  grandparentElement.appendChild(element);
-  setTimeout(() => {
-    element.classList.add('fade');
-    setTimeout(() => {
-      grandparentElement.removeChild(element);
-    }, 1500);
-  }, 100);
+	let parentElement = document.getElementById(id);
+	let grandparentElement = parentElement.parentElement;
+	let element = document.createElement('div');
+	element.classList.add('ping');
+	element.innerHTML = message;
+	grandparentElement.appendChild(element);
+	setTimeout(() => {
+		element.classList.add('fade');
+		setTimeout(() => {
+			grandparentElement.removeChild(element);
+		}, 1500);
+	}, 100);
 }
