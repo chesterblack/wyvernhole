@@ -1,3 +1,5 @@
+import { setFromAttribute } from "./utils";
+
 export default class Typewriter extends HTMLElement {
 	typingSpeed: number = 1;
 	fullText: string = '';
@@ -10,10 +12,7 @@ export default class Typewriter extends HTMLElement {
 		this.fullText = this.textContent.trim();
 		this.textContent = '';
 
-		const typingSpeed = this.getAttribute('speed');
-		if (typingSpeed !== null) {
-			this.typingSpeed = parseInt(typingSpeed);
-		}
+		setFromAttribute(this, 'speed', 'typingSpeed', parseInt);
 	}
 
 	build(message: string) {

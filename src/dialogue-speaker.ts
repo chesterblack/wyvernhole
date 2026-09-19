@@ -5,6 +5,17 @@ export default class DialogueSpeaker extends HTMLElement {
 	finished = new CustomEvent('finished');
 	messageElement?: Typewriter
 
+	connectedCallback() {
+		if (!this.messageElement) {
+			console.error('No messageElement on connectedCallback for SpeakerDialogue', this);
+			return;
+		}
+
+		this.messageElement.addEventListener('finished', () => {
+			this.dispatchEvent(this.finished);
+		});
+	}
+
 	build( options: DialogueStatement ) {
 		const { message, speaker } = options;
 
@@ -17,17 +28,6 @@ export default class DialogueSpeaker extends HTMLElement {
 
 		this.appendChild(speakerElement);
 		this.appendChild(this.messageElement);
-	}
-
-	connectedCallback() {
-		if (!this.messageElement) {
-			console.error('No messageElement on connectedCallback for SpeakerDialogue', this);
-			return;
-		}
-
-		this.messageElement.addEventListener('finished', () => {
-			this.dispatchEvent(this.finished);
-		});
 	}
 	
 	runMessage() {

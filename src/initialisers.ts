@@ -2,7 +2,23 @@ import DialogueSpeaker from './dialogue-speaker';
 import Typewriter from './typewriter';
 import { roomData, type RoomId } from './room-data';
 import RoomAction from './room-action';
+import { Character } from './character';
+import type CharacterStat from './character-stat';
+import { CharacterMinMaxStat } from './character-stat';
 
+export type SaveFile = {
+	roomId: RoomId,
+	stats: {
+		health: {
+			value: number,
+			max: number
+		}
+		gold: number
+		attack: number
+		defence: number
+		drunkenness: number
+	}
+}
 
 function initialiseNarrator(roomId: RoomId) {
 	const root = document.querySelector('.narrator');
@@ -76,6 +92,42 @@ function initialiseActions(roomId: RoomId) {
 	});
 }
 
+function initialiseStats(stats: SaveFile['stats']) {
+	const statElements: Record<keyof SaveFile['stats'], CharacterMinMaxStat|CharacterStat|null> = {
+		health: document.querySelector<CharacterMinMaxStat>('character-min-max[label="Health"]'),
+		gold: document.querySelector<CharacterStat>('character-stat[label="Gold"]'),
+		attack: document.querySelector<CharacterStat>('character-stat[label="Attack"]'),
+		defence: document.querySelector<CharacterStat>('character-stat[label="Defence"]'),
+		drunkenness: document.querySelector<CharacterStat>('character-stat[label="Drunkenness"]'),
+	}
+
+	const keys = Object.keys(stats) as (keyof typeof stats)[];
+	for (const key of keys) {
+		const element = statElements[key];
+		if (!element) {
+			continue;
+		}
+
+		switch (typeof stats[key]) {
+			case 'object':
+				element.setAttribute('max', stats[key].max.toString());
+				element.setAttribute('value', stats[key].value.toString());
+				break;
+			case 'number':
+				element.setAttribute('value', stats[key].toString());
+				break;
+		}
+
+		element.setAttributes();
+		element.build();
+	}
+}
+
+function initialiseCharacter() {
+	const character = new Character();
+	return character;
+}
+
 function clearRoom() {
 	[
 		document.querySelector('.narrator'),
@@ -95,4 +147,10 @@ export async function initialiseRoom(roomId: RoomId) {
 	await initialiseNarrator(roomId);
 	await initialiseDialogue(roomId);
 	initialiseActions(roomId);
+}
+
+export async function initialiseGame(saveFile: SaveFile) {
+	initialiseStats(saveFile.stats);
+	initialiseCharacter();
+	await initialiseRoom(saveFile.roomId);
 }

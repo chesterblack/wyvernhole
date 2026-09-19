@@ -8,7 +8,7 @@ export type RoomAction = {
 
 export type Speaker = {
 	name: string,
-	color: `#${string}`
+	color: string
 }
 
 export type DialogueStatement = {

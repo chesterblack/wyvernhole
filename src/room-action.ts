@@ -1,5 +1,6 @@
 import { initialiseRoom } from "./initialisers";
 import type { RoomAction as RoomActionData } from "./room-data";
+import { setFromAttribute } from "./utils";
 
 export default class RoomAction extends HTMLElement {
 	newRoomId?: string;
@@ -8,10 +9,7 @@ export default class RoomAction extends HTMLElement {
 		this.classList.add('button');
 		this.addEventListener('click', this.moveRooms);
 		
-		const roomIdAttr = this.getAttribute('to');
-		if (roomIdAttr) {
-			this.newRoomId = roomIdAttr;
-		}
+		setFromAttribute(this, 'to', 'newRoomId');
 	}
 
 	build(roomAction: RoomActionData) {

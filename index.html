@@ -11,6 +11,14 @@
 	<body>
 		<script type="module" src="/src/main.ts"></script>
 
+		<div class="stats">
+			<character-stat label="Gold" value="50" template="{value}gp" color="goldenrod"></character-stat>
+			<character-min-max label="Health" value="100" max="100" color="green" negative="true"></character-min-max>
+			<character-stat label="Attack" value="0"></character-stat>
+			<character-stat label="Defence" value="0"></character-stat>
+			<character-stat label="Drunkenness" value="0" color="mediumpurple" hidden="true"></character-stat>
+		</div>
+
 		<main>
 			<div class="narrator"></div>
 			<div class="dialogue"></div>

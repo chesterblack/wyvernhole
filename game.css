@@ -30,6 +30,17 @@ dialogue-speaker{
 	margin-bottom: 50px;
 }
 
+.stats {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+}
+
+character-stat,
+character-min-max {
+	display: block;
+}
+
 section {
 	border-top: 3px solid #fff;
 	margin: 10px 0;
