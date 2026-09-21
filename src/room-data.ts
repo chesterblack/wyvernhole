@@ -2,34 +2,35 @@ export type RoomId = string;
 export type ItemId = string;
 
 export type RoomAction = {
-	text: string,
+	text: string
 	id: RoomId
 }
 
 export type Speaker = {
-	name: string,
+	name: string
 	color: string
 }
 
 export type DialogueStatement = {
-	speaker: Speaker,
+	speaker: Speaker
 	message: string
 }
 
 export type ShopItem = {
-	name: string,
-	stock: number,
-	price: number,
+	name: string
+	stock: number
+	price: number
 	id: ItemId
 }
 
 export type Shop = ShopItem[]
 
 export type Room = {
-	actions: RoomAction[],
-	message?: string,
-	dialogue?: DialogueStatement[],
+	actions: RoomAction[]
+	message?: string
+	dialogue?: DialogueStatement[]
 	shop?: Shop
+	combat?: any
 }
 
 export const roomData: Record<string, Room> = {
@@ -364,11 +365,13 @@ export const roomData: Record<string, Room> = {
 	},
 
 	"15": {
-		"message": "You trot up the dusty path towards the woods and are stuck with a strange feeling that this is the start of quite the adventure...."
+		"message": "You trot up the dusty path towards the woods and are stuck with a strange feeling that this is the start of quite the adventure....",
+		"actions": []
 	},
 
 	"17": {
 		"message": "Combat test",
+		"actions": [],
 		"combat": {
 			"combatants": [
 				{
