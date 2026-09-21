@@ -1,4 +1,5 @@
 import CharacterStat, { CharacterMinMaxStat } from './character-stat'
+import type { SaveFile } from './save-load';
 
 export class Character {
 	health: CharacterMinMaxStat;
@@ -15,7 +16,20 @@ export class Character {
 		this.drunkenness = this.getFromQuerySelector<CharacterStat>('character-stat[label="Drunkenness"]', 'drunkenness');
 	}
 
-	getFromQuerySelector<T extends Element>(selector: string, label: string) {
+	getStatValues(): SaveFile['stats'] {
+		return {
+			health: {
+				max: this.health.maximum,
+				value: this.health.value
+			},
+			gold: this.gold.value,
+			attack: this.attack.value,
+			defence: this.defence.value,
+			drunkenness: this.drunkenness.value,
+		}
+	}
+
+	private getFromQuerySelector<T extends Element>(selector: string, label: string) {
 		const statElement = document.querySelector<T>(selector);
 		if (!statElement) {
 			throw new Error(`Missing ${label}`);

@@ -220,7 +220,7 @@ export const roomData: Record<string, Room> = {
 					"name": "Old Man 2",
 					"color": "#8ada8b"
 				},
-				"message": "Now you just listen here, if you go off into them there woods and find a harpy, come back and I'll buy you a round my damn self"
+				"message": "Now you just listen here, if you go off into them there woods and find a gang right on our doorstep, come back and I'll buy you a round my damn self"
 			}
 		],
 		"actions": [

@@ -20,6 +20,7 @@ export default class DialogueSpeaker extends HTMLElement {
 		const { message, speaker } = options;
 
 		const speakerElement = document.createElement('span');
+		speakerElement.classList.add('speaker');
 		speakerElement.textContent = `${speaker.name}: `;
 		speakerElement.style.color = speaker.color;
 

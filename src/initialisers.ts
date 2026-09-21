@@ -5,20 +5,7 @@ import RoomAction from './room-action';
 import { Character } from './character';
 import type CharacterStat from './character-stat';
 import { CharacterMinMaxStat } from './character-stat';
-
-export type SaveFile = {
-	roomId: RoomId,
-	stats: {
-		health: {
-			value: number,
-			max: number
-		}
-		gold: number
-		attack: number
-		defence: number
-		drunkenness: number
-	}
-}
+import type { SaveFile } from './save-load';
 
 function initialiseNarrator(roomId: RoomId) {
 	const root = document.querySelector('.narrator');
@@ -147,10 +134,13 @@ export async function initialiseRoom(roomId: RoomId) {
 	await initialiseNarrator(roomId);
 	await initialiseDialogue(roomId);
 	initialiseActions(roomId);
+	window.dispatchEvent(new CustomEvent('room-moved', {detail: roomId}));
 }
 
 export async function initialiseGame(saveFile: SaveFile) {
 	initialiseStats(saveFile.stats);
-	initialiseCharacter();
+	const character = initialiseCharacter();
 	await initialiseRoom(saveFile.roomId);
+
+	return {character};
 }

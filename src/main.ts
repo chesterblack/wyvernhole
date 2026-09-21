@@ -1,27 +1,17 @@
-import { initialiseGame, type SaveFile } from './initialisers.ts';
+import { initialiseGame } from './initialisers';
+import { constructSaveFile, loadGameLocal, saveGameLocal } from './save-load.ts';
 
-export * from './dialogue-speaker.ts';
+export * from './dialogue-speaker';
 export * from './typewriter';
 export * from './character-stat';
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-	// const lastRoom = getCookie('lastroom');
-	// initialiseRoom(lastRoom ?? '1');
+	const {character} = await initialiseGame(loadGameLocal());
 
-	const freshSave: SaveFile = {
-		roomId: '1',
-		stats: {
-			health: {
-				value: 100,
-				max: 100
-			},
-			gold: 50,
-			attack: 0,
-			defence: 0,
-			drunkenness: 0
-		}
-	}
-
-	initialiseGame(freshSave)
+	const callback = ({detail: roomId}: CustomEvent<string>) => {
+		const saveFile = constructSaveFile(character, roomId);
+		saveGameLocal(saveFile);
+	};
+	window.addEventListener("room-moved", callback as EventListener);
 });
