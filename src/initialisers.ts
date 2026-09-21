@@ -5,7 +5,7 @@ import RoomAction from './room-action';
 import { Character } from './character';
 import type CharacterStat from './character-stat';
 import { CharacterMinMaxStat } from './character-stat';
-import type { SaveFile } from './save-load';
+import type { SaveController, SaveFile } from './save-load';
 
 function initialiseNarrator(roomId: RoomId) {
 	const root = document.querySelector('.narrator');
@@ -68,9 +68,7 @@ function initialiseActions(roomId: RoomId) {
 	const root = document.querySelector('.actions');
 	const room = roomData[roomId];
 
-	if (!root || !room.actions) {
-		return;
-	}
+	if (!root || !room.actions) return;
 
 	room.actions.forEach((action) => {
 		const roomAction = new RoomAction;
@@ -121,9 +119,7 @@ function clearRoom() {
 		document.querySelector('.dialogue'),
 		document.querySelector('.actions')
 	].forEach((container) => {
-		if (!container) {
-			return;
-		}
+		if (!container) return;
 		container.innerHTML = '';
 	});
 }
@@ -137,9 +133,12 @@ export async function initialiseRoom(roomId: RoomId) {
 	window.dispatchEvent(new CustomEvent('room-moved', {detail: roomId}));
 }
 
-export async function initialiseGame(saveFile: SaveFile) {
+export async function initialiseGame(saveController: SaveController) {
+	const saveFile = saveController.loadGame();
+
 	initialiseStats(saveFile.stats);
 	const character = initialiseCharacter();
+	saveController.setAutosaveListener(character);
 	await initialiseRoom(saveFile.roomId);
 
 	return {character};

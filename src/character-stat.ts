@@ -27,9 +27,7 @@ export default class CharacterStat extends HTMLElement {
 	build() {
 		this.innerHTML = '';
 
-		if (this.hidden && this.value < 1) {
-			return;
-		}
+		if (this.hidden && this.value < 1) return;
 
 		const labelElement = document.createElement('span');
 		labelElement.textContent = `${this.label}: `;

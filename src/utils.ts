@@ -1,5 +1,5 @@
 import CharacterStat, { CharacterMinMaxStat } from './character-stat';
-import { freshSave, type SaveFile } from './save-load';
+import { SaveController, type SaveFile } from './save-load';
 
 export function getCookie(cookieName: string) {
 	return document.cookie.split(";").find(i => i.trim().startsWith(cookieName))?.split("=")[1];
@@ -46,24 +46,21 @@ export function getStatFromQuerySelector<T extends Element>(selector: string, la
 
 export function getAllStatValues() {
 	const statElements = getAllStats();
-	const stats: SaveFile['stats'] = freshSave.stats;
+
+	const stats: Record<keyof SaveFile['stats'], number|{value: number, max: number}> = SaveController.freshSave.stats;
 
 	const keys = Object.keys(statElements) as (keyof typeof statElements)[];
 	for (const key of keys) {
 		const element = statElements[key];
+
 		if (typeof stats[key] === 'number') {
 			stats[key] = parseInt(element.getAttribute('value') ?? '0');
+			return;
 		}
 
-		switch (typeof stats[key]) {
-			case 'object':
-				stats[key] = {
-					max: parseInt(element.getAttribute('max') ?? '0'),
-					value: parseInt(element.getAttribute('value') ?? '0')
-				};
-				break;
-			case 'number':
-				break;
-		}
+		stats[key] = {
+			max: parseInt(element.getAttribute('max') ?? '0'),
+			value: parseInt(element.getAttribute('value') ?? '0')
+		};
 	}
 }

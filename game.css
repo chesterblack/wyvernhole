@@ -41,6 +41,31 @@ dialogue-speaker{
 	left: 15px;
 }
 
+.hud {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+}
+
+.sidebar {
+	/* min-width: 255px; */
+	height: 100vh;
+	max-height: 100vh;
+	overflow: hidden;
+	overflow-y: scroll;
+	background: black;
+	border: none;
+	border-left: 3px solid goldenrod;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 15px;
+	box-shadow: 0 0 0 6px #0000006b;
+	inset-inline-start: auto;
+	inset-inline-end: 0;
+}
+
 character-stat,
 character-min-max {
 	display: block;

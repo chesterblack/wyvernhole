@@ -7,10 +7,9 @@
 		<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 		<link href="game.css" rel="stylesheet" />
 		<title>Wyvernhole</title>
+		<script type="module" src="/src/main.ts"></script>
 	</head>
 	<body>
-		<script type="module" src="/src/main.ts"></script>
-
 		<div class="stats">
 			<character-stat label="Gold" value="50" template="{value}gp" color="goldenrod"></character-stat>
 			<character-min-max label="Health" value="100" max="100" color="green" negative="true"></character-min-max>
@@ -19,7 +18,21 @@
 			<character-stat label="Drunkenness" value="0" color="mediumpurple" hidden="true"></character-stat>
 		</div>
 
+		<div class="hud">
+			<button popovertarget="options">
+				Options
+			</button>
+		</div>
 		
+		<div id="options" class="sidebar" closedby="any" popover>
+			<button popovertarget="options">
+				Close
+			</button>
+			<button class="toggle-autosave">
+				Autosave: <span class="autosave-label">-</span>
+			</button>
+		</div>
+
 		<main>
 			<div class="narrator"></div>
 			<div class="dialogue"></div>
