@@ -31,6 +31,7 @@ export type Room = {
 	dialogue?: DialogueStatement[]
 	shop?: Shop
 	combat?: any
+	effects?: any
 }
 
 export const roomData: Record<string, Room> = {
