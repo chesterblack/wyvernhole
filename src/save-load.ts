@@ -4,6 +4,7 @@ import { getCookie } from './utils';
 
 export type SaveFile = {
 	roomId: RoomId;
+	autosave: boolean;
 	stats: {
 		health: {
 			value: number;
@@ -19,6 +20,7 @@ export type SaveFile = {
 export class SaveController {
 	static freshSave: SaveFile = {
 		roomId: '1',
+		autosave: true,
 		stats: {
 			health: {
 				value: 100,
@@ -33,9 +35,8 @@ export class SaveController {
 
 	saveFile: SaveFile = SaveController.freshSave;
 
-	shouldAutosave: boolean = true;
-
-	constructor() {
+	constructor(saveFile?: SaveFile) {
+		this.saveFile = saveFile ?? this.loadGame();
 		this.addAutosaveButtonListener();
 		this.setAutosaveLabel();
 	}
@@ -52,7 +53,7 @@ export class SaveController {
 
 	setAutosaveListener(character: Character) {
 		const callback = ({detail: roomId}: CustomEvent<string>) => {
-			if (this.shouldAutosave) {
+			if (this.saveFile.autosave) {
 				const saveFile = this.constructSaveFile(character, roomId);
 				this.saveGame(saveFile);
 			}
@@ -61,7 +62,7 @@ export class SaveController {
 	}
 
 	toggleAutosave() {
-		this.shouldAutosave = !this.shouldAutosave;
+		this.saveFile.autosave = !this.saveFile.autosave;
 		this.setAutosaveLabel();
 		this.saveGame(this.saveFile);
 	}
@@ -71,33 +72,34 @@ export class SaveController {
 
 		if (!autosaveLabel) return;
 
-		autosaveLabel.textContent = this.shouldAutosave ? 'On' : 'Off';
+		autosaveLabel.textContent = this.saveFile.autosave ? 'On' : 'Off';
 	}
 
 	constructSaveFile(character: Character, roomId: RoomId): SaveFile {
 		return {
 			roomId,
+			autosave: this.saveFile.autosave,
 			stats: character.getStatValues()
 		}
 	}
 	
 	loadGame() {
-		return this.loadGameLocal();
+		return this.loadGameCookie();
 	}
 
-	loadGameLocal(): SaveFile {
+	loadGameCookie(): SaveFile {
 		const saveFileString = getCookie('savedgame');
 		this.saveFile = saveFileString ? JSON.parse(saveFileString) : SaveController.freshSave;
 		return this.saveFile;
 	}
 
 	saveGame(saveFile: SaveFile) {
-		this.saveGameLocal(saveFile);
+		this.saveFile = saveFile;
+		this.saveGameCookie(saveFile);
 	}
 
-	saveGameLocal(saveFile: SaveFile) {
+	saveGameCookie(saveFile: SaveFile) {
 		document.cookie = `savedgame=${JSON.stringify(saveFile)};path=/`;
-		this.saveFile = saveFile;
 	}
 
 	saveGameFile(saveFile: SaveFile) {

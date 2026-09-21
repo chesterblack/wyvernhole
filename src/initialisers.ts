@@ -125,7 +125,6 @@ function clearRoom() {
 }
 
 export async function initialiseRoom(roomId: RoomId) {
-	document.cookie = `lastroom=${roomId};path=/`;
 	clearRoom();
 	await initialiseNarrator(roomId);
 	await initialiseDialogue(roomId);
